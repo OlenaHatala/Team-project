@@ -1,7 +1,6 @@
 # Team-project
 
 
-<<<<<<< HEAD
 
 ### How to run localy
 
@@ -25,10 +24,12 @@ in the chosen directory.
 
 
 
+
 #### Step 3: Add and configure .env
  1. Navigate to ***/back-end*** and add **".env"** file.
  2. Copy content of **".env.example"** file and paste to **".env"**.
  3. Replace *"USER"* and *"PASSWORD"* variables values with database credentials given by owner of the repository.
+
 
 
 
@@ -42,7 +43,3 @@ in the chosen directory.
         npm start
 
 
-
-=======
-Hello Worl
->>>>>>> dfbb47a2e5b2c6735ea5bcf767623bc5df342d9b
