@@ -1,0 +1,111 @@
+.form {
+  margin: 2rem auto;
+}
+
+.form label,
+.form input,
+.form textarea {
+  display: block;
+  width: 100%;
+}
+
+.form input,
+.form textarea {
+  color: black;
+  font: inherit;
+  padding: 0.25rem;
+  background-color: white;
+  border-color: gray;
+  border: 4px;
+  border-radius: 4px;
+}
+.form input {
+  height: 2.5rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.actions button {
+  margin-top: 2rem;
+  font: inherit;
+  cursor: pointer;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  background-color: #ad7ada;
+  color: #1c1333;
+  border: 1px solid #8c8c8c;
+}
+
+.actions button:hover {
+  background-color: rgb(219, 201, 255);
+}
+
+.mode-suggestion {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.mode-suggestion a {
+  color: #ad7ada;
+  text-decoration: none;
+}
+
+.mode-suggestion a:hover {
+  color: white;
+}
+
+.form h1 {
+  font: inherit;
+  display: flex;
+  justify-content: center;
+  color: #ad7ada;
+  font-size: 25px;
+}
+
+.password-input-block {
+  display: flex;
+  position: relative;
+}
+
+.password-input-block span {
+  position: absolute;
+  right: 11px;
+  top: 7px;
+  color: black;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.fullname-input-block { 
+  display: flex; 
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.name-input-block p{
+  padding: 0;
+  margin: 0;
+}
+
+.input {
+  margin: 10px 0;
+}
+
+.input.left {
+  margin-right: 10px;
+  margin-block: 0;
+}
+
+.input.right {
+  margin-left: 10px;
+  margin-block: 0;
+}
+

@@ -1,6 +1,6 @@
 <h1>Register</h1>
 <%- include ('./partials/messages') %>
-<form action="/users/register" method="POST">
+<form action="/Auth/auth.js" method="POST">
 <div>
     <label for="name">Name</label>
     <input
@@ -48,14 +48,14 @@
       value="<%= typeof password != 'undefined' ? password : '' %>"
     />
   </div>
-  <div >
+  <!-- <div >
     <label for="password2">Confirm Password</label>
     <input
       type="password"
       name="password2"
       placeholder="Confirm Password"
       value="<%= typeof password2 != 'undefined' ? password2 : '' %>"
-    />
+    /> -->
   </div>
   <button type="submit" class="btn btn-primary btn-block">
     Register
