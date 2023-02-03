@@ -10,6 +10,7 @@ import {
 import classes from "./UserForm.module.css";
 
 function UserForm({ method, user}) {
+  console.log('UserForm render');
   const [isEditing, setIsEditing] = useState(false);
 
   const [firstname, setFirstname] = useState(user.firstname);
@@ -17,7 +18,7 @@ function UserForm({ method, user}) {
   const [email, setEmail] = useState(user.email);
   const [number, setNumber] = useState(user.number);
 
-  const [focusedInput, setFocusedInput] = useState("firstname");
+  const [focusedInput, setFocusedInput] = useState("");
 
   const firstnameInputRef = useRef();
 
@@ -54,25 +55,33 @@ function UserForm({ method, user}) {
     setNumber(event.target.value);
   }
 
-  function firstnameFocusHandler(event) {
+  function firstnameFocusHandler() {
     setFocusedInput('firstname');
   }
 
-  function lastnameFocusHandler(event) {
+  function lastnameFocusHandler() {
     setFocusedInput('lastname');
   }
 
-  function emailFocusHandler(event) {
+  function emailFocusHandler() {
     setFocusedInput('email');
   }
 
-  function numberFocusHandler(event) {
+  function numberFocusHandler() {
     setFocusedInput('number');
   }
 
+  function blurHandler () {
+    setFocusedInput('');
+  }
+
   useEffect(() => {
+    console.log('UserForm useEffect');
     if (isEditing) {
+      setFocusedInput("firstname");
       firstnameInputRef.current.focus();
+    } else {
+      setFocusedInput("");
     }
   }, [isEditing]);
 
@@ -110,6 +119,7 @@ function UserForm({ method, user}) {
               value={firstname}
               onChange={firstnameChangeHandler}
               onFocus={firstnameFocusHandler}
+              onBlur={blurHandler}
             />
           </div>
           <div className={`${classes.input} ${focusedInput === "lastname" ? classes.focused : ''}`}>
@@ -123,6 +133,7 @@ function UserForm({ method, user}) {
               value={lastname}
               onChange={lastnameChangeHandler}
               onFocus={lastnameFocusHandler}
+              onBlur={blurHandler}
             />
           </div>
           <div className={`${classes.input} ${focusedInput === "email" ? classes.focused : ''}`}>
@@ -136,6 +147,7 @@ function UserForm({ method, user}) {
               value={email}
               onChange={emailChangeHandler}
               onFocus={emailFocusHandler}
+              onBlur={blurHandler}
             />
           </div>
           <div className={`${classes.input} ${focusedInput === "number" ? classes.focused : ''}`}>
@@ -149,6 +161,7 @@ function UserForm({ method, user}) {
               value={number}
               onChange={numberChangeHandler}
               onFocus={numberFocusHandler}
+              onBlur={blurHandler}
             />
           </div>
           <div className={classes.actions}>
