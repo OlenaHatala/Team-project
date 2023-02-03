@@ -1,6 +1,7 @@
 # Team-project
 
 
+<<<<<<< HEAD
 
 ### How to run localy
 
@@ -42,3 +43,6 @@ in the chosen directory.
 
 
 
+=======
+Hello Worl
+>>>>>>> dfbb47a2e5b2c6735ea5bcf767623bc5df342d9b
