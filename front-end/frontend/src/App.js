@@ -1,5 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
+import Register from './pages/Register';
+import Login from './pages/Login';
 import ErrorPage from "./pages/Error";
 import SuccessPage from "./pages/Success";
 import HomePage from "./pages/Home";
@@ -14,6 +16,14 @@ import { action as editAccountAction } from "./components/UserForm";
 import AccountRootLayout from "./pages/AccountRoot";
 
 const router = createBrowserRouter([
+  {
+    path: "register",
+    element: <Register />
+  },
+  {
+    path: "login",
+    element: <Login />
+  },
   {
     path: "auth",
     element: <AuthenticationPage />,
