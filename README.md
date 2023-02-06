@@ -25,18 +25,11 @@ in the chosen directory.
 
 
 
-#### Step 3: Add and configure .env
- 1. Navigate to ***/back-end*** and add **".env"** file.
- 2. Copy content of **".env.example"** file and paste to **".env"**.
- 3. Replace *"USER"* and *"PASSWORD"* variables values with database credentials given by owner of the repository.  
+#### Step 3: Add and configure gitignored constants
+ 1. Navigate to ***/back-end/config*** and add **"gitignoredConstants.js"** file.
+ 2. Copy content of **"gitignoredConstants.example.js"** file and paste to newly created file.
+ 3. Replace *"USER"* and *"PASSWORD"* constants values with database credentials given by owner of the repository.  
  4. If you have trouble connecting to database and get this error:
-
-        An error occurred: bad auth : Authentication failed.  
-    you can try insert hard-coded values in places where .env file is used.
-    To do this follow next steps:
-     1. Go to ***/back-end/db.js*** and replace `${process.env.USER}:${process.env.PASSWORD}` with `<YOUR_DB_USERNAME>:<PASSWORD>` in the following line:
-
-                const localDB = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@clusterqa.dhdgpcl.mongodb.net/tableDB?retryWrites=true&w=majority`  
 
 
 
