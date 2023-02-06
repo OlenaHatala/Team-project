@@ -4,11 +4,11 @@ const bcrypt = require("bcryptjs")
 exports.register = async (req, res, next) => {
   const { name, surname, mobile_number, email, password } = req.body
   if (password.length < 8) {
-    return res.status(400).json({ message: "Password less than 8 characters" })
+    return res.status(400).json({ message: "Password less than 8 characters." })
   }
   const email_user = await User.findOne({ email})
   if(email_user){
-    return res.status(409).json({ message: "This email is token" })
+    return res.status(409).json({ message: "This email has been used already." })
   }
   bcrypt.hash(password, 10).then(async (hash) => {
     await User.create({
@@ -58,23 +58,24 @@ exports.login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email })
     if (!user) {
-      res.status(400).json({
-        message: "Login not successful",
-        error: "User not found",
+      res.status(401).json({
+        message: `${email} account was not found`,
       })
     } else {
       bcrypt.compare(password, user.password).then(function (result) 
       {
+        console.log(result);
+        console.log(user);
         result
           ? res.status(200).json({
               message: "Login successful",
               user,
             })
-          : res.status(400).json({ message: "Login not succesful" })
+          : res.status(401).json({ message: "Incorrect password" })
       })
     }
   }  catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       message: "An error occurred",
       error: error.message,
     })
