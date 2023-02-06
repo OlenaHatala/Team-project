@@ -1,7 +1,9 @@
 //import { useRouteLoaderData } from "react-router-dom";
+import { useState } from "react";
+
+import { API_URL } from "../config/urls";
 import UserForm from "../components/UserForm";
 import Card from "../components/UI/Card";
-import { useState } from "react";
 
 function getUserData() {
   return {
@@ -28,7 +30,7 @@ function EditAccountPage() {
 export async function loader({ request }) {
   console.log("hi1");
   const id = localStorage.getItem("userId");
-  return fetch("http://localhost:8080/events/user/" + id);
+  return fetch(`${API_URL}/events/user/` + id);
 }
 
 export async function action({ request }) {

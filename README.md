@@ -32,13 +32,19 @@ in the chosen directory.
 
 
 
+#### Step 4: Change api localhost port, if needed
+1. Navigate to ***/back-end/config/constants.js*** and change the "PORT" constant.
+2. Navigate to ***/front-end/frontend/config/urls.js*** and specify chosen port in "API_URL" constant.
 
-#### Step 4: Start development srvers
+
+
+
+#### Step 5: Start development srvers
 1. Navigate to ***/back-end*** and run  
 
         npm run dev
 
-1. Navigate to ***/front-end/frontend*** and run  
+2. Navigate to ***/front-end/frontend*** and run  
 
         npm start
 
