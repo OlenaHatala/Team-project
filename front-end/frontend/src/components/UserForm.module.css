@@ -26,14 +26,16 @@
   background: transparent;
   border-bottom: 2px solid #8c5bff;
   padding: 15px;
-  color: #f3f3f3;
+  color: #a0a0a0;
   font-size: 18px;
   text-decoration: none solid rgb(243, 243, 243);
+  caret-color: transparent;
 }
 
 .form input:focus {
   border-color: #f3f3f3;
   color: #ffff;
+  caret-color: #f3f3f3;
 }
 
 .form label {
@@ -45,7 +47,8 @@
 }
 
 .input {
-  margin-bottom: 35px;
+  margin-bottom: 45px;
+  text-align: left;
 }
 
 .profile-photo img {

@@ -14,13 +14,17 @@
   color: black;
   font: inherit;
   padding: 0.25rem;
-  background-color: white;
+  background-color: #f3f3f3;
   border-color: gray;
   border: 4px;
   border-radius: 4px;
 }
 .form input {
   height: 2.5rem;
+}
+
+.controls {
+  margin: 1rem;
 }
 
 .actions {
@@ -58,7 +62,11 @@
 }
 
 .mode-suggestion a:hover {
-  color: white;
+  color: #f3f3f3;
+}
+
+.mode-suggestion p{
+  color: #a7a7a7;
 }
 
 .form h1 {
