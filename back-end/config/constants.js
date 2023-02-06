@@ -1,3 +1,3 @@
 module.exports = Object.freeze({
-    PORT: '5000'
+    PORT: '3500'
 })
