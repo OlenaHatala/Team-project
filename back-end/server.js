@@ -1,10 +1,11 @@
 require('dotenv').config();
+const constants = require('./config/constants');
 
 const express = require("express")
 const connectDB = require("./db")
 const app = express()
 
-const PORT = 5000
+
 
 
 connectDB()
@@ -24,8 +25,8 @@ app.use("/api/auth", require("./Auth/route"))
 
 
 
-const server = app.listen(PORT, () =>
-  console.log(`Server Connected to port ${PORT}`)
+const server = app.listen(constants.PORT, () =>
+  console.log(`Server Connected to port ${constants.PORT}`)
 )
 // Handling Error
 process.on("unhandledRejection", err => {
