@@ -29,7 +29,7 @@ in the chosen directory.
  1. Navigate to ***/back-end/config*** and add **"gitignoredConstants.js"** file.
  2. Copy content of **"gitignoredConstants.example.js"** file and paste to newly created file.
  3. Replace *"USER"* and *"PASSWORD"* constants values with database credentials given by owner of the repository.  
- 4. If you have trouble connecting to database and get this error:
+
 
 
 
