@@ -23,7 +23,7 @@ function MainNavigation() {
           {!token && (
             <li>
               <NavLink
-                to="/auth?mode=login"
+                to="/login"
                 className={({ isActive }) =>
                   isActive ? classes.active : undefined
                 }
