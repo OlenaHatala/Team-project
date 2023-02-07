@@ -1,5 +1,7 @@
-const User = require("../model/User")
+const User = require("../models/User")
 const bcrypt = require("bcryptjs")
+const jwt = require('jsonwebtoken')
+const asyncHandler = require('express-async-handler')
 
 exports.register = async (req, res, next) => {
   const { name, surname, mobile_number, email, password } = req.body
@@ -31,9 +33,10 @@ exports.register = async (req, res, next) => {
         })
       );
   });
+  
 };
 
-exports.login = async (req, res, next) => {
+exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body
   // Check if email and password is provided
   if (!email && !password) {
@@ -79,7 +82,7 @@ exports.login = async (req, res, next) => {
       error: error.message,
     })
   }
-}
+})
 
 exports.update = async (req, res, next) => {
   const {id, userData} = req.body;
