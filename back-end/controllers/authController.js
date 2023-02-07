@@ -1,7 +1,8 @@
 const User = require("../models/User")
 const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
-const asyncHandler = require('express-async-handler')
+const asyncHandler = require('express-async-handler');
+const gitignoredConstants = require("../config/gitignoredConstants");
 
 exports.register = async (req, res, next) => {
   const { name, surname, mobile_number, email, password } = req.body
@@ -33,10 +34,9 @@ exports.register = async (req, res, next) => {
         })
       );
   });
-  
 };
 
-exports.login = asyncHandler(async (req, res, next) => {
+exports.login = async (req, res, next) => {
   const { email, password } = req.body
   // Check if email and password is provided
   if (!email && !password) {
@@ -59,21 +59,55 @@ exports.login = asyncHandler(async (req, res, next) => {
   } 
   
   try {
-    const user = await User.findOne({ email })
-    if (!user) {
+    const foundUser = await User.findOne({ email })
+    if (!foundUser) {
       res.status(400).json({
         message: "Login not successful",
         error: "User not found",
       })
     } else {
-      bcrypt.compare(password, user.password).then(function (result) 
+      bcrypt.compare(password, foundUser.password).then(function (result) 
       {
-        result
-          ? res.status(200).json({
-              message: "Login successful",
-              user,
-            })
-          : res.status(400).json({ message: "Login not succesful" })
+        if (result) {
+          
+          const accessToken = jwt.sign(
+            {
+              "UserInfo": {
+                "name": foundUser.name,
+                "surname": foundUser.surname,
+                "mobile_number": foundUser.mobile_number,
+                "email": foundUser.email,
+                "password": foundUser.password
+              }
+            },
+        
+            gitignoredConstants.ACCESS_TOKEN_SECRET,
+            {expiresIn: '15m'}
+          )
+        
+          const refreshToken = jwt.sign(
+            { "email": foundUser.email, "password": foundUser.password},
+            gitignoredConstants.REFRESH_TOKEN_SECRET,
+            { expiresIn: '7d' }
+          )
+        
+          res.cookie('jwt', refreshToken, {
+            httpOnly: true,
+            //secure: true,
+            // to do: add secure true after testing
+            sameSite: 'None',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+          })
+
+          res.status(200).json({
+            message: "Login successful",
+            user: foundUser,
+            accessToken: accessToken,
+          })
+        }
+        else {
+          res.status(400).json({ message: "Login not succesful" })
+        }
       })
     }
   }  catch (error) {
@@ -82,13 +116,58 @@ exports.login = asyncHandler(async (req, res, next) => {
       error: error.message,
     })
   }
-})
+
+
+};
+
+exports.refresh = (req, res) => {
+  const cookie = req.cookies
+
+  if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
+
+  const refreshToken = cookies.jwt
+
+  jwt.verify(
+    refreshToken,
+    gitignoredConstants.REFRESH_TOKEN_SECRET,
+    asyncHandler(async (err, decoded) => {
+      if (err) return res.status(403).json({ message: 'Forbidden' })
+    
+      const foundUser = await User.findOne({ email: decoded.email }).exec()
+
+      if (!foundUser) return res.status(401).json({ message: 'Unauthorized' })
+
+      const accessToken = jwt.sign(
+        {
+          "UserInfo": {
+            "name": foundUser.name,
+            "surname": foundUser.surname,
+            "mobile_number": foundUser.mobile_number,
+            "email": foundUser.email,
+            "password": foundUser.password
+          }
+        },
+        gitignoredConstants.ACCESS_TOKEN_SECRET,
+        { expiresIn: '15m'}
+      )
+
+      res.json({ accessToken })
+    })
+  )
+}
+
+exports.logout = (req, res) => {
+  const cookies = req.cookies
+  if (!cookies?.jwt) return res.sendStatus(204) //No content
+  res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true })
+  res.json({ message: 'Cookie cleared' })
+}
+
 
 exports.update = async (req, res, next) => {
   const {id, userData} = req.body;
   const { name, surname, email, mobile_number} = userData;
 
-  // Verifying if name and id is present
   if (id && (name || surname || email || mobile_number)) {
     // Finds the user with the id
 
@@ -118,6 +197,7 @@ exports.update = async (req, res, next) => {
     res.status(400).json({ message: "First name or Id not present" });
   }
 };
+
 
 exports.deleteUser = async (req, res, next) => {
   const { id } = req.body;
