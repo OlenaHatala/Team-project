@@ -4,6 +4,8 @@ import AuthForm from "../components/AuthForm";
 
 import Card from "../components/UI/Card";
 
+import { API_URL } from "../config/urls";
+
 function AuthenticationPage() {
   return (
     <>
@@ -47,7 +49,7 @@ export async function action({ request }) {
   console.log('fetch start');
 
 
-  const response = await fetch("http://localhost:5000/api/auth/" + mode, {
+  const response = await fetch(`${API_URL}/api/auth/` + mode, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(authData),

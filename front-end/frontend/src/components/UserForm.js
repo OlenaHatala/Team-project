@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 //import { getAuthToken } from "../util/auth";
 import classes from "./UserForm.module.css";
+import { API_URL } from "../config/urls";
 
 function UserForm({ method, user}) {
   console.log('UserForm render');
@@ -204,7 +205,7 @@ export async function action({ request, params }) {
   };
 
   const userId = localStorage.getItem("userId");
-  let url = "http://localhost:5000/api/auth/update/";
+  let url = `${API_URL}/api/auth/update/`;
 
   //const token = getAuthToken();
 
