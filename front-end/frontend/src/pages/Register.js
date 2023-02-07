@@ -15,6 +15,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import classes from "../components/AuthForm.module.css";
 import Card from "../components/UI/Card";
+import AuthHeader from '../components/AuthHeader';
+
+
 import axios from "../api/axios";
 
 const REGISTER_URL = "/auth/register";
@@ -174,12 +177,7 @@ function Login() {
 
   return (
     <>
-      <div className="auth-page__logo">
-        <Link to="/">
-          <p>Loggions</p>
-          <span>Home</span>
-        </Link>
-      </div>
+      <AuthHeader />
       <div className="auth-page__form">
         <Card>
           {success ? (

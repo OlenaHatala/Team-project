@@ -13,12 +13,14 @@ import { eyeOff } from "react-icons-kit/feather/eyeOff";
 import classes from "../components/AuthForm.module.css";
 import Card from "../components/UI/Card";
 import axios from "../api/axios";
+import AuthHeader from "../components/AuthHeader";
 const LOGIN_URL = "/auth/login";
 
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+  console.log(from);
 
   const userRef = useRef();
   const errRef = useRef();
@@ -113,73 +115,65 @@ function Login() {
 
   return (
     <>
-    <div className="auth-page__logo">
-    <Link to='/'><p>Loggions</p>
-    <span>Home</span></Link>
-  </div>
-  <div className="auth-page__form">
-    <Card>
-    <section>
-      <h1>LOG IN</h1>
-      <div className={classes["mode-suggestion"]}>
-          {<p>{modeSuggestionContent}</p>}
-          <Link to={"/register"}>here</Link>
-        </div>
-      <p
-        ref={errRef}
-        className={errMsg ? classes.errmsg : classes.offscreen}
-        aria-live="assertive"
-      >
-        {errMsg}
-      </p>
-      <form onSubmit={handleSubmit} className={classes.form}>
-        <div className={classes.controls}>
-          <div className={classes.input}>
-            <label htmlFor="email">Email</label>
-            <input
-              placeholder="Email address"
-              type="email"
-              id="email"
-              ref={userRef}
-              autoComplete="off"
-              onChange={(e) => setUser(e.target.value)}
-              value={user}
-              required
-            />
-          </div>
-          <div className={classes.input}>
-            <label htmlFor="image">Password</label>
-            <div className={classes["password-input-block"]}>
-              <input
-                id="password"
-                type={type}
-                placeholder="Enter password"
-                onChange={(e) => setPwd(e.target.value)}
-                value={pwd}
-                required
-              />
-              <span onClick={handleToggle}>
-                <Icon icon={icon} size={25} />
-              </span>
+      <AuthHeader />
+      <div className="auth-page__form">
+        <Card>
+          <section>
+            <h1>LOG IN</h1>
+            <div className={classes["mode-suggestion"]}>
+              {<p>{modeSuggestionContent}</p>}
+              <Link to={"/register"}>here</Link>
             </div>
-          </div>
-        </div>
+            <p
+              ref={errRef}
+              className={errMsg ? classes.errmsg : classes.offscreen}
+              aria-live="assertive"
+            >
+              {errMsg}
+            </p>
+            <form onSubmit={handleSubmit} className={classes.form}>
+              <div className={classes.controls}>
+                <div className={classes.input}>
+                  <label htmlFor="email">Email</label>
+                  <input
+                    placeholder="Email address"
+                    type="email"
+                    id="email"
+                    ref={userRef}
+                    autoComplete="off"
+                    onChange={(e) => setUser(e.target.value)}
+                    value={user}
+                    required
+                  />
+                </div>
+                <div className={classes.input}>
+                  <label htmlFor="image">Password</label>
+                  <div className={classes["password-input-block"]}>
+                    <input
+                      id="password"
+                      type={type}
+                      placeholder="Enter password"
+                      onChange={(e) => setPwd(e.target.value)}
+                      value={pwd}
+                      required
+                    />
+                    <span onClick={handleToggle}>
+                      <Icon icon={icon} size={25} />
+                    </span>
+                  </div>
+                </div>
+              </div>
 
-        <div className={classes.actions}>
-          <button disabled={isSubmitting}>
-            {isSubmitting ? "Submitting..." : saveButtonLabel}
-          </button>
-        </div>
-      </form>
-    </section>
-    </Card>
-  </div>
-  </>
-
-
-
-
-    
+              <div className={classes.actions}>
+                <button disabled={isSubmitting}>
+                  {isSubmitting ? "Submitting..." : saveButtonLabel}
+                </button>
+              </div>
+            </form>
+          </section>
+        </Card>
+      </div>
+    </>
   );
 }
 
