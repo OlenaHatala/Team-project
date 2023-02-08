@@ -4,6 +4,8 @@ const router = express.Router();
 
 const { register, login, update, deleteUser, logout, refresh} = require("../controllers/authController");
 
+
+
 router.route("/register").post(register);
 router.route("/login").post(login);
 router.route("/update").patch(update);
