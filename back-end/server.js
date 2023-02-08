@@ -18,7 +18,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/auth", require("./Auth/route"))
+app.use("/api/auth", require("./routes/userRoutes"))
 
 // app.listen(PORT, () => console.log(`Server Connected to port ${PORT}`))
 
