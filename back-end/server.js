@@ -1,4 +1,3 @@
-require('dotenv').config();
 const constants = require('./config/constants');
 
 const express = require("express")

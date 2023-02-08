@@ -21,20 +21,10 @@ function EditAccountPage() {
   return (
     <div className="account-details">
       <Card>
-        <UserForm method="patch" user={userData}/>
+        <UserForm user={userData}/>
       </Card>
     </div>
   );
-}
-
-export async function loader({ request }) {
-  console.log("hi1");
-  const id = localStorage.getItem("userId");
-  return fetch(`${API_URL}/events/user/` + id);
-}
-
-export async function action({ request }) {
-  return { message: "acc successful!" };
 }
 
 export default EditAccountPage;

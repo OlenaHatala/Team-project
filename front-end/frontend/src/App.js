@@ -6,13 +6,9 @@ import ErrorPage from "./pages/Error";
 import SuccessPage from "./pages/Success";
 import HomePage from "./pages/Home";
 import RootLayout from "./pages/Root";
-import AuthenticationPage, {
-  action as authAction,
-} from "./pages/Authentication";
 import { action as logoutAction } from "./pages/Logout";
 import { checkAuthLoader, tokenLoader } from "./util/auth";
 import EditAccountPage from "./pages/Account";
-import { action as editAccountAction } from "./components/UserForm";
 import AccountRootLayout from "./pages/AccountRoot";
 
 const router = createBrowserRouter([
@@ -23,12 +19,6 @@ const router = createBrowserRouter([
   {
     path: "login",
     element: <Login />
-  },
-  {
-    path: "auth",
-    element: <AuthenticationPage />,
-    errorElement: <ErrorPage />,
-    action: authAction,
   },
   {
     path: "/",
@@ -51,7 +41,6 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <EditAccountPage />,
-            action: editAccountAction,
             loader: checkAuthLoader,
           },
         ],
