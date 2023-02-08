@@ -120,7 +120,7 @@ exports.login = async (req, res, next) => {
 };
 
 exports.refresh = (req, res) => {
-  const cookie = req.cookies
+  const cookies = req.cookies
 
   if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
 
