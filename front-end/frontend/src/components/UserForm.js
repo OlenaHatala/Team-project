@@ -5,13 +5,23 @@ import {
   useActionData,
   json,
   redirect,
+  useNavigate,
 } from "react-router-dom";
-//import { getAuthToken } from "../util/auth";
-import classes from "./UserForm.module.css";
-import { API_URL } from "../config/urls";
 
-function UserForm({ method, user}) {
-  console.log('UserForm render');
+import classes from "./UserForm.module.css";
+import axios from "../api/axios";
+
+const API_EDIT_USER_URL = "/auth/update";
+
+const NAME_REGEX = /^[A-z][A-z-_]{1,15}$/;
+const MNUMBER_REGEX =
+  /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im;
+const EMAIL_REGEX =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+function UserForm({ user }) {
+  const navigate = useNavigate();
+
   const [isEditing, setIsEditing] = useState(false);
 
   const [firstname, setFirstname] = useState(user.firstname);
@@ -21,12 +31,27 @@ function UserForm({ method, user}) {
 
   const [focusedInput, setFocusedInput] = useState("");
 
-  const firstnameInputRef = useRef();
+  const [errMsg, setErrMsg] = useState("");
 
-  const data = useActionData();
+  const firstnameInputRef = useRef();
+  const errRef = useRef();
+
   const navigation = useNavigation();
 
   const isSubmitting = navigation.state === "submitting";
+
+  useEffect(() => {
+    setErrMsg("");
+  }, [firstname, lastname, email, number]);
+
+  useEffect(() => {
+    if (isEditing) {
+      setFocusedInput("firstname");
+      firstnameInputRef.current.focus();
+    } else {
+      setFocusedInput("");
+    }
+  }, [isEditing]);
 
   function cancelHandler() {
     setIsEditing(false);
@@ -40,63 +65,92 @@ function UserForm({ method, user}) {
     setIsEditing(true);
   }
 
-  function firstnameChangeHandler(event) {
-    setFirstname(event.target.value);
+  function blurHandler() {
+    //setFocusedInput("");
   }
 
-  function lastnameChangeHandler(event) {
-    setLastname(event.target.value);
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  function emailChangeHandler(event) {
-    setEmail(event.target.value);
-  }
+    //validation
+    const v1 = NAME_REGEX.test(firstname);
+    const v2 = NAME_REGEX.test(lastname);
+    const v3 = MNUMBER_REGEX.test(number);
+    const v4 = EMAIL_REGEX.test(email);
 
-  function numberChangeHandler(event) {
-    setNumber(event.target.value);
-  }
-
-  function firstnameFocusHandler() {
-    setFocusedInput('firstname');
-  }
-
-  function lastnameFocusHandler() {
-    setFocusedInput('lastname');
-  }
-
-  function emailFocusHandler() {
-    setFocusedInput('email');
-  }
-
-  function numberFocusHandler() {
-    setFocusedInput('number');
-  }
-
-  function blurHandler () {
-    setFocusedInput('');
-  }
-
-  useEffect(() => {
-    console.log('UserForm useEffect');
-    if (isEditing) {
-      setFocusedInput("firstname");
-      firstnameInputRef.current.focus();
-    } else {
-      setFocusedInput("");
+    if (!v1) {
+      setErrMsg("First name should have 2 to 16 letters.");
+      return;
     }
-  }, [isEditing]);
+
+    if (!v2) {
+      setErrMsg("Last name should have 2 to 16 letters.");
+      return;
+    }
+
+    if (!v3) {
+      setErrMsg("Phone number is not valid.");
+      return;
+    }
+
+    if (!v4) {
+      setErrMsg("Email is not valid.");
+      return;
+    }
+
+    const userData = {
+      name: firstname,
+      surname: lastname,
+      email: email,
+      mobile_number: number,
+    };
+
+    const id = localStorage.getItem("userId");
+
+    try {
+      const response = await axios.patch(
+        API_EDIT_USER_URL,
+        JSON.stringify({ id, userData }),
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      
+      localStorage.setItem("userEmail", response.data.user.email);
+      localStorage.setItem("userSurname", response.data.user.surname);
+      localStorage.setItem("userName", response.data.user.name);
+      localStorage.setItem(
+        "userMobileNumber",
+        response.data.user.mobile_number
+        );
+        
+      navigate("/success/?message=Personal-data-was-saved-successfuly");
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 409) {
+        setErrMsg(err.response?.data?.message || "Changing data failed");
+      } else if (err.response?.status === 400) {
+        setErrMsg(err.response?.data?.message || "Invalid Entry");
+      } else {
+        setErrMsg("Changing data failed");
+      }
+      errRef.current.focus();
+    }
+  };
 
   return (
-    <Form method={method} className={classes.form}>
+    <form onSubmit={handleSubmit} className={classes.form}>
+      <p
+        ref={errRef}
+        className={errMsg ? classes.errmsg : classes.offscreen}
+        aria-live="assertive"
+      >
+        {errMsg}
+      </p>
       <div className={classes.header}>
         <h2>Personal information</h2>{" "}
-        {data && data.errors && (
-          <ul>
-            {Object.values(data.errors).map((err) => (
-              <li key={err}>{err}</li>
-            ))}
-          </ul>
-        )}
       </div>
       <div className={classes.body}>
         <div className={classes["image-block"]}>
@@ -108,7 +162,11 @@ function UserForm({ method, user}) {
           </div>
         </div>
         <div className={classes["input-block"]}>
-          <div className={`${classes.input} ${focusedInput === "firstname" ? classes.focused : ''}`}>
+          <div
+            className={`${classes.input} ${
+              focusedInput === "firstname" ? classes.focused : ""
+            }`}
+          >
             <label htmlFor="firstname">First Name</label>
             <input
               ref={firstnameInputRef}
@@ -118,12 +176,16 @@ function UserForm({ method, user}) {
               disabled={!isEditing}
               required
               value={firstname}
-              onChange={firstnameChangeHandler}
-              onFocus={firstnameFocusHandler}
+              onChange={(event) => setFirstname(event.target.value)}
+              onFocus={() => setFocusedInput("firstname")}
               onBlur={blurHandler}
             />
           </div>
-          <div className={`${classes.input} ${focusedInput === "lastname" ? classes.focused : ''}`}>
+          <div
+            className={`${classes.input} ${
+              focusedInput === "lastname" ? classes.focused : ""
+            }`}
+          >
             <label htmlFor="lastname">Last Name</label>
             <input
               id="lastname"
@@ -132,12 +194,16 @@ function UserForm({ method, user}) {
               disabled={!isEditing}
               required
               value={lastname}
-              onChange={lastnameChangeHandler}
-              onFocus={lastnameFocusHandler}
+              onChange={(event) => setLastname(event.target.value)}
+              onFocus={() => setFocusedInput("lastname")}
               onBlur={blurHandler}
             />
           </div>
-          <div className={`${classes.input} ${focusedInput === "email" ? classes.focused : ''}`}>
+          <div
+            className={`${classes.input} ${
+              focusedInput === "email" ? classes.focused : ""
+            }`}
+          >
             <label htmlFor="email">Email</label>
             <input
               id="email"
@@ -146,12 +212,16 @@ function UserForm({ method, user}) {
               disabled={!isEditing}
               required
               value={email}
-              onChange={emailChangeHandler}
-              onFocus={emailFocusHandler}
+              onChange={(event) => setEmail(event.target.value)}
+              onFocus={() => setFocusedInput("email")}
               onBlur={blurHandler}
             />
           </div>
-          <div className={`${classes.input} ${focusedInput === "number" ? classes.focused : ''}`}>
+          <div
+            className={`${classes.input} ${
+              focusedInput === "number" ? classes.focused : ""
+            }`}
+          >
             <label htmlFor="number">Phone number</label>
             <input
               id="number"
@@ -160,8 +230,8 @@ function UserForm({ method, user}) {
               disabled={!isEditing}
               required
               value={number}
-              onChange={numberChangeHandler}
-              onFocus={numberFocusHandler}
+              onChange={(event) => setNumber(event.target.value)}
+              onFocus={() => setFocusedInput("number")}
               onBlur={blurHandler}
             />
           </div>
@@ -188,53 +258,53 @@ function UserForm({ method, user}) {
           </div>
         </div>
       </div>
-    </Form>
+    </form>
   );
 }
 
 export default UserForm;
 
-export async function action({ request, params }) {
-  const data = await request.formData();
+// export async function action({ request, params }) {
+//   const data = await request.formData();
 
-  const userData = {
-    name: data.get("firstname"),
-    surname: data.get("lastname"),
-    email: data.get("email"),
-    mobile_number: data.get("number"),
-  };
+//   const userData = {
+//     name: data.get("firstname"),
+//     surname: data.get("lastname"),
+//     email: data.get("email"),
+//     mobile_number: data.get("number"),
+//   };
 
-  const userId = localStorage.getItem("userId");
-  let url = `${API_URL}/api/auth/update/`;
+//   const userId = localStorage.getItem("userId");
+//   let url = `${API_URL}/api/auth/update/`;
 
-  //const token = getAuthToken();
+//   //const token = getAuthToken();
 
-  const response = await fetch(url, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({id: userId, userData}),
-  });
+//   const response = await fetch(url, {
+//     method: "PATCH",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({ id: userId, userData }),
+//   });
 
-  if (response.status === 422) {
-    return response;
-  }
+//   if (response.status === 422) {
+//     return response;
+//   }
 
-  if (!response.ok) {
-    throw json({ message: "Could not save user info." }, { status: 500 });
-  }
+//   if (!response.ok) {
+//     throw json({ message: "Could not save user info." }, { status: 500 });
+//   }
 
-  if (response.status === 422) {
-    return response;
-  }
+//   if (response.status === 422) {
+//     return response;
+//   }
 
-  const resData = await response.json();
+//   const resData = await response.json();
 
-  localStorage.setItem("userEmail", resData.user.email);
-  localStorage.setItem("userSurname", resData.user.surname);
-  localStorage.setItem("userName", resData.user.name);
-  localStorage.setItem("userMobileNumber", resData.user.mobile_number);
+//   localStorage.setItem("userEmail", resData.user.email);
+//   localStorage.setItem("userSurname", resData.user.surname);
+//   localStorage.setItem("userName", resData.user.name);
+//   localStorage.setItem("userMobileNumber", resData.user.mobile_number);
 
-  return redirect("/success/?message=Personal-data-was-saved-successfuly");
-}
+//   return redirect("/success/?message=Personal-data-was-saved-successfuly");
+// }

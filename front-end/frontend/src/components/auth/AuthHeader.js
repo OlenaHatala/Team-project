@@ -6,12 +6,14 @@ import { Link } from "react-router-dom";
 
 const AuthHeader = () => {
   return (
-    <div className={classes["auth-page__logo"]}>
-      <Link to="/">
-        <p>Loggions</p>
-        <span>Home</span>
-      </Link>
-    </div>
+    <header>
+      <div className={classes["auth-page__logo"]}>
+        <Link to="/">
+          <p>Loggions</p>
+          <span>Home</span>
+        </Link>
+      </div>
+    </header>
   );
 };
 
