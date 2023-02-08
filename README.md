@@ -41,7 +41,7 @@ in the chosen directory.
 
 
 
-#### Step 5: Start development srvers
+#### Step 5: Start development servers
 1. Navigate to ***/back-end*** and run  
 
         npm run dev
