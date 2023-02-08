@@ -121,7 +121,7 @@ exports.login = async (req, res, next) => {
 };
 
 exports.refresh = (req, res) => {
-  const cookie = req.cookies
+  const cookies = req.cookies
 
   if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
 
@@ -157,11 +157,16 @@ exports.refresh = (req, res) => {
 }
 
 exports.logout = (req, res) => {
+  console.log("1")
   const cookies = req.cookies
+  console.log("3")
+  console.log(cookies)
   if (!cookies?.jwt) return res.sendStatus(204) //No content
   res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true })
   res.json({ message: 'Cookie cleared' })
+  console.log("2")
 }
+
 
 
 exports.update = async (req, res, next) => {
@@ -213,3 +218,9 @@ exports.deleteUser = async (req, res, next) => {
     );
 };
 
+
+// module.exports = {
+//   login,
+//   refresh,
+//   logout
+// }
