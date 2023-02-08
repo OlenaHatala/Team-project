@@ -3,8 +3,11 @@ const constants = require('./config/constants');
 
 const express = require("express")
 const connectDB = require("./db")
+const cookies = require("cookie-parser");
 const app = express()
 
+
+app.use(cookies());
 
 
 

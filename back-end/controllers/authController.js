@@ -82,13 +82,15 @@ exports.login = async (req, res, next) => {
             },
         
             gitignoredConstants.ACCESS_TOKEN_SECRET,
-            {expiresIn: '15m'}
+            //to do: change to 15 minutes
+            {expiresIn: '5m'}
           )
         
           const refreshToken = jwt.sign(
             { "email": foundUser.email, "password": foundUser.password},
             gitignoredConstants.REFRESH_TOKEN_SECRET,
-            { expiresIn: '7d' }
+            //to do: change to one month
+            { expiresIn: '1h' }
           )
         
           res.cookie('jwt', refreshToken, {
@@ -119,7 +121,7 @@ exports.login = async (req, res, next) => {
 };
 
 exports.refresh = (req, res) => {
-  const cookie = req.cookies
+  const cookies = req.cookies
 
   if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
 
@@ -155,11 +157,12 @@ exports.refresh = (req, res) => {
 }
 
 exports.logout = (req, res) => {
-  const cookies = req.cookies
-  if (!cookies?.jwt) return res.sendStatus(204) //No content
-  res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true })
-  res.json({ message: 'Cookie cleared' })
+  const cookies = req.cookies;
+  if (!cookies?.jwt) return res.sendStatus(204); //No content
+  res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
+  res.json({ message: 'Cookie cleared' });
 }
+
 
 
 exports.update = async (req, res, next) => {
@@ -211,3 +214,9 @@ exports.deleteUser = async (req, res, next) => {
     );
 };
 
+
+// module.exports = {
+//   login,
+//   refresh,
+//   logout
+// }
