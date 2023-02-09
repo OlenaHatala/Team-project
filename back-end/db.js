@@ -11,8 +11,8 @@ const connectDB = async () => {
     console.log("MongoDB Connected")
   } catch (err) {
     console.log(err)
+  }
 }
 
-}
 module.exports = connectDB;
 

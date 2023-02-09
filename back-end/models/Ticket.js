@@ -1,11 +1,13 @@
 const Mongoose = require("mongoose")
 const TicketSchema = new Mongoose.Schema({
         table_id: {
-            type: Mongoose.Schema.Types.ObjectId,
+            //type: Mongoose.Schema.Types.ObjectId,
+            type: String,
             default: "",
         },
         user_id: {
-            type: ObjectID,
+            //type:  Mongoose.Schema.Types.ObjectId,
+            type: String,
             default: "",
         },
         datetime: {
