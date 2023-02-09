@@ -1,14 +1,12 @@
 const Mongoose = require("mongoose")
 const TicketSchema = new Mongoose.Schema({
         table_id: {
-            type: ObjectID,
+            type: Mongoose.Schema.Types.ObjectId,
             default: "",
-            required: true,
         },
         user_id: {
             type: ObjectID,
             default: "",
-            required: true,
         },
         datetime: {
             type: Date,
@@ -23,17 +21,14 @@ const TicketSchema = new Mongoose.Schema({
         is_outdated: {
             type: Boolean,
             default: false,
-            required: true,
         },
         enabled: {
             type: Boolean,
             default: false,
-            required: true,
         },
         confirmed: {
             type: Boolean,
             default: false,
-            required: true,
         },
     },
     {versionKey: false}    
