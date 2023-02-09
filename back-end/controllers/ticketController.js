@@ -3,7 +3,7 @@ const User = require('../models/User')
 const asyncHandler = require('express-async-handler')
 
 
-const createNewNote = asyncHandler(async (req, res) => {
+const createNewTicket = asyncHandler(async (req, res) => {
     const { table_id, user_id, datetime, duration, is_outdated, enabled, confirmed } = req.body
 
     if (!table_id || !user_id || !datetime || !duration || !is_outdated || !enabled || !confirmed) {
@@ -22,7 +22,7 @@ const createNewNote = asyncHandler(async (req, res) => {
 })
 
 module.exports = {
-    createNewNote,
-    //updateNote,
-    //deleteNote
+    createNewTicket,
+    //updateTicket,
+    //deleteTicket
 }
