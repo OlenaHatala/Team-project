@@ -22,7 +22,10 @@ app.use((req, res, next) => {
 
 app.use("/api/auth", require("./routes/userRoutes"))
 app.use("/api/ticket", require("./routes/ticketRoutes"))
+<<<<<<< HEAD
 app.use("/api/board", require("./routes/boardRoutes"))
+=======
+>>>>>>> ec71799 (task completed)
 
 // app.listen(PORT, () => console.log(`Server Connected to port ${PORT}`)\\)
 
