@@ -59,7 +59,7 @@ function ServiceInfo() {
       <header className={classes["fieldset-header"]}>
         <div className={classes["fieldset-nav"]}>
           <div className={classes["right-btn"]}>
-            <button type="button"
+            <button
               className={
                 !canSaveStep ? classes["invalid-nav-btn"] : classes["nav-btn"]
               }

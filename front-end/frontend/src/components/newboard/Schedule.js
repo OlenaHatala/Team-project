@@ -3,11 +3,15 @@ import DayHours from "./DayHours";
 
 import classes from "./Schedule.module.css";
 
-const Schedule = ({onSubmit}) => {
-  const { duration, setDuration, saveSchedule} = useNewBoardContext();
+const Schedule = () => {
+  const { duration, setDuration, saveSchedule, submitForm} = useNewBoardContext();
 
   const prevHandler = () => {
     saveSchedule();
+  };
+
+  const submitHandler = () => {
+    submitForm();
   };
 
   return (
@@ -15,16 +19,16 @@ const Schedule = ({onSubmit}) => {
       <header className={classes["fieldset-header"]}>
         <div className={classes["fieldset-nav"]}>
           <div className={classes["left-btn"]}>
-            <button type="button" onClick={prevHandler}>Back</button>
+            <button onClick={prevHandler}>Back</button>
           </div>
           <div className={classes["right-btn"]}>
-            <button type="button" onClick={onSubmit}>Create Board</button>
+            <button onClick={submitHandler}>Create Board</button>
           </div>
         </div>
       </header>
 
       <fieldset>
-        <legend id="days-text">Working days</legend>
+        <legend id="days_text">Working days</legend>
         <div className={classes.week}>
           <DayHours dayName="Mon" label="Monday" />
           <DayHours dayName="Tue" label="Tuesday" />
@@ -42,12 +46,11 @@ const Schedule = ({onSubmit}) => {
           <input
             id="num"
             type="number"
-            max="1440"
+            max="720"
             min="1"
             value={duration}
             onChange={(e) => {
-              const value = e.target.value < 1441 ? e.target.value : 1440;
-              setDuration(value);
+              setDuration(e.target.value);
             }}
           />
         </div>

@@ -33,8 +33,7 @@ const Settings = () => {
             max="99"
             value={ahead}
             onChange={(e) => {
-              const value = e.target.value < 100 ? e.target.value : 99;
-              setAhead(value);
+              setAhead(e.target.value);
             }}
           />
           <nobr>days ahead.</nobr>
@@ -70,10 +69,10 @@ const Settings = () => {
       <header className={classes["fieldset-header"]}>
         <div className={classes["fieldset-nav"]}>
           <div className={classes["left-btn"]}>
-            <button type="button" onClick={prevHandler}>Back</button>
+            <button onClick={prevHandler}>Back</button>
           </div>
           <div className={classes["right-btn"]}>
-            <button type="button" onClick={nextHandler}>Next</button>
+            <button onClick={nextHandler}>Next</button>
           </div>
         </div>
       </header>
@@ -110,8 +109,7 @@ const Settings = () => {
                 max="99"
                 value={booknum}
                 onChange={(e) => {
-                  const value = e.target.value < 100 ? e.target.value : 99;
-                  setBooknum(value);
+                  setBooknum(e.target.value);
                 }}
               />
             </div>

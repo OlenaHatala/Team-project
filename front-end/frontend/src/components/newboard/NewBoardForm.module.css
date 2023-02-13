@@ -28,6 +28,7 @@ fieldset {
 }
 
 .form-fieldset legend {
+  background-color: red;
   text-align: center;
   padding: 10px;
   font-size: 25px;
@@ -35,6 +36,7 @@ fieldset {
 }
 
 .fieldset-header {
+  background-color: rgba(255, 255, 255, 0.13);
   margin-bottom: 2rem;
 }
 
@@ -51,6 +53,7 @@ fieldset {
   text-decoration: none solid rgb(173, 122, 218);
   letter-spacing: 2px;
   line-break: auto;
+  background-color: rgba(0, 38, 255, 0.445);
 }
 
 .form-fieldset label span {
@@ -67,6 +70,7 @@ fieldset {
   display: flex;
   margin-bottom: 45px;
   text-align: left;
+  background-color: rgba(255, 251, 0, 0.274);
 }
 
 .input-block {
@@ -114,6 +118,7 @@ fieldset {
   width: 4rem;
   text-align: center;
   padding-bottom: 0;
+  background-color: rgba(47, 104, 104, 0.096);
   position: relative;
 }
 
@@ -142,6 +147,7 @@ fieldset {
 .invalid-nav-btn {
   padding-inline: 5 0px;
   text-align: center;
+  background-color: blue;
   text-align: center;
 }
 
@@ -149,7 +155,7 @@ fieldset {
   width: 25px;
   height: 25px;
   padding: 0;
-  margin-top: 4px;
+  margin: 0;
 }
 
 .autoopen-options {
@@ -188,6 +194,7 @@ fieldset {
 }
 
 .inputcheck {
+  background-color: rgb(29, 173, 0);
   padding: 0px 20px 0px 0px;
   margin: 0px;
 }
@@ -224,6 +231,7 @@ fieldset {
 
 .left-btn {
   float: left;
+  background-color: green;
 }
 .left-btn button {
   text-align: center;
@@ -232,7 +240,7 @@ fieldset {
 .right-btn {
   padding: 0px 0px 0px 20px;
   text-align: center;
-  margin-left: auto;
+  background-color: green;
 }
 
 .remove-button {
