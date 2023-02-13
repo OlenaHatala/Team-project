@@ -11,7 +11,7 @@ exports.register = async (req, res, next) => {
   }
   const email_user = await User.findOne({ email})
   if(email_user){
-    return res.status(409).json({ message: "This email is token" })
+    return res.status(409).json({ message: "This email has been used already" })
   }
   bcrypt.hash(password, 10).then(async (hash) => {
     await User.create({
@@ -29,7 +29,7 @@ exports.register = async (req, res, next) => {
       )
       .catch ((error) =>
         res.status(400).json({
-          message: "User not successful created",
+          message: "User was not created",
           error: error.message,
         })
       );
@@ -61,9 +61,8 @@ exports.login = async (req, res, next) => {
   try {
     const foundUser = await User.findOne({ email })
     if (!foundUser) {
-      res.status(400).json({
-        message: "Login not successful",
-        error: "User not found",
+      res.status(401).json({
+        message: `${email} account was not found`,
       })
     } else {
       bcrypt.compare(password, foundUser.password).then(function (result) 
@@ -82,15 +81,13 @@ exports.login = async (req, res, next) => {
             },
         
             gitignoredConstants.ACCESS_TOKEN_SECRET,
-            //to do: change to 15 minutes
-            {expiresIn: '5m'}
+            {expiresIn: '15m'}
           )
         
           const refreshToken = jwt.sign(
             { "email": foundUser.email, "password": foundUser.password},
             gitignoredConstants.REFRESH_TOKEN_SECRET,
-            //to do: change to one month
-            { expiresIn: '1h' }
+            { expiresIn: '7d' }
           )
         
           res.cookie('jwt', refreshToken, {
@@ -108,16 +105,18 @@ exports.login = async (req, res, next) => {
           })
         }
         else {
-          res.status(400).json({ message: "Login not succesful" })
+          res.status(401).json({ message: "Incorrect password" })
         }
       })
     }
   }  catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       message: "An error occurred",
       error: error.message,
     })
   }
+
+
 };
 
 exports.refresh = (req, res) => {
@@ -157,12 +156,11 @@ exports.refresh = (req, res) => {
 }
 
 exports.logout = (req, res) => {
-  const cookies = req.cookies;
-  if (!cookies?.jwt) return res.sendStatus(204); //No content
-  res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
-  res.json({ message: 'Cookie cleared' });
+  const cookies = req.cookies
+  if (!cookies?.jwt) return res.sendStatus(204) //No content
+  res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true })
+  res.json({ message: 'Cookie cleared' })
 }
-
 
 
 exports.update = async (req, res, next) => {
@@ -214,9 +212,3 @@ exports.deleteUser = async (req, res, next) => {
     );
 };
 
-
-// module.exports = {
-//   login,
-//   refresh,
-//   logout
-// }

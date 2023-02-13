@@ -3,3 +3,7 @@ gitignoredConstants.js
 gitignoredConstants
 
 /gitignoredConstants
+
+gitignoredConstants/
+
+config/gitignoredConstants.js
