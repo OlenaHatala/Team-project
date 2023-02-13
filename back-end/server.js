@@ -23,6 +23,7 @@ app.use((req, res, next) => {
 
 app.use("/api/auth", require("./routes/userRoutes"))
 app.use("/api/ticket", require("./routes/ticketRoutes"))
+app.use("/api/board", require("./routes/boardRoutes"))
 
 // app.listen(PORT, () => console.log(`Server Connected to port ${PORT}`))
 
