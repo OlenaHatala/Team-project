@@ -37,7 +37,13 @@ const create = asyncHandler(async (req, res) => {
 
 module.exports = {
     create,
+<<<<<<< HEAD
     //updateTicket,
     //deleteTicket
 }
 >>>>>>> ec71799 (task completed)
+=======
+    //update,
+    //delete
+}
+>>>>>>> 2b7fdd1 (add create function to boardController.js)
