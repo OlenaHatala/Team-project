@@ -1,0 +1,31 @@
+.day {
+  background-color: #09ff001f;
+  display: inline-block;
+  margin: 2rem auto;
+  width: auto;
+  max-width: 18rem;
+  min-width: 1rem;
+}
+
+.day input {
+  border-bottom: 1px dotted #8c5bff;
+  padding: 9px 0;
+  color: black;
+}
+
+.day_disabled button {
+  color: #f3f3f3;
+  background-color: transparent;
+  border: 1px solid #f3f3f3;
+  padding: 30 30px;
+  overflow: hidden;
+}
+
+.day_disabled button:hover {
+  background-color: #aa77d607;
+}
+
+.day label {
+  color: black;
+  margin-top: 20px;
+}

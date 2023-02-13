@@ -10,6 +10,8 @@ import { action as logoutAction } from "./pages/Logout";
 import { checkAuthLoader, tokenLoader } from "./util/auth";
 import EditAccountPage from "./pages/Account";
 import AccountRootLayout from "./pages/AccountRoot";
+import ServiceInfo from "./components/newboard/ServiceInfo";
+import NewBoardForm from "./components/newboard/NewBoardForm";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,10 @@ const router = createBrowserRouter([
             element: <EditAccountPage />,
             loader: checkAuthLoader,
           },
+          {
+            path: "sinfo",
+            element: <NewBoardForm />,
+          }
         ],
       },
     ],

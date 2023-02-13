@@ -55,13 +55,17 @@ ul {
 }
 
 .account-details {
-  width: 90%;
   max-width: 70rem;
   margin: auto;
 }
 
-.account-root {
-  text-align: center;
+.form-header {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  background-color: red;
 }
+
 
 
