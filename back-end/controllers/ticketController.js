@@ -35,6 +35,6 @@ const create = asyncHandler(async (req, res) => {
 
 module.exports = {
     create,
-    //updateTicket,
-    //deleteTicket
+    //update,
+    //delete
 }
