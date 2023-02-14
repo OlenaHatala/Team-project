@@ -30,8 +30,31 @@ const create  = asyncHandler(async (req, res) => {
     }
 })
 
+const deleteBoard = async (req, res) => {
+    const { id } = req.body;
+
+    console.log("delete -> enter id");
+
+    if (!id) {
+        return res.status(400).json({ message: 'Board ID required' })
+    }
+
+    const board = await Board.findById(id).exec()
+
+    if (!board) {
+        return res.status(400).json({ message: 'Board not found' })
+    }
+
+    const result = await board.deleteOne()
+
+    const reply = `Board '${result.title}' with ID ${result._id} deleted`
+
+    res.json(reply)
+}
+
+
 module.exports = {
     create,
     //update,
-    //delete
+    deleteBoard
 }
