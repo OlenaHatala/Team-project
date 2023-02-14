@@ -7,7 +7,7 @@ const asyncHandler = require('express-async-handler')
 
 const create = asyncHandler(async (req, res) => {
     const { table_id, user_id, datetime, duration, is_outdated, enabled, confirmed } = req.body
-
+    console.log(Date.now());
     if (!table_id || !user_id || !datetime || !duration || !is_outdated || !enabled || !confirmed) {
         return res.status(400).json({ message: 'All fields are required' })
     }
@@ -35,6 +35,28 @@ const create = asyncHandler(async (req, res) => {
       }
 })
 
+
+const deleteTicket = async (req, res) => {
+  const { id } = req.body;
+
+  if (!id) {
+      return res.status(400).json({ message: 'Ticket ID required' })
+  }
+
+  const ticket = await Ticket.findById(id).exec()
+
+  if (!ticket) {
+      return res.status(400).json({ message: 'Ticket not found' })
+  }
+
+  const result = await ticket.deleteOne()
+
+  const reply = `Ticket '${result.title}' with ID ${result._id} deleted`
+
+  res.json(reply)
+}
+
+
 module.exports = {
     create,
 <<<<<<< HEAD
@@ -44,6 +66,11 @@ module.exports = {
 >>>>>>> ec71799 (task completed)
 =======
     //update,
+<<<<<<< HEAD
     //delete
 }
 >>>>>>> 2b7fdd1 (add create function to boardController.js)
+=======
+    deleteTicket
+}
+>>>>>>> a432056 (board creation)
