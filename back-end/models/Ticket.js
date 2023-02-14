@@ -1,4 +1,6 @@
 const Mongoose = require("mongoose")
+
+
 const TicketSchema = new Mongoose.Schema({
         table_id: {
             type: Mongoose.Schema.Types.ObjectId,
@@ -10,13 +12,13 @@ const TicketSchema = new Mongoose.Schema({
         },
         datetime: {
             type: Date,
-            min: Date.now(),
+            //min: new Date(),
             required: true,
         },
         duration: {
             type: Number,
             min: 0,
-            required: true,
+            default: 60,
         },
         is_outdated: {
             type: Boolean,
