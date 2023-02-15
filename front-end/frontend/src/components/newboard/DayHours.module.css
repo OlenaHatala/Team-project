@@ -1,0 +1,88 @@
+.day {
+  display: inline-block;
+  width: 100%;
+  border-radius: 5px;
+  text-align: center;
+  height: 200px;
+}
+
+.day input {
+  display: flex;
+  margin:auto;
+  width: 100%;
+  text-align: center;
+  padding: 9px 5px;
+  color: #f3f3f3;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  border-bottom: 2px dotted #8c5bff;
+  font-size: 16px;
+  text-decoration: none solid rgb(243, 243, 243);
+  caret-color: transparent;
+}
+
+.disabled-day {
+  display: inline-block;
+  width: 100%;
+  border-radius: 5px;
+  text-align: center;
+  height: 200px;
+}
+
+.disabled-day input {
+  display: flex;
+  margin:auto;
+  width: 100%;
+  text-align: center;
+  padding: 9px 5px;
+  color: #8a8a8a;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  border-bottom: 2px solid #8c5bff;
+  font-size: 16px;
+  text-decoration: none solid rgb(243, 243, 243);
+  caret-color: transparent;
+}
+
+.disabled-day input:hover {
+  cursor:not-allowed;
+}
+
+.disabled-day .day-hours-button {
+  background-color: #1c1333;
+  color: #f3f3f3;
+  border: 1px solid #f3f3f3;
+}
+
+.disabled-day .day-hours-button:hover {
+  background-color: #1f1638;
+}
+
+
+.day label {
+  display: flex;
+  color: #f3f3f3;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.disabled-day label {
+    display: flex;
+    color: #8a8a8a;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+@media (max-width: 650px) {
+  .day {
+    width: 60%;
+    margin-top: 30px;
+  }
+
+  .disabled-day {
+    width: 60%;
+    margin-top: 30px;
+  }
+}

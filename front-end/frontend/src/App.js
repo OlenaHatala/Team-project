@@ -10,6 +10,7 @@ import { action as logoutAction } from "./pages/Logout";
 import { checkAuthLoader, tokenLoader } from "./util/auth";
 import EditAccountPage from "./pages/Account";
 import AccountRootLayout from "./pages/AccountRoot";
+import NewBoard from "./pages/NewBoard";
 
 const router = createBrowserRouter([
   {
@@ -42,9 +43,13 @@ const router = createBrowserRouter([
             index: true,
             element: <EditAccountPage />,
             loader: checkAuthLoader,
-          },
+          }
         ],
       },
+      {
+        path: "newboard",
+        element: <NewBoard />,
+      }
     ],
   },
 ]);
