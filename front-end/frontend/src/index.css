@@ -59,6 +59,11 @@ ul {
   margin: auto;
 }
 
+.new-board-page {
+  max-width: 70rem;
+  margin: auto;
+}
+
 .form-header {
   display: flex;
   flex-flow: row nowrap;
