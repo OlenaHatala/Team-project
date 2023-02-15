@@ -67,7 +67,7 @@ const DayHours = ({ dayName, label }) => {
         type="button"
         className={classes["day-hours-button"]}
         onClick={() => {
-          setDay((prevInfo) => ({ ...day, disabled: !day["disabled"] }));
+          setDay((prevInfo) => ({ ...prevInfo, disabled: !prevInfo["disabled"] }));
         }}
       >
         {label}
