@@ -3,15 +3,11 @@ import DayHours from "./DayHours";
 
 import classes from "./Schedule.module.css";
 
-const Schedule = () => {
-  const { duration, setDuration, saveSchedule, submitForm} = useNewBoardContext();
+const Schedule = ({onSubmit}) => {
+  const { duration, setDuration, saveSchedule} = useNewBoardContext();
 
   const prevHandler = () => {
     saveSchedule();
-  };
-
-  const submitHandler = () => {
-    submitForm();
   };
 
   return (
@@ -22,7 +18,7 @@ const Schedule = () => {
             <button type="button" onClick={prevHandler}>Back</button>
           </div>
           <div className={classes["right-btn"]}>
-            <button type="button" onClick={submitHandler}>Create Board</button>
+            <button type="button" onClick={onSubmit}>Create Board</button>
           </div>
         </div>
       </header>
