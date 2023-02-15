@@ -26,10 +26,13 @@ in the chosen directory.
 
 
 #### Step 3: Add and configure gitignored constants
- 1. Navigate to ***/back-end/config*** and add **"gitignoredConstants.js"** file.
- 2. Copy content of **"gitignoredConstants.example.js"** file and paste to newly created file.
- 3. Replace *"USER"* and *"PASSWORD"* constants values with database credentials given by owner of the repository.  
-
+ 1. Navigate to ***/back-end/*** and add **".env"** file.
+ 2. Copy content of **"/back-end/.env.example"** file and paste to newly created file.
+ 3. Replace *"USER"*, *"PASSWORD"*, *"ACCESS_TOKEN_SECRET"* and *"REFRESH_TOKEN_SECRET"* constants values with database credentials given by owner of the repository.  
+ 4. Change api localhost port, if needed (default - 3500).
+ 5. Navigate to ***/front-end/frontend*** and add **".env"** file.
+ 6. Copy content of **"/front-end/frontend.env.example"** file and paste to newly created file.
+ 7. Match api localhost port in *"REACT_APP_API_URL"* connection string with localhost port in **"/back-end/.env"** file.
 
 
 
