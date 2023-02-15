@@ -13,34 +13,48 @@ html, body {
     padding-top: 10px;
 }
 
-.header h1 {
+fieldset legend {
+    padding-top: 5%;
+    padding-bottom: 5%;
+    font-size: 25px;
     text-align: center;
-    color: #a977d6;
 }
 
-.header h2 {
-    text-align: center;
-    color: #F3F3F3;
+.fieldset-nav {
+    height: 5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+.fieldset-nav button {
+    padding: 0 10px;
+    margin: 20px;
+    width: 7rem;
 }
+  
+.left-btn {
+    float: left;
+}
+  
+.left-btn button {
+    text-align: center;
+}
+  
+.right-btn {
+    padding: 0px 0px 0px 20px;
+    text-align: center;
+}
+  
 
 .week {
     width: 100%;
     display: flex;
-    justify-content: center;
-    background-color: rgba(255, 0, 0, 0.185);
-}
-
-.day {
-    background-color: #09ff001f;
-    display: inline-block;
-    margin: 2rem auto;
-    width: auto;
-    max-width: 18rem;
-    min-width: 1rem;
+    justify-content: space-evenly;
+    text-align: center;
+    gap: 20px;
 }
 
 #days-text{
-    padding-left: 55px;
     color: #F3F3F3;
 }
 
@@ -48,9 +62,10 @@ html, body {
     border-bottom: 1px dotted #8c5bff;
     padding: 9px 0;
     color: #F3F3F3;
-  }
+}
 
-button {
+
+.week button, button {
     background-color: #a977d6;
     width: 100%;
     height: 40px;
@@ -67,40 +82,36 @@ button:hover{
     cursor: pointer;
 }
 
-.day_disabled button {
-    color: #f3f3f3;
-    background-color: transparent;
-    border: 1px solid #f3f3f3;
-    padding: 30 30px;
-    overflow: hidden;
-}
-
-.day_disabled button:hover{
-    background-color: #aa77d607;
-}
-
 .day label {
     color: #f3f3f3;
     margin-top: 20px;
 }
 
-.input {
-    margin-bottom: 45px;
-    text-align: center;
-    margin-top: 100px;
-    margin-inline: auto;
-    display: block;
-    width: 90%;
+.number-input {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+    padding-bottom: 5%;
+    font-size: 18px;
+    padding-top: 30px;
 }
 
-
+.number-input label{
+    width: auto;
+}
 
 .number-input input {
-    width: 5rem;
-    border-bottom: 1px dotted #8c5bff;
     padding: 9px 0;
-    color: #F3F3F3;
-    margin: auto;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    text-align: center;
+    border-bottom: 2px solid #8c5bff;
+    color: #f3f3f3;
+    right: 30px;
+    font-size: 16px;
 }
 
 @media (max-width: 1000px) {
@@ -116,5 +127,28 @@ button:hover{
 }
 
 input[type="time"]::-webkit-calendar-picker-indicator{
-    filter: invert(99%) sepia(34%) saturate(117%) hue-rotate(216deg) brightness(111%) contrast(91%);
-  }
+    filter: invert(99%) sepia(0%) saturate(23%) hue-rotate(75deg) brightness(113%) contrast(91%);;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

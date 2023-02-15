@@ -17,7 +17,7 @@ const NewBoardForm = () => {
 
   const content = (
     <div className="account-details">
-      <Card>{display[page]}</Card>
+      <Card><form>{display[page]}</form></Card>
     </div>
   );
 
