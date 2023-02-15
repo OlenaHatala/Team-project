@@ -41,11 +41,12 @@ const Schedule = ({onSubmit}) => {
           <input
             id="num"
             type="number"
-            max="720"
+            max="1440"
             min="1"
             value={duration}
             onChange={(e) => {
-              setDuration(e.target.value);
+              const value = e.target.value < 1441 ? e.target.value : 1440;
+              setDuration(value);
             }}
           />
         </div>
