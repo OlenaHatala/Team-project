@@ -1,8 +1,8 @@
+require("dotenv").config();
 const User = require("../models/User")
 const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 const asyncHandler = require('express-async-handler');
-const gitignoredConstants = require("../config/gitignoredConstants");
 
 exports.register = async (req, res, next) => {
 
@@ -81,13 +81,13 @@ exports.login = async (req, res, next) => {
               }
             },
         
-            gitignoredConstants.ACCESS_TOKEN_SECRET,
+            process.env.ACCESS_TOKEN_SECRET,
             {expiresIn: '15m'}
           )
         
           const refreshToken = jwt.sign(
             { "email": foundUser.email, "password": foundUser.password},
-            gitignoredConstants.REFRESH_TOKEN_SECRET,
+            process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '7d' }
           )
         
@@ -129,7 +129,7 @@ exports.refresh = (req, res) => {
 
   jwt.verify(
     refreshToken,
-    gitignoredConstants.REFRESH_TOKEN_SECRET,
+    process.env.REFRESH_TOKEN_SECRET,
     asyncHandler(async (err, decoded) => {
       if (err) return res.status(403).json({ message: 'Forbidden' })
     
@@ -147,7 +147,7 @@ exports.refresh = (req, res) => {
             "password": foundUser.password
           }
         },
-        gitignoredConstants.ACCESS_TOKEN_SECRET,
+        process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: '15m'}
       )
 

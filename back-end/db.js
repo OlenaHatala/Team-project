@@ -1,7 +1,7 @@
-const gitignoredConstants = require('./config/gitignoredConstants');
+//const gitignoredConstants = require('./config/gitignoredConstants');
 
 const Mongoose = require("mongoose")
-const localDB = `mongodb+srv://${gitignoredConstants.USER}:${gitignoredConstants.PASSWORD}@clusterqa.dhdgpcl.mongodb.net/tableDB?retryWrites=true&w=majority`
+const localDB = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@clusterqa.dhdgpcl.mongodb.net/tableDB?retryWrites=true&w=majority`
 const connectDB = async () => {
   try {
     await Mongoose.connect(localDB, {
