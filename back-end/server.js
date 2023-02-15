@@ -1,10 +1,9 @@
-const constants = require('./config/constants');
-
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require("express")
 const connectDB = require("./db")
 const cookies = require("cookie-parser");
 const app = express()
-
 
 app.use(cookies());
 
@@ -23,12 +22,12 @@ app.use((req, res, next) => {
 
 app.use("/api/auth", require("./routes/userRoutes"))
 
-// app.listen(PORT, () => console.log(`Server Connected to port ${PORT}`))
+// app.listen(PORT, () => console.log(`Server Connected to port ${PORT}`)\\)
 
 
 
-const server = app.listen(constants.PORT, () =>
-  console.log(`Server Connected to port ${constants.PORT}`)
+const server = app.listen(process.env.PORT, () =>
+  console.log(`Server Connected to port ${process.env.PORT}`)
 )
 // Handling Error
 process.on("unhandledRejection", err => {

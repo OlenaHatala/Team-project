@@ -3,3 +3,5 @@ gitignoredConstants.js
 gitignoredConstants
 
 /gitignoredConstants
+
+.env
