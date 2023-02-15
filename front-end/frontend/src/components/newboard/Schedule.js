@@ -19,16 +19,16 @@ const Schedule = () => {
       <header className={classes["fieldset-header"]}>
         <div className={classes["fieldset-nav"]}>
           <div className={classes["left-btn"]}>
-            <button onClick={prevHandler}>Back</button>
+            <button type="button" onClick={prevHandler}>Back</button>
           </div>
           <div className={classes["right-btn"]}>
-            <button onClick={submitHandler}>Create Board</button>
+            <button type="button" onClick={submitHandler}>Create Board</button>
           </div>
         </div>
       </header>
 
       <fieldset>
-        <legend id="days_text">Working days</legend>
+        <legend id="days-text">Working days</legend>
         <div className={classes.week}>
           <DayHours dayName="Mon" label="Monday" />
           <DayHours dayName="Tue" label="Tuesday" />
