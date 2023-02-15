@@ -10,8 +10,8 @@ const DayHours = ({ dayName, label }) => {
     useNewBoardContext();
 
   return (
-    <div className={`${classes.day}`}>
-      <button
+    <div className={!day.disabled ? classes.day : classes["disabled-day"]}>
+      <button type="button" className={classes["day-hours-button"]}
         onClick={() => {
           setDay((prevInfo) => ({...day, disabled: !day["disabled"]}));
         }}

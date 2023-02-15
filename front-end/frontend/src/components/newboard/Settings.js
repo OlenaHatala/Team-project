@@ -69,10 +69,10 @@ const Settings = () => {
       <header className={classes["fieldset-header"]}>
         <div className={classes["fieldset-nav"]}>
           <div className={classes["left-btn"]}>
-            <button onClick={prevHandler}>Back</button>
+            <button type="button" onClick={prevHandler}>Back</button>
           </div>
           <div className={classes["right-btn"]}>
-            <button onClick={nextHandler}>Next</button>
+            <button type="button" onClick={nextHandler}>Next</button>
           </div>
         </div>
       </header>
