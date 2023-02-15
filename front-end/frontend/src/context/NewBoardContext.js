@@ -63,7 +63,6 @@ const NewBoardContext = createContext({
   setDetails: (details) => {},
   setSettings: (nav, settings) => {},
   setSchedule: () => {},
-  submitForm: () => {},
 });
 
 export const NewBoardProvider = ({ children }) => {
@@ -197,27 +196,6 @@ export const NewBoardProvider = ({ children }) => {
   //   setSun({ disabled, open, close });
   // };
 
-  const submitForm = () => {
-    console.log(details);
-    console.log("settings:");
-    console.log(settings);
-    console.log(`duration: ${duration}`);
-    console.log('mon:');
-    console.log(mon);
-    console.log('tue:');
-    console.log(tue);
-    console.log('wed:');
-    console.log(wed);
-    console.log('thu:');
-    console.log(thu);
-    console.log('fri:');
-    console.log(fri);
-    console.log('sat:');
-    console.log(sat);
-    console.log('sun:');
-    console.log(sun);
-  };
-
   return (
     <NewBoardContext.Provider
       value={{
@@ -246,7 +224,6 @@ export const NewBoardProvider = ({ children }) => {
         setDetails,
         setSettings,
         setDuration,
-        submitForm
       }}
     >
       {children}
