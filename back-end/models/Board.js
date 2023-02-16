@@ -65,9 +65,10 @@ const BoardSchema = new Mongoose.Schema({
                 }
             },
         },
-        tickets: [{
-            
-                monday: { type: Array },
+        tickets:
+        [{
+
+                monday:  { type: Array },
                 tuesday: { type: Array },
                 wednesday: { type: Array },
                 thursday: { type: Array },
@@ -75,7 +76,7 @@ const BoardSchema = new Mongoose.Schema({
                 saturday: { type: Array },
                 sunday: { type: Array }
         },
-            {
+        {
             
             monday: { type: Array },
             tuesday: { type: Array },
