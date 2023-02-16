@@ -12,10 +12,13 @@ import { eyeOff } from "react-icons-kit/feather/eyeOff";
 
 import classes from "./authForm.module.css";
 import axios from "../../api/axios";
+import useAuth from "../../hooks/useAuth";
 
 const API_LOGIN_URL = "/auth/login";
 
 function LoginForm() {
+  const { setAuth, auth } = useAuth();
+
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -66,14 +69,23 @@ function LoginForm() {
       setPwd("");
 
       //test token
-      const token = "test token";
+      const accessToken = response?.data?.accessToken;
+      const responseUser = response?.data?.user;
+
+      setAuth({
+        id: responseUser._id,
+        email: responseUser.email,
+        surname: responseUser.surname,
+        name: responseUser.name,
+        accessToken,
+      });
 
       // TODO: remove console.logs before deployment
 
       console.log("putting data from response to localStorage");
       console.log(response.data.user);
 
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", accessToken);
       localStorage.setItem("userId", response.data.user._id);
       localStorage.setItem("userEmail", response.data.user.email);
       localStorage.setItem("userSurname", response.data.user.surname);
@@ -89,8 +101,9 @@ function LoginForm() {
       expiration.setHours(expiration.getHours() + 1);
 
       localStorage.setItem("expiration", expiration.toISOString());
-
+      console.log(from);
       navigate(from, { replace: true });
+
     } catch (err) {
       console.log(err);
       if (!err.response?.status) {

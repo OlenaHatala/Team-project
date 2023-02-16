@@ -11,6 +11,7 @@ import { checkAuthLoader, tokenLoader } from "./util/auth";
 import EditAccountPage from "./pages/Account";
 import AccountRootLayout from "./pages/AccountRoot";
 import NewBoard from "./pages/NewBoard";
+import RequireAuth from "./components/auth/RequireAuth";
 import BoardOwnerView from './pages/BoardOwnerView';
 
 const router = createBrowserRouter([
@@ -48,9 +49,15 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "newboard",
-        element: <NewBoard />,
-      },
+        path: "boards",
+        element: <RequireAuth />,
+        children: [
+          {
+            path: "newboard",
+            element: <NewBoard />,
+          }
+        ]
+      }
     ],
   },
 
