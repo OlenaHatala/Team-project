@@ -2,11 +2,12 @@ const Board = require('../models/Board')
 const User = require('../models/User')
 const Ticket = require('../models/Ticket')
 const asyncHandler = require('express-async-handler')
+const Mongoose = require("mongoose")
 
-function addMinutes(date, minutes) {
+// function addMinutes(date, minutes) {
 
-    return date.setTime(date.getTime() + minutes*60000);
-}
+//     return date.setTime(date.getTime() + minutes*60000);
+// }
 const week_index = {
     'monday': 0,
     'tuesday': 1,
@@ -20,8 +21,8 @@ const week_index = {
 const create  = asyncHandler(async (req, res) => {
     const {owner_id, label, description, service_name, req_confirm, book_num, markup, address, auto_open} = req.body
 
-    const tickets = [{
-
+    const tickets = 
+    [{
         monday:  [],
         tuesday: [],
         wednesday: [],
@@ -31,7 +32,6 @@ const create  = asyncHandler(async (req, res) => {
         sunday: []
     },
     {
-
         monday: [],
         tuesday: [],
         wednesday: [],
@@ -41,7 +41,6 @@ const create  = asyncHandler(async (req, res) => {
         sunday: []
     },
     {
-        
         monday: [],
         tuesday: [],
         wednesday: [],
@@ -51,7 +50,6 @@ const create  = asyncHandler(async (req, res) => {
         sunday: []
     },
     {
-        
         monday: [],
         tuesday: [],
         wednesday: [],
@@ -61,7 +59,6 @@ const create  = asyncHandler(async (req, res) => {
         sunday: []
     },
     {
-        
         monday: [],
         tuesday: [],
         wednesday: [],
@@ -71,7 +68,6 @@ const create  = asyncHandler(async (req, res) => {
         sunday: []
     },
     {
-        
         monday: [],
         tuesday: [],
         wednesday: [],
@@ -82,8 +78,6 @@ const create  = asyncHandler(async (req, res) => {
     }]
 
     try {
-
-
         const board = await Board.create({
             owner_id,
             label,
@@ -118,17 +112,16 @@ const create  = asyncHandler(async (req, res) => {
             const add_min = (min) => {
                 ticket_time = ticket_time + min * 60000
             }
+            
             do{
                 
                 const current_day = new Date().getDay()
-                let markup_day = 0
                 
                 num_of_days = 8 - current_day + 7 * i + week_index[day]
 
                 const ticket_datetime = new Date(new Date().getTime() + num_of_days*24*60*60*1000)
                 
                 const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_datetime, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
-                console.log(`${i}: ${day}`)
                 
                 board.tickets[i][day].push(ticket._id)
 
@@ -138,7 +131,6 @@ const create  = asyncHandler(async (req, res) => {
            
         }
         board.save((error) => {
-            //Monogodb error checker
             if (error) {
               return res
                 .status(200)
@@ -147,17 +139,11 @@ const create  = asyncHandler(async (req, res) => {
             res.status(201).json({ message: "Created successfully", board});
         });
 
-        // res.status(200).json({
-        //     message: "Board created successfully",
-        //     board
-        // })
-
     } catch (error) {
         res.status(400).json({
             message: "Board was not created",
             error: error.message,
         })
-
     }
 })
 
@@ -167,13 +153,35 @@ const deleteBoard = async (req, res) => {
     if (!id) {
         return res.status(400).json({ message: 'Board ID required' })
     }
-
+    
     const board = await Board.findById(id).exec()
 
     if (!board) {
         return res.status(400).json({ message: 'Board not found' })
     }
+    for (i = 0; i<6; i++)
+    {  
+        const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
+        wednesday: board.tickets[i].wednesday, thursday : board.tickets[i].thursday, 
+        friday: board.tickets[i].friday, saturday: board.tickets[i].saturday, sunday: board.tickets[i].sunday}
 
+        for(var day in week_tickets)
+        {
+            for (j in week_tickets[day])
+            {
+                const found_ticket = await Ticket.findById(week_tickets[day][j]).exec()
+
+                if (!found_ticket) {
+                    return res.status(400).json({ message: 'Ticket is not found' })
+                }
+
+                const result_ticket = await found_ticket.deleteOne()
+
+                const reply = `Ticket '${result_ticket.title}' with ID ${result_ticket._id} deleted`
+            }
+        }
+    }
+        
     const result = await board.deleteOne()
 
     const reply = `Board '${result.title}' with ID ${result._id} deleted`
