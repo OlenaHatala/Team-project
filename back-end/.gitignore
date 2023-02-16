@@ -4,6 +4,4 @@ gitignoredConstants
 
 /gitignoredConstants
 
-gitignoredConstants/
-
-config/gitignoredConstants.js
+.env
