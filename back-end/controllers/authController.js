@@ -5,6 +5,7 @@ const asyncHandler = require('express-async-handler');
 const gitignoredConstants = require("../config/gitignoredConstants");
 
 exports.register = async (req, res, next) => {
+
   const { name, surname, mobile_number, email, password } = req.body
   if (password.length < 8) {
     return res.status(400).json({ message: "Password less than 8 characters" })
