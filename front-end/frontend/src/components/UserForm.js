@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  Form,
   useNavigation,
-  useActionData,
-  json,
-  redirect,
   useNavigate,
 } from "react-router-dom";
 
@@ -157,7 +153,7 @@ function UserForm({ user }) {
           <div className={classes["profile-photo"]}>
             <img
               src="https://t4.ftcdn.net/jpg/03/31/69/91/360_F_331699188_lRpvqxO5QRtwOM05gR50ImaaJgBx68vi.jpg"
-              alt="profile-photo"
+              alt=""
             />
           </div>
         </div>
