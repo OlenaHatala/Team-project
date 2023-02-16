@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 import classes from "./UserForm.module.css";
-import axios from "../api/axios";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const API_EDIT_USER_URL = "/auth/update";
 
@@ -16,6 +16,7 @@ const EMAIL_REGEX =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 function UserForm({ user }) {
+  const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -104,7 +105,7 @@ function UserForm({ user }) {
     const id = localStorage.getItem("userId");
 
     try {
-      const response = await axios.patch(
+      const response = await axiosPrivate.patch(
         API_EDIT_USER_URL,
         JSON.stringify({ id, userData }),
         {

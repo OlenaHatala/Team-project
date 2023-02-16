@@ -1,10 +1,10 @@
-import ServiceInfo from "./ServiceInfo";
+import { useNavigate } from "react-router-dom";
 
 import useNewBoardContext from "../../hooks/useNewBoardContext";
 
+import ServiceInfo from "./ServiceInfo";
 import Settings from "./Settings";
 import Schedule from "./Schedule";
-import { useNavigate } from "react-router-dom";
 
 const NewBoardForm = () => {
   const navigate = useNavigate();
