@@ -22,7 +22,7 @@ function MainNavigation() {
           </li>
           <li>
           <NavLink
-              to="/newboard"
+              to="/boards/newboard"
               className={({ isActive }) =>
                 isActive ? classes.active : undefined
               }
