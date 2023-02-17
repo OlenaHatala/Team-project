@@ -33,7 +33,8 @@ const Settings = () => {
             max="99"
             value={ahead}
             onChange={(e) => {
-              setAhead(e.target.value);
+              const value = e.target.value < 100 ? e.target.value : 99;
+              setAhead(value);
             }}
           />
           <nobr>days ahead.</nobr>
@@ -109,7 +110,8 @@ const Settings = () => {
                 max="99"
                 value={booknum}
                 onChange={(e) => {
-                  setBooknum(e.target.value);
+                  const value = e.target.value < 100 ? e.target.value : 99;
+                  setBooknum(value);
                 }}
               />
             </div>

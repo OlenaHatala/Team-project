@@ -4,7 +4,11 @@ node_modules
 # dotenv environment variables file
 .env
 
+<<<<<<< HEAD
+# credentials and other secure constants
+=======
 # credentials and other secure constants
 
 gitignoredConstants.js
 back-end/config/gitignoredConstants.js
+>>>>>>> d98f1b74c1ba6ebdaff88a537891754ebc770864

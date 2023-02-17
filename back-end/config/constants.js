@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 module.exports = Object.freeze({
-    PORT: '3500'
+    PORT: process.env.PORT
 })

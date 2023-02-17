@@ -1,8 +1,6 @@
 const Board = require('../models/Board')
-const User = require('../models/User')
 const Ticket = require('../models/Ticket')
 const asyncHandler = require('express-async-handler')
-const Mongoose = require("mongoose")
 
 // function addMinutes(date, minutes) {
 

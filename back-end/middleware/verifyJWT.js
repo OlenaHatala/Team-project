@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt = require('jsonwebtoken')
 
 const verifyJWT = (req, res, next) => {
@@ -11,7 +12,7 @@ const verifyJWT = (req, res, next) => {
 
     jwt.verify(
         token,
-        gitignoredConstants.ACCESS_TOKEN_SECRET,
+        process.env.ACCESS_TOKEN_SECRET,
         (err, decoded) => {
             if (err) return res.status(403).json({ message: 'Forbidden' })
             req.email = decoded.UserInfo.email
