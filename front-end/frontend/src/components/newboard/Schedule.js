@@ -1,6 +1,5 @@
 import useNewBoardContext from "../../hooks/useNewBoardContext";
 import DayHours from "./DayHours";
-
 import classes from "./Schedule.module.css";
 
 const Schedule = ({onSubmit}) => {
@@ -18,7 +17,7 @@ const Schedule = ({onSubmit}) => {
             <button type="button" onClick={prevHandler}>Back</button>
           </div>
           <div className={classes["right-btn"]}>
-            <button type="button" onClick={onSubmit}>Create Board</button>
+              <button type="button" onClick={onSubmit}>Create Board</button>
           </div>
         </div>
       </header>

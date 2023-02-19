@@ -1,0 +1,32 @@
+.day {
+    width: 100%;
+    height: 1020px;
+    color: #b2a4e5;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.time-markup {
+    width: 100%;
+    height: 100%;
+    color: #b2a4e5;
+    display: inline;
+    position: absolute;
+    z-index: 11;
+}
+
+.time {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    color: black;
+    width: 97%;
+    border-bottom: 1px solid rgb(150, 144, 144);
+    z-index: 11;
+}
+
+.time p {
+    margin-top: 5px;
+    padding: 0;
+}
