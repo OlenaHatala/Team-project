@@ -127,7 +127,7 @@ button:hover{
 }
 
 input[type="time"]::-webkit-calendar-picker-indicator{
-    filter: invert(99%) sepia(0%) saturate(23%) hue-rotate(75deg) brightness(113%) contrast(91%);;
+    filter: invert(99%) sepia(0%) saturate(23%) hue-rotate(75deg) brightness(113%) contrast(91%);
 }
 
 

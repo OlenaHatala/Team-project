@@ -1,0 +1,40 @@
+.days {
+    width: 89.2%;
+    margin-left: auto;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+
+.new-ticket {
+    display: flex;
+    position: absolute;
+    width: auto;
+    top: 30px;
+    right: 45px;
+}
+
+.new-ticket button {
+    color: #353438;
+    padding: 10px;
+    background-color: #7b44ac;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.day-button {
+    display: inline-block;
+    overflow: hidden;
+    width: 10.8%;
+}
+
+.day-button button{
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    color: #655e81;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
