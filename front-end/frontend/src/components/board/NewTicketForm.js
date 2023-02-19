@@ -36,8 +36,7 @@ const NewTicketForm = ({onClose}) => {
             console.log(newTickets);
             return newTickets;
     
-          }) 
-          onClose()
+          })
     }
 
     const newTicketModalContent = (

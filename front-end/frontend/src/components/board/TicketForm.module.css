@@ -1,16 +1,14 @@
-.form h3 {
+h3 {
     text-align: center;
     font-size: 28px; 
     padding:0;
     margin: 0;   
-    color: black;
-    padding-top: 20px;
 }
 
 .time {
     width: 100%;
     display: flex;
-    padding-top: 25px;
+    padding-top: 18px;
 }
 
 .time-picker {
@@ -21,7 +19,6 @@
 
 .time-picker h4 {
     margin:8px;
-    color: black;
 }
 
 .picker-btn {
@@ -36,27 +33,26 @@
     text-decoration: none solid rgb(243, 243, 243);
     caret-color: transparent;
     text-align: center;
-    padding: 0;
 }
 
 .picker-btn:focus {
     border-color: black;
 }
   
+
 .item-checkbox {
     width: 100%;
     padding-top: 58px;
     padding-left: 2%;
 }
 
-.item-checkbox .checkbox-text {
+.item-checkbox #checkbox-text {
     cursor: pointer;
 }
 
 .item-checkbox label{
     display: inline;
     padding-left: 8px;
-    color: black;
 }
 
 .buttons-container {
@@ -89,6 +85,6 @@
     background-color: rgb(170, 145, 219);
 }
 
-.time-picker input[type="time"]::-webkit-calendar-picker-indicator{
-    filter: brightness(100%) contrast(100%);
+input[type="time"]::-webkit-calendar-picker-indicator{
+    filter: invert(99%) sepia(0%) saturate(23%) hue-rotate(75deg) brightness(113%) contrast(91%);;
 }
