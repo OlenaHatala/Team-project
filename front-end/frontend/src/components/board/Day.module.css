@@ -1,0 +1,26 @@
+.day {
+    width: 100%;
+    height: 1020px;
+    color: #b2a4e5;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.time-markup {
+    width: 100%;
+    height: 100%;
+    color: #b2a4e5;
+    display: inline;
+    position: absolute;
+    z-index: 11;
+}
+
+.fourth {
+    background-color:transparent;
+    width: 97%;
+    text-align: center;
+    position: relative; 
+    border-bottom: 1px solid rgb(150, 144, 144);
+    z-index: 10;
+}
