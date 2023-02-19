@@ -36,8 +36,12 @@ const NewTicketForm = ({onClose}) => {
             console.log(newTickets);
             return newTickets;
     
+<<<<<<< HEAD
           }) 
           onClose()
+=======
+          })
+>>>>>>> 01920580079801c8772c3b981ad59377e69d40e9
     }
 
     const newTicketModalContent = (
