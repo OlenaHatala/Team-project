@@ -68,7 +68,7 @@
 
 .button-inner {
     display: flex;
-    justify-content:end;
+    justify-content: right;
     width: 100%;
     gap: 10px;
 }
