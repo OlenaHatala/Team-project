@@ -4,6 +4,8 @@ import classes from "./Schedule.module.css";
 
 const Schedule = ({ onSubmit, isSubmitting }) => {
   const { duration, setDuration, saveSchedule } = useNewBoardContext();
+const Schedule = ({ onSubmit, isSubmitting }) => {
+  const { duration, setDuration, saveSchedule } = useNewBoardContext();
 
   const prevHandler = () => {
     saveSchedule();
@@ -14,6 +16,9 @@ const Schedule = ({ onSubmit, isSubmitting }) => {
       <header className={classes["fieldset-header"]}>
         <div className={classes["fieldset-nav"]}>
           <div className={classes["left-btn"]}>
+            <button type="button" onClick={prevHandler}>
+              Back
+            </button>
             <button type="button" onClick={prevHandler}>
               Back
             </button>
@@ -50,9 +55,12 @@ const Schedule = ({ onSubmit, isSubmitting }) => {
             id="num"
             type="number"
             max="1440"
+            max="1440"
             min="1"
             value={duration}
             onChange={(e) => {
+              const value = e.target.value < 1441 ? e.target.value : 1440;
+              setDuration(value);
               const value = e.target.value < 1441 ? e.target.value : 1440;
               setDuration(value);
             }}

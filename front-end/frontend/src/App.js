@@ -39,6 +39,7 @@ const router = createBrowserRouter([
       },
       {
         element: <PersistLogin />,
+        element: <PersistLogin />,
         children: [
           {
             element: <RequireAuth />,
@@ -52,7 +53,19 @@ const router = createBrowserRouter([
                 element: <EditAccountPage />,
               }
             ]
+            element: <RequireAuth />,
+            children: [
+              {
+                path: "newboard",
+                element: <NewBoard />,
+              },
+              {
+                path: "/account",
+                element: <EditAccountPage />,
+              }
+            ]
           }
+        ]
         ]
       },
     ],
