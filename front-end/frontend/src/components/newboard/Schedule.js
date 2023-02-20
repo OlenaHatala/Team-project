@@ -4,6 +4,8 @@ import classes from "./Schedule.module.css";
 
 const Schedule = ({ onSubmit, isSubmitting }) => {
   const { duration, setDuration, saveSchedule } = useNewBoardContext();
+const Schedule = ({ onSubmit, isSubmitting }) => {
+  const { duration, setDuration, saveSchedule } = useNewBoardContext();
 
   const prevHandler = () => {
     saveSchedule();
@@ -17,15 +19,14 @@ const Schedule = ({ onSubmit, isSubmitting }) => {
             <button type="button" onClick={prevHandler}>
               Back
             </button>
+            <button type="button" onClick={prevHandler}>
+              Back
+            </button>
           </div>
           <div className={classes["right-btn"]}>
-<<<<<<< HEAD
-              <button type="button" onClick={onSubmit}>Create Board</button>
-=======
             <button type="button" onClick={onSubmit}>
               {isSubmitting ? "Creating..." : "Create Board"}
             </button>
->>>>>>> d46a7f8 (submit new board form)
           </div>
         </div>
       </header>
