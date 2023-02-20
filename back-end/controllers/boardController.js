@@ -20,7 +20,21 @@ const week_index = {
 }
 
 const create  = asyncHandler(async (req, res) => {
-    const {owner_id, label, description, service_name, req_confirm, book_num, markup, address, auto_open} = req.body
+    const {owner_id, label, service_name, req_confirm, book_num, markup, auto_open} = req.body
+    let address = req.body.address ? req.body.address : " ";
+    let description = req.body.description ? req.body.description : " ";
+    console.log(owner_id);
+    console.log(label);
+    console.log(description);
+
+    console.log(service_name);
+    console.log(req_confirm);
+    console.log(book_num);
+
+    console.log(markup);
+    console.log(address);
+    console.log(auto_open);
+
 
     const tickets = [{
 
@@ -101,6 +115,10 @@ const create  = asyncHandler(async (req, res) => {
         for (i = 0; i<6; i++)
         {
             for (const day in markup.days) {
+            if (markup.days[day].disabled === true){
+                console.log("if");
+                continue;
+            }
             const open_hour = markup.days[day].open.split(':')[0];
             const open_min = markup.days[day].open.split(':')[1];
             
@@ -135,7 +153,7 @@ const create  = asyncHandler(async (req, res) => {
                 board.tickets[i][day].push(ticket._id)
 
                 add_min(duration)
-            } while(ticket_time < close_time.getTime())
+            } while(ticket_time + duration * 60000 < close_time.getTime())
         }
            
         }
