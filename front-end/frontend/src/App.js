@@ -7,12 +7,14 @@ import SuccessPage from "./pages/Success";
 import HomePage from "./pages/Home";
 import RootLayout from "./pages/Root";
 import { action as logoutAction } from "./pages/Logout";
-import { checkAuthLoader, tokenLoader } from "./util/auth";
 import EditAccountPage from "./pages/Account";
-import AccountRootLayout from "./pages/AccountRoot";
 import NewBoard from "./pages/NewBoard";
 import RequireAuth from "./components/auth/RequireAuth";
+<<<<<<< HEAD
 import BoardOwnerView from './pages/BoardOwnerView';
+=======
+import PersistLogin from "./components/auth/PersistLogin";
+>>>>>>> d46a7f8 (submit new board form)
 
 const router = createBrowserRouter([
   {
@@ -28,7 +30,6 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     id: "root",
-    loader: tokenLoader,
     children: [
       { index: true, element: <HomePage /> },
       {path: 'success', element: <SuccessPage />},
@@ -37,27 +38,23 @@ const router = createBrowserRouter([
         action: logoutAction,
       },
       {
-        path: "account",
-        id: "user-detail",
-        element: <AccountRootLayout />,
+        element: <PersistLogin />,
         children: [
           {
-            index: true,
-            element: <EditAccountPage />,
-            loader: checkAuthLoader,
-          }
-        ],
-      },
-      {
-        path: "boards",
-        element: <RequireAuth />,
-        children: [
-          {
-            path: "newboard",
-            element: <NewBoard />,
+            element: <RequireAuth />,
+            children: [
+              {
+                path: "newboard",
+                element: <NewBoard />,
+              },
+              {
+                path: "/account",
+                element: <EditAccountPage />,
+              }
+            ]
           }
         ]
-      }
+      },
     ],
   },
 

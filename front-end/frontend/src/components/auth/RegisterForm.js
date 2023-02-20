@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./authForm.module.css";
 
 import axios from "../../api/axios";
+//import useAuth from "../../hooks/useAuth";
 
 const API_REGISTER_URL = "/auth/register";
 
@@ -28,6 +29,7 @@ const EMAIL_REGEX =
 
 function RegisterForm() {
   const navigate = useNavigate();
+  //const {setAuth} = useAuth();
 
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
@@ -109,7 +111,7 @@ function RegisterForm() {
       return;
     }
     try {
-      const response = await axios.post(
+      await axios.post(
         API_REGISTER_URL,
         JSON.stringify({
           name: firstname,
@@ -120,10 +122,10 @@ function RegisterForm() {
         }),
         {
           headers: { "Content-Type": "application/json" },
+          withCredentials: true,
         }
       );
 
-      //clear state and controlled inputs
       setFirstname("");
       setLastname("");
       setPwd("");
@@ -131,33 +133,7 @@ function RegisterForm() {
       setMnumber("");
       setEmail("");
 
-      //test token
-      const token = "test token";
-
-      // TODO: remove console.logs before deployment
-
-      console.log("putting data from response to localStorage");
-      console.log(response.data.user);
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("userId", response.data.user._id);
-      localStorage.setItem("userEmail", response.data.user.email);
-      localStorage.setItem("userSurname", response.data.user.surname);
-      localStorage.setItem("userName", response.data.user.name);
-      localStorage.setItem(
-        "userMobileNumber",
-        response.data.user.mobile_number
-      );
-
-      console.log("localStorage has user data");
-
-      const expiration = new Date();
-      expiration.setHours(expiration.getHours() + 1);
-
-      localStorage.setItem("expiration", expiration.toISOString());
-
       navigate(from, { replace: true });
-
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");

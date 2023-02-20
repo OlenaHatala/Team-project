@@ -17,11 +17,18 @@ import useAuth from "../../hooks/useAuth";
 const API_LOGIN_URL = "/auth/login";
 
 function LoginForm() {
-  const { setAuth, auth } = useAuth();
+  const { setAuth, accessToken } = useAuth();
 
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
+
   const from = location.state?.from?.pathname || "/";
+
+  useEffect(() => {
+    if (accessToken) {
+      navigate(from);
+    }
+  }, [accessToken, from, navigate]);
 
   const userRef = useRef();
   const errRef = useRef();
@@ -63,6 +70,7 @@ function LoginForm() {
         JSON.stringify({ email: user, password: pwd }),
         {
           headers: { "Content-Type": "application/json" },
+          withCredentials: true,
         }
       );
       setUser("");
@@ -77,35 +85,10 @@ function LoginForm() {
         email: responseUser.email,
         surname: responseUser.surname,
         name: responseUser.name,
+        mobileNum: responseUser.mobile_number,
         accessToken,
       });
-
-      // TODO: remove console.logs before deployment
-
-      console.log("putting data from response to localStorage");
-      console.log(response.data.user);
-
-      localStorage.setItem("token", accessToken);
-      localStorage.setItem("userId", response.data.user._id);
-      localStorage.setItem("userEmail", response.data.user.email);
-      localStorage.setItem("userSurname", response.data.user.surname);
-      localStorage.setItem("userName", response.data.user.name);
-      localStorage.setItem(
-        "userMobileNumber",
-        response.data.user.mobile_number
-      );
-
-      console.log("localStorage has user data");
-
-      const expiration = new Date();
-      expiration.setHours(expiration.getHours() + 1);
-
-      localStorage.setItem("expiration", expiration.toISOString());
-      console.log(from);
-      navigate(from, { replace: true });
-
     } catch (err) {
-      console.log(err);
       if (!err.response?.status) {
         setErrMsg("No Server Response");
       } else if (err.response?.status === 400) {

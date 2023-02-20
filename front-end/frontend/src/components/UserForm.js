@@ -6,6 +6,7 @@ import {
 
 import classes from "./UserForm.module.css";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useAuth from "../hooks/useAuth";
 
 const API_EDIT_USER_URL = "/auth/update";
 
@@ -18,6 +19,7 @@ const EMAIL_REGEX =
 function UserForm({ user }) {
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
+  const {setAccInfo, id: userId} = useAuth();
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -102,25 +104,23 @@ function UserForm({ user }) {
       mobile_number: number,
     };
 
-    const id = localStorage.getItem("userId");
-
     try {
       const response = await axiosPrivate.patch(
         API_EDIT_USER_URL,
-        JSON.stringify({ id, userData }),
+        JSON.stringify({ id: userId, userData }),
         {
           headers: { "Content-Type": "application/json" },
         }
       );
 
-      
-      localStorage.setItem("userEmail", response.data.user.email);
-      localStorage.setItem("userSurname", response.data.user.surname);
-      localStorage.setItem("userName", response.data.user.name);
-      localStorage.setItem(
-        "userMobileNumber",
-        response.data.user.mobile_number
-        );
+      const responseUser = response?.data?.user;
+
+      setAccInfo({
+        email: responseUser.email,
+        surname: responseUser.surname,
+        name: responseUser.name,
+        mobileNum: responseUser.mobile_number,
+      });
         
       navigate("/success/?message=Personal-data-was-saved-successfuly");
     } catch (err) {
