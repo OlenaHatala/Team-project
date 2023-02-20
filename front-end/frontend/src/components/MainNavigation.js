@@ -1,9 +1,12 @@
-import { NavLink, Form, useRouteLoaderData } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import useLogout from "../hooks/useLogout";
 
 import classes from "./MainNavigation.module.css";
 
 function MainNavigation() {
-  const token = useRouteLoaderData("root");
+  const { accessToken } = useAuth();
+  const logout = useLogout();
 
   return (
     <header className={classes.header}>
@@ -21,8 +24,8 @@ function MainNavigation() {
             </NavLink>
           </li>
           <li>
-          <NavLink
-              to="/boards/newboard"
+            <NavLink
+              to="/newboard"
               className={({ isActive }) =>
                 isActive ? classes.active : undefined
               }
@@ -31,7 +34,7 @@ function MainNavigation() {
               New Board
             </NavLink>
           </li>
-          {!token && (
+          {!accessToken && (
             <li>
               <NavLink
                 to="/login"
@@ -43,7 +46,7 @@ function MainNavigation() {
               </NavLink>
             </li>
           )}
-          {token && (
+          {accessToken && (
             <li>
               <NavLink
                 to="/account"
@@ -55,11 +58,9 @@ function MainNavigation() {
               </NavLink>
             </li>
           )}
-          {token && (
+          {accessToken && (
             <li>
-              <Form action="/logout" method="post">
-                <button>Logout</button>
-              </Form>
+              <button onClick={logout}>Log out</button>
             </li>
           )}
         </ul>

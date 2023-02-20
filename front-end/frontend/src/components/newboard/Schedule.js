@@ -3,8 +3,8 @@ import DayHours from "./DayHours";
 
 import classes from "./Schedule.module.css";
 
-const Schedule = ({onSubmit}) => {
-  const { duration, setDuration, saveSchedule} = useNewBoardContext();
+const Schedule = ({ onSubmit, isSubmitting }) => {
+  const { duration, setDuration, saveSchedule } = useNewBoardContext();
 
   const prevHandler = () => {
     saveSchedule();
@@ -15,10 +15,14 @@ const Schedule = ({onSubmit}) => {
       <header className={classes["fieldset-header"]}>
         <div className={classes["fieldset-nav"]}>
           <div className={classes["left-btn"]}>
-            <button type="button" onClick={prevHandler}>Back</button>
+            <button type="button" onClick={prevHandler}>
+              Back
+            </button>
           </div>
           <div className={classes["right-btn"]}>
-            <button type="button" onClick={onSubmit}>Create Board</button>
+            <button type="button" onClick={onSubmit}>
+              {isSubmitting ? "Creating..." : "Create Board"}
+            </button>
           </div>
         </div>
       </header>

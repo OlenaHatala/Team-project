@@ -9,7 +9,7 @@ import useValidInput from "../../hooks/useValidInput";
 import classes from "./NewBoardForm.module.css";
 
 function ServiceInfo() {
-  const { saveDetails, details } = useNewBoardContext();
+  const { saveDetails, details} = useNewBoardContext();
 
   const [address, setAddress] = useState(details.address);
   const [desc, setDesc] = useState(details.desc);
@@ -59,7 +59,8 @@ function ServiceInfo() {
       <header className={classes["fieldset-header"]}>
         <div className={classes["fieldset-nav"]}>
           <div className={classes["right-btn"]}>
-            <button type="button"
+            <button
+            type="button"
               className={
                 !canSaveStep ? classes["invalid-nav-btn"] : classes["nav-btn"]
               }
