@@ -168,9 +168,10 @@ const deleteBoard = async (req, res) => {
             for (j in week_tickets[day])
             {
                 const found_ticket = await Ticket.findById(week_tickets[day][j]).exec()
+                // const found_ticket = await Ticket.findById(j).exec()
 
                 if (!found_ticket) {
-                    return res.status(400).json({ message: 'Ticket is not found' })
+                    continue
                 }
 
                 const result_ticket = await found_ticket.deleteOne()
