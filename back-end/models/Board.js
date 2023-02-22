@@ -128,7 +128,11 @@ const BoardSchema = new Mongoose.Schema({
         auto_open: {
             day: { type: String },
             ahead: { type: Number }
-        }
+        },
+        // members: {
+        //     type: Array,
+        //     default:[]
+        // }
     },
     {versionKey: false}
 );

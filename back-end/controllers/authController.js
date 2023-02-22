@@ -21,6 +21,9 @@ exports.register = async (req, res, next) => {
       email,
       password: hash,
       mobile_number,
+      taken_tickets: [],
+      created_tables: [],
+      membered_tables: []
     })
       .then((user) =>
         res.status(200).json({
@@ -77,7 +80,10 @@ exports.login = async (req, res, next) => {
                 "surname": foundUser.surname,
                 "mobile_number": foundUser.mobile_number,
                 "email": foundUser.email,
-                "password": foundUser.password
+                "password": foundUser.password,
+                "taken_tickets": foundUser.taken_tickets,
+                "created_tables": foundUser.created_tables,
+                "membered_tables": foundUser.membered_tables
               }
             },
         
@@ -116,8 +122,6 @@ exports.login = async (req, res, next) => {
       error: error.message,
     })
   }
-
-
 };
 
 exports.refresh = (req, res) => {
@@ -144,7 +148,10 @@ exports.refresh = (req, res) => {
             "surname": foundUser.surname,
             "mobile_number": foundUser.mobile_number,
             "email": foundUser.email,
-            "password": foundUser.password
+            "password": foundUser.password,
+            "taken_tickets": foundUser.taken_tickets,
+            "created_tables": foundUser.created_tables,
+            "membered_tables": foundUser.membered_tables
           }
         },
         process.env.ACCESS_TOKEN_SECRET,
