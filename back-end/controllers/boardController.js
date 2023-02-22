@@ -2,10 +2,6 @@ const Board = require('../models/Board')
 const Ticket = require('../models/Ticket')
 const asyncHandler = require('express-async-handler')
 
-// function addMinutes(date, minutes) {
-
-//     return date.setTime(date.getTime() + minutes*60000);
-// }
 const week_index = {
     'monday': 0,
     'tuesday': 1,
@@ -16,8 +12,30 @@ const week_index = {
     'sunday': 6,
 }
 
+const compareMarkup = (a, b) => {
+    console.log("POINT: compareMarkup")
+
+    if (a.duration !== b.duration) {
+        console.log("POINT: compareMarkup duration if")
+        return false
+    }
+
+    for (const day in a.days) {
+        if ((a.days[day].open !== b.days[day].open) || 
+        (a.days[day].close !== b.days[day].close) || 
+        !(Arrays.equals(a.days[day].hours, b.days[day].hours))) {
+            return false   
+        }
+    }
+
+    return true
+}
+
+
 const create  = asyncHandler(async (req, res) => {
-    const {owner_id, label, description, service_name, req_confirm, book_num, markup, address, auto_open} = req.body
+    const {owner_id, label, service_name, req_confirm, book_num, markup, auto_open} = req.body
+    let address = req.body.address ? req.body.address : " ";
+    let description = req.body.description ? req.body.description : " ";
 
     const tickets = 
     [{
@@ -145,6 +163,180 @@ const create  = asyncHandler(async (req, res) => {
     }
 })
 
+
+
+const update = asyncHandler(async (req, res) => {
+    //console.log("POINT: start")
+    const {id, label, description, service_name, req_confirm, book_num, markup, address, auto_open, apply_new_markup} = req.body
+
+    //console.log("POINT: destr")
+    try {
+        const board = await Board.findByIdAndUpdate(
+            id,
+            {
+                label,
+                description,
+                service_name,
+                req_confirm,
+                book_num,
+                markup,
+                address,
+                auto_open
+            }
+        )
+        //console.log("POINT: details updated")
+
+        if (!(compareMarkup(markup, board.markup)) && apply_new_markup) {
+            //console.log("POINT: if markup changed")       
+
+            for (i = 0; i < 6; i++) {
+                //console.log(`POINT: ${i} week`)
+
+                const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
+                wednesday: board.tickets[i].wednesday, thursday : board.tickets[i].thursday, 
+                friday: board.tickets[i].friday, saturday: board.tickets[i].saturday, sunday: board.tickets[i].sunday}
+
+                let found_enabled_ticket = false
+
+                for (const day in week_tickets) {
+                    //console.log("DAY_TICKETS-----------------\n")
+                    let day_tickets = week_tickets[day]
+                    //console.log(day_tickets)
+                    console.log("--------------day--------------")
+
+                    let tickets_array = day_tickets.map(async (ticket_id) => {
+                        const ticket = await Ticket.findById(ticket_id)
+
+                        return ticket
+                    })
+
+                    for (p = 0; p < tickets_array.length; p++) {
+                        // found_enabled_ticket = false;
+                        if (tickets_array[p].enabled) {
+                            found_enabled_ticket = true;
+                            //console.log(`POINT: ${i} week, p: ${p}, day: ${day}`)
+                            console.log("if tickets_array[p].enabled")
+                            break
+                        }
+                        if (found_enabled_ticket = true)
+                        {
+                            console.log("after_break1")
+                        }
+                        
+                    }
+                    //console.log("after_break1")
+                } 
+
+                if (found_enabled_ticket) {
+                    //console.log(`POINT: ${i} week, found enabled ticket`)
+                    continue
+                }
+                else {
+                    //console.log(`POINT: ${i} week, found enabled ticket ELSE`)
+                    for (const day in week_tickets) 
+                    {
+                        for (j in week_tickets[day])
+                        {
+                            const index = week_tickets[day].indexOf(week_tickets[day][j]);
+                            //console.log(week_tickets[j])
+                            //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                            //console.log(week_tickets[day][j])
+                            //console.log(`week_tickets[${day}] before splice, index: ${index}`)
+                            //console.log(week_tickets[day])
+
+                            if (index > -1) { 
+                                
+                                week_tickets[day].splice(index, 1); 
+                                //console.log(`week_tickets[${day}] after splice, index: ${index}`)
+                                //console.log(week_tickets[day])
+                            }
+
+                            // board.save((error) => {
+                            //     if (error) {
+                            //     return res
+                            //         .status(200)
+                            //         .json({ message: "An error occurred", error: error.message });
+                            //     }
+                            // });
+
+                            //console.log("deleting ticket")
+                            await Ticket.deleteOne({_id: week_tickets[j]})
+
+                        }
+                    }
+
+                    for (const day in markup.days) {
+                        const open_hour = markup.days[day].open.split(':')[0];
+                        const open_min = markup.days[day].open.split(':')[1];
+                        
+                        const close_hour = markup.days[day].close.split(':')[0];
+                        const close_min = markup.days[day].close.split(':')[1];
+            
+                        const duration = markup.duration
+                        
+                        const open_time = new Date(2000, 1, 1)
+                        open_time.setMinutes(open_min)
+                        open_time.setHours(open_hour)
+                        const close_time = new Date(2000, 1, 1)
+                        close_time.setHours(close_hour)
+                        close_time.setMinutes(close_min)
+            
+                        let ticket_time = open_time.getTime()
+                        const add_min = (min) => {
+                            ticket_time = ticket_time + min * 60000
+                        }
+                        
+                        do{
+                            const current_day = new Date().getDay()
+                            
+                            num_of_days = 8 - current_day + 7 * i + week_index[day]
+            
+                            const ticket_datetime = new Date(new Date().getTime() + num_of_days*24*60*60*1000)
+                            
+                            const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_datetime, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
+                            
+                            week_tickets[day].push(ticket._id)
+            
+                            add_min(duration)
+                            //console.log(`-------------------------------------${day}--------------------------------`)
+                            //console.log(`LEFT: ${ticket_time + duration * 60000 }`)
+                            //console.log(`RIGHT: ${close_time.getTime()}`)
+                        } while(ticket_time + duration * 60000 < close_time.getTime())
+                    }
+                }
+                
+                board.tickets[i] = week_tickets
+                //console.log("week_tickets--------------------------")
+                //console.log(week_tickets)
+                //console.log(`board.tickets[${i}]--------------------------`)
+                //console.log(board.tickets[i])
+
+            }
+
+            await Board.findByIdAndUpdate(
+                id,
+                {
+                   tickets: board.tickets
+                }
+            )
+
+            const updated_board = await Board.findById(id);
+
+            res.status(200).json({
+                message: "Board updated succesfully", 
+                board: updated_board
+            })
+        }
+
+    } catch (error) {
+        res.status(400).json({
+            message: "Board was not saved",
+            error: error.message,
+        })
+    }
+})
+
+
 const deleteBoard = async (req, res) => {
     const { id } = req.body;
 
@@ -191,6 +383,6 @@ const deleteBoard = async (req, res) => {
 
 module.exports = {
     create,
-    //update,
+    update,
     deleteBoard
 }

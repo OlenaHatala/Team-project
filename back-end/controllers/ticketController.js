@@ -52,7 +52,7 @@ const deleteTicket = async (req, res) => {
     return res.status(400).json({ message: 'Board not found' })
   }
 
-  for (i = 0; i<6; i++)
+  for (i = 0; i < 6; i++)
      {  
         const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
         wednesday: board.tickets[i].wednesday, thursday : board.tickets[i].thursday, 
@@ -65,7 +65,6 @@ const deleteTicket = async (req, res) => {
                 if (week_tickets[day][j] == id) {
 
                   const index = board.tickets[i][day].indexOf(week_tickets[day][j]);
-                  console.log(index)
 
                   if (index > -1) { 
                     board.tickets[i][day].splice(index, 1); 
@@ -93,33 +92,38 @@ const deleteTicket = async (req, res) => {
 
 const update = async (req, res) => {
   const {id, ticketData} = req.body;
-  const { datetime, duration, is_outdated, enabled, confirmed} = ticketData;
+  if (!ticketData || !id){
+    res.status(404).json({ message: "Data or ID is not present" });
+  }
 
-  if (id && (datetime || duration || is_outdated || enabled || confirmed)) {
+  let newData = {};
+
+  if(ticketData?.datetime){
+    newData.datetime = ticketData.datetime
+  }
+  if(ticketData?.duration){
+    newData.duration = ticketData.duration
+  }
+  if(ticketData?.is_outdated){
+    newData.is_outdated = ticketData.is_outdated
+  }
+  if(ticketData?.enabled){
+    newData.enabled = ticketData.enabled
+  }
+  if(ticketData?.confirmed){
+    newData.confirmed = ticketData.confirmed
+  }
+
+  if (Object.keys(newData).length) {
 
     try {
-    const ticket = await Ticket.findById(id).exec()
-      table_id = ticket.table_id
-      user_id = ticket.user_id
+      await Ticket.findByIdAndUpdate(
+        id, newData
+      );
 
-      ticket.table_id = table_id;
-      ticket.user_id = user_id;
-      ticket.datetime = datetime ? datetime : ticket.datetime
-      ticket.duration = duration ? duration : ticket.duration
-      ticket.is_outdated = is_outdated ? is_outdated : ticket.is_outdated
-      ticket.enabled = enabled ? enabled : ticket.enabled
-      ticket.confirmed = confirmed ? confirmed : ticket.confirmed
+      const ticket = await Ticket.findById(id) 
 
-        ticket.save((err) => {
-          if (err) {
-            //console.log("ticket.save")
-            return res
-              .status(400)
-              .json({ message: "An error occurred", error: err.message });
-              
-          }
-          res.status(201).json({ message: "Update successful", ticket });
-        });
+    res.status(201).json({ message: "Update successful", ticket });
       }
       catch(error){
         console.log("catch error")
@@ -127,42 +131,10 @@ const update = async (req, res) => {
           .status(400)
           .json({ message: "An error occurred", error: error.message });
       };
-
-      /* await Ticket.findById(id)
-    .then((ticket) => {
-        ticket.table_id = ticket.table_id;
-        tisket.user_id = ticket.user_id;
-        ticket.datetime = datetime ? datetime : ticket.datetime
-        //console.log(datetime)
-        ticket.duration = duration ? duration : ticket.duration
-        //console.log(duration)
-        ticket.is_outdated = is_outdated ? is_outdated : ticket.is_outdated
-        //console.log(is_outdated)
-        ticket.enabled = enabled ? enabled : ticket.enabled
-        //console.log(enabled)
-        ticket.confirmed = confirmed ? confirmed : ticket.confirmed
-        //console.log(confirmed)
-
-        ticket.save((err) => {
-          if (err) {
-            console.log("ticket.save")
-            return res
-              .status(400)
-              .json({ message: "An error occurred", error: err.message });
-              
-          }
-          res.status(201).json({ message: "Update successful", ticket });
-        });
-      })
-      .catch((error) => {
-        console.log("catch error")
-        res
-          .status(400)
-          .json({ message: "An error occurred", error: error.message });
-      }); */
-
-  } else {
-    res.status(400).json({ message: "Id is not present" });
+  } 
+  
+  else if (id && ticketData && !(Object.keys(newData).length)) {
+    res.status(204).json({ message: "Data is not present" });
   }
 };
 
