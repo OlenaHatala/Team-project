@@ -13,10 +13,8 @@ const week_index = {
 }
 
 const compareMarkup = (a, b) => {
-    console.log("POINT: compareMarkup")
 
     if (a.duration !== b.duration) {
-        console.log("POINT: compareMarkup duration if")
         return false
     }
 
@@ -128,9 +126,9 @@ const create  = asyncHandler(async (req, res) => {
             const add_min = (min) => {
                 ticket_time = ticket_time + min * 60000
             }
-            
-            do{
-                
+            add_min(duration)
+            while(ticket_time < close_time.getTime())
+            {
                 const current_day = new Date().getDay()
                 
                 num_of_days = 8 - current_day + 7 * i + week_index[day]
@@ -142,7 +140,8 @@ const create  = asyncHandler(async (req, res) => {
                 board.tickets[i][day].push(ticket._id)
 
                 add_min(duration)
-            } while(ticket_time < close_time.getTime())
+            } 
+
         }
            
         }
@@ -166,10 +165,8 @@ const create  = asyncHandler(async (req, res) => {
 
 
 const update = asyncHandler(async (req, res) => {
-    //console.log("POINT: start")
     const {id, label, description, service_name, req_confirm, book_num, markup, address, auto_open, apply_new_markup} = req.body
 
-    //console.log("POINT: destr")
     try {
         const board = await Board.findByIdAndUpdate(
             id,
@@ -184,13 +181,10 @@ const update = asyncHandler(async (req, res) => {
                 auto_open
             }
         )
-        //console.log("POINT: details updated")
 
         if (!(compareMarkup(markup, board.markup)) && apply_new_markup) {
-            //console.log("POINT: if markup changed")       
 
             for (i = 0; i < 6; i++) {
-                //console.log(`POINT: ${i} week`)
 
                 const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
                 wednesday: board.tickets[i].wednesday, thursday : board.tickets[i].thursday, 
@@ -199,72 +193,42 @@ const update = asyncHandler(async (req, res) => {
                 let found_enabled_ticket = false
 
                 for (const day in week_tickets) {
-                    //console.log("DAY_TICKETS-----------------\n")
                     let day_tickets = week_tickets[day]
-                    //console.log(day_tickets)
-                    console.log("--------------day--------------")
 
-                    let tickets_array = day_tickets.map(async (ticket_id) => {
-                        const ticket = await Ticket.findById(ticket_id)
+                    let tickets_array = []
+                    for (j in day_tickets)
+                    {
+                        const found_ticket = await Ticket.findById(day_tickets[j]).exec()
 
-                        return ticket
-                    })
-
+                        if (found_ticket) {
+                            tickets_array.push(found_ticket)
+                        }
+                    }
+                    
                     for (p = 0; p < tickets_array.length; p++) {
-                        // found_enabled_ticket = false;
-                        if (tickets_array[p].enabled) {
+                        if (tickets_array[p].enabled &&  !tickets_array[p].is_outdated && tickets_array[p].user_id) {
                             found_enabled_ticket = true;
-                            //console.log(`POINT: ${i} week, p: ${p}, day: ${day}`)
-                            console.log("if tickets_array[p].enabled")
                             break
                         }
-                        if (found_enabled_ticket = true)
-                        {
-                            console.log("after_break1")
-                        }
-                        
                     }
-                    //console.log("after_break1")
                 } 
 
                 if (found_enabled_ticket) {
-                    //console.log(`POINT: ${i} week, found enabled ticket`)
                     continue
                 }
+                
                 else {
-                    //console.log(`POINT: ${i} week, found enabled ticket ELSE`)
                     for (const day in week_tickets) 
                     {
-                        for (j in week_tickets[day])
-                        {
-                            const index = week_tickets[day].indexOf(week_tickets[day][j]);
-                            //console.log(week_tickets[j])
-                            //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                            //console.log(week_tickets[day][j])
-                            //console.log(`week_tickets[${day}] before splice, index: ${index}`)
-                            //console.log(week_tickets[day])
-
-                            if (index > -1) { 
-                                
-                                week_tickets[day].splice(index, 1); 
-                                //console.log(`week_tickets[${day}] after splice, index: ${index}`)
-                                //console.log(week_tickets[day])
-                            }
-
-                            // board.save((error) => {
-                            //     if (error) {
-                            //     return res
-                            //         .status(200)
-                            //         .json({ message: "An error occurred", error: error.message });
-                            //     }
-                            // });
-
-                            //console.log("deleting ticket")
-                            await Ticket.deleteOne({_id: week_tickets[j]})
-
-                        }
+                        for (let j = week_tickets[day].length - 1; j >= 0; j--) {
+                            const index = j;
+                            const ticketId = week_tickets[day][index];
+                            week_tickets[day].splice(index, 1); 
+                            await Ticket.findByIdAndDelete(ticketId);
+                          }
+                          
                     }
-
+                    
                     for (const day in markup.days) {
                         const open_hour = markup.days[day].open.split(':')[0];
                         const open_min = markup.days[day].open.split(':')[1];
@@ -286,31 +250,24 @@ const update = asyncHandler(async (req, res) => {
                             ticket_time = ticket_time + min * 60000
                         }
                         
-                        do{
+                        add_min(duration)
+                        while(ticket_time <= close_time.getTime())
+                        {
                             const current_day = new Date().getDay()
                             
                             num_of_days = 8 - current_day + 7 * i + week_index[day]
-            
+
                             const ticket_datetime = new Date(new Date().getTime() + num_of_days*24*60*60*1000)
                             
                             const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_datetime, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
                             
-                            week_tickets[day].push(ticket._id)
-            
+                            board.tickets[i][day].push(ticket._id)
+
                             add_min(duration)
-                            //console.log(`-------------------------------------${day}--------------------------------`)
-                            //console.log(`LEFT: ${ticket_time + duration * 60000 }`)
-                            //console.log(`RIGHT: ${close_time.getTime()}`)
-                        } while(ticket_time + duration * 60000 < close_time.getTime())
+                        } 
                     }
                 }
-                
-                board.tickets[i] = week_tickets
-                //console.log("week_tickets--------------------------")
-                //console.log(week_tickets)
-                //console.log(`board.tickets[${i}]--------------------------`)
-                //console.log(board.tickets[i])
-
+                board.tickets[i] = week_tickets                
             }
 
             await Board.findByIdAndUpdate(
@@ -360,7 +317,6 @@ const deleteBoard = async (req, res) => {
             for (j in week_tickets[day])
             {
                 const found_ticket = await Ticket.findById(week_tickets[day][j]).exec()
-                // const found_ticket = await Ticket.findById(j).exec()
 
                 if (!found_ticket) {
                     continue
