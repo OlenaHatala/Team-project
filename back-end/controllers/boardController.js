@@ -308,6 +308,29 @@ const read  = asyncHandler(async (req, res) =>{
   }
 })
 
+
+const readOneWeek  = asyncHandler(async (req, res) =>{
+    const { id, numberOfWeek } = req.body
+  try {const board = await Board.findById(id) 
+
+    board.tickets[numberOfWeek]
+    
+    console.log(board.tickets[numberOfWeek]);
+
+
+
+  res.status(200).json({
+    message:"Get board",
+    board
+  })
+  } catch(error) {
+    res.status(500).json({
+      message: "An error occurred",
+      error: error.message,
+    })
+  }
+})
+
 const deleteBoard = async (req, res) => {
     const { id } = req.body;
 
@@ -354,6 +377,7 @@ const deleteBoard = async (req, res) => {
 module.exports = {
     create,
     read,
+    readOneWeek,
     update,
     deleteBoard
 }
