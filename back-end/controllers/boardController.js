@@ -25,10 +25,8 @@ const compareMarkup = (a, b) => {
             return false   
         }
     }
-
     return true
 }
-
 
 const create  = asyncHandler(async (req, res) => {
     const {owner_id, label, service_name, req_confirm, book_num, markup, auto_open} = req.body
@@ -161,8 +159,6 @@ const create  = asyncHandler(async (req, res) => {
         })
     }
 })
-
-
 
 const update = asyncHandler(async (req, res) => {
     const {id, label, description, service_name, req_confirm, book_num, markup, address, auto_open, apply_new_markup} = req.body
@@ -300,7 +296,7 @@ const deleteBoard = async (req, res) => {
     if (!id) {
         return res.status(400).json({ message: 'Board ID required' })
     }
-    
+
     const board = await Board.findById(id).exec()
 
     if (!board) {
