@@ -7,9 +7,11 @@ import {
   defaulSettings,
   defaultMarkup,
   defaultTickets,
+  defaultBordId
 } from "./BoardContext";
 
 export const BoardProvider = ({ children }) => {
+  const [boardId, setBoardId] = useState(defaultBordId);
   const [ownerId, setOwnerId] = useState(defaultOwnerId);
   const [details, setDetails] = useState(defaultDetails);
   const [settings, setSettings] = useState(defaulSettings);
@@ -46,11 +48,13 @@ console.log(minHour);
     bottom: new Date(`August 19, 1975 ${maxHour}:00:00`),
   };
 
-
+  console.log(details);
+  console.log("PROVIDER");
 
   return (
     <BoardContext.Provider
       value={{
+        boardId,
         ownerId,
         details,
         settings,
@@ -59,6 +63,11 @@ console.log(minHour);
         minutePercentage,
         timeBorders,
         setTickets,
+        setOwnerId,
+        setDetails,
+        setSettings,
+        setMarkup,
+        setBoardId,
       }}
     >
       {children}

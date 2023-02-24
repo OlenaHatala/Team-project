@@ -52,27 +52,33 @@ const NewBoardContext = createContext({
     open: "09:00",
     close: "18:00",
   },
-
-  // setMon: () => {},
-  // setTue: () => {},
-  // setWed: () => {},
-  // setThu: () => {},
-  // setFri: () => {},
-  // setSat: () => {},
-  // setSun: () => {},
-  setDetails: (details) => {},
-  setSettings: (nav, settings) => {},
-  setSchedule: () => {},
+  saveDetails: (details) => {},
+  saveSettings: (nav, settings) => {},
+  saveSchedule: () => {},
+  setMon: () => {},
+  setTue: () => {},
+  setWed: () => {},
+  setThu: () => {},
+  setFri: () => {},
+  setSat: () => {},
+  setSun: () => {},
+  setDetails: () => {},
+  setSettings: () => {},
+  setDuration: () => {},
+  setIsNewBoard: () => {},
 });
 
 export const NewBoardProvider = ({ children }) => {
   const [page, setPage] = useState("details");
+  const [isNewBoard, setIsNewBoard] = useState(true);
   const [details, setDetails] = useState({
     boardname: "",
     desc: "",
     address: "",
     servname: "",
   });
+  console.log(details);
+  console.log("NEWPROVIDER");
   const [settings, setSettings] = useState({
     reqconf: false,
     booknum: 1,
@@ -117,44 +123,6 @@ export const NewBoardProvider = ({ children }) => {
   });
 
   const [duration, setDuration] = useState(60);
-  // const [schedule, setSchedule] = useState({
-  //   duration: 60,
-  //   mon: {
-  //     disabled: false,
-  //     open: "09:00",
-  //     close: "18:00",
-  //   },
-  //   tue: {
-  //     disabled: false,
-  //     open: "09:00",
-  //     close: "18:00",
-  //   },
-  //   wed: {
-  //     disabled: false,
-  //     open: "09:00",
-  //     close: "18:00",
-  //   },
-  //   thu: {
-  //     disabled: false,
-  //     open: "09:00",
-  //     close: "18:00",
-  //   },
-  //   fri: {
-  //     disabled: false,
-  //     open: "09:00",
-  //     close: "18:00",
-  //   },
-  //   sat: {
-  //     disabled: true,
-  //     open: "09:00",
-  //     close: "18:00",
-  //   },
-  //   sun: {
-  //     disabled: true,
-  //     open: "09:00",
-  //     close: "18:00",
-  //   },
-  // });
 
   const canSubmit = details.boardname && details.servname;
 
@@ -174,32 +142,11 @@ export const NewBoardProvider = ({ children }) => {
     setPage("settings");
   };
 
-  // const saveMon = (disabled, open, close) => {
-  //   setMon({ disabled, open, close });
-  // };
-  // const saveTue = (disabled, open, close) => {
-  //   setTue({ disabled, open, close });
-  // };
-  // const saveWed = (disabled, open, close) => {
-  //   setWed({ disabled, open, close });
-  // };
-  // const saveThu = (disabled, open, close) => {
-  //   setThu({ disabled, open, close });
-  // };
-  // const saveFri = (disabled, open, close) => {
-  //   setFri({ disabled, open, close });
-  // };
-  // const saveSat = (disabled, open, close) => {
-  //   setSat({ disabled, open, close });
-  // };
-  // const saveSun = (disabled, open, close) => {
-  //   setSun({ disabled, open, close });
-  // };
-
   return (
     <NewBoardContext.Provider
       value={{
         page,
+        isNewBoard,
         details,
         settings,
         canSubmit,
@@ -224,6 +171,7 @@ export const NewBoardProvider = ({ children }) => {
         setDetails,
         setSettings,
         setDuration,
+        setIsNewBoard
       }}
     >
       {children}

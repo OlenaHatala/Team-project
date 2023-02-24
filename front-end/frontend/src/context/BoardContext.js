@@ -2,8 +2,8 @@ import { createContext } from "react";
 
 export const defaultTickets = [
   {
-    monday: [{ id: "id1_31", type: 'ticket', date: new Date("July 3 1775 06:00"), duration: 60 }, { id: "id1_1", type: 'ticket', date: new Date("July 4 1776 11:00"), duration: 90 }, { id: "id1_2" , type: 'ticket', date: new Date("July 4 1776 13:30"), duration: 90  }],
-    tuesday: [{ id: "id1_3" , type: 'ticket', date: new Date("July 4 1776 12:30"), duration: 90  }, { id: "id1_4" , type: 'ticket', date: new Date("July 4 1776 15:30"), duration: 90  }, { id: "id1_32", type: 'ticket', date: new Date("July 3 1775 01:00"), duration: 180 }],
+    monday: [{ id: "id1_1", type: 'ticket', date: new Date("July 4 1776 11:00"), duration: 90 }, { id: "id1_2" , type: 'ticket', date: new Date("July 4 1776 13:30"), duration: 90  }, { id: "id1_2" , type: 'ticket', date: new Date("July 4 1776 18:00"), duration: 20  }],
+    tuesday: [{ id: "id1_3" , type: 'ticket', date: new Date("July 4 1776 12:30"), duration: 90  }, { id: "id1_4" , type: 'ticket', date: new Date("July 4 1776 15:30"), duration: 90  }],
     wednesday: [{ id: "id1_5" , type: 'ticket', date: new Date("July 4 1776 13:00"), duration: 90  }, { id: "id1_6" , type: 'ticket', date: new Date("July 4 1776 18:30"), duration: 90  }],
     thursday: [{ id: "id1_7" , type: 'ticket', date: new Date("July 4 1776 15:00"), duration: 90  }, { id: "id1_8" , type: 'ticket', date: new Date("July 4 1776 18:00"), duration: 90  }],
     friday: [{ id: "id1_9" , type: 'ticket', date: new Date("July 4 1776 12:30"), duration: 90  }, { id: "id1_10" , type: 'ticket', date: new Date("July 4 1776 16:30"), duration: 90  }],
@@ -63,6 +63,7 @@ export const defaultTickets = [
 ];
 
 export const defaultOwnerId = "OWNER_ID";
+export const defaultBordId = "BOARD_ID";
 
 export const defaultDetails = {
   boardname: "",
@@ -126,6 +127,9 @@ export const defaultTimeBorders = {
   } 
 
 const BoardContext = createContext({
+
+  boardId: defaultBordId,
+
   ownerId: defaultOwnerId,
 
   details: defaultDetails,
@@ -138,9 +142,13 @@ const BoardContext = createContext({
 
   timeBorders: defaultTimeBorders,
 
-    minutePercentage: 0.138,
+  minutePercentage: 0.138,
 
     setTickets: () => {},
+    setOwnerId: () => {},
+    setDetails: () => {},
+    setSettings: () => {},
+    setMarkup: () => {},
 });
 
 export default BoardContext;
