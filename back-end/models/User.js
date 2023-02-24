@@ -22,7 +22,6 @@ const UserSchema = new Mongoose.Schema({
       minlength: 8,
       required: true,
     },
-    /////////
     taken_tickets: {
       type: Array,
       default:[]
