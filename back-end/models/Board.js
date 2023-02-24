@@ -67,17 +67,15 @@ const BoardSchema = new Mongoose.Schema({
         },
         tickets:
         [{
-
-                monday:  { type: Array },
-                tuesday: { type: Array },
-                wednesday: { type: Array },
-                thursday: { type: Array },
-                friday: { type: Array },
-                saturday: { type: Array },
-                sunday: { type: Array }
+            monday:  { type: Array },
+            tuesday: { type: Array },
+            wednesday: { type: Array },
+            thursday: { type: Array },
+            friday: { type: Array },
+            saturday: { type: Array },
+            sunday: { type: Array }
         },
         {
-            
             monday: { type: Array },
             tuesday: { type: Array },
             wednesday: { type: Array },
@@ -87,7 +85,6 @@ const BoardSchema = new Mongoose.Schema({
             sunday: { type: Array }
         },
         {
-            
             monday: { type: Array },
             tuesday: { type: Array },
             wednesday: { type: Array },
@@ -97,7 +94,6 @@ const BoardSchema = new Mongoose.Schema({
             sunday: { type: Array }
         },
         {
-            
             monday: { type: Array },
             tuesday: { type: Array },
             wednesday: { type: Array },
@@ -107,7 +103,6 @@ const BoardSchema = new Mongoose.Schema({
             sunday: { type: Array }
         },
         {
-            
             monday: { type: Array },
             tuesday: { type: Array },
             wednesday: { type: Array },
@@ -117,7 +112,6 @@ const BoardSchema = new Mongoose.Schema({
             sunday: { type: Array }
         },
         {
-            
             monday: { type: Array },
             tuesday: { type: Array },
             wednesday: { type: Array },
@@ -134,7 +128,11 @@ const BoardSchema = new Mongoose.Schema({
         auto_open: {
             day: { type: String },
             ahead: { type: Number }
-        }
+        },
+        // members: {
+        //     type: Array,
+        //     default:[]
+        // }
     },
     {versionKey: false}
 );
