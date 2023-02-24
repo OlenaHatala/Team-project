@@ -289,6 +289,20 @@ const update = asyncHandler(async (req, res) => {
     }
 })
 
+const read  = asyncHandler(async (req, res) =>{
+    const { id } = req.body
+  try {const user = await Board.findById(id) 
+  res.status(200).json({
+    message:"Get board",
+    user
+  })
+  } catch(error) {
+    res.status(500).json({
+      message: "An error occurred",
+      error: error.message,
+    })
+  }
+})
 
 const deleteBoard = async (req, res) => {
     const { id } = req.body;
@@ -335,6 +349,7 @@ const deleteBoard = async (req, res) => {
 
 module.exports = {
     create,
+    read,
     update,
     deleteBoard
 }
