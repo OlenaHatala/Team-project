@@ -129,10 +129,10 @@ const BoardSchema = new Mongoose.Schema({
             day: { type: String },
             ahead: { type: Number }
         },
-        // members: {
-        //     type: Array,
-        //     default:[]
-        // }
+        members: {
+            type: Array,
+            default: []
+        }
     },
     {versionKey: false}
 );

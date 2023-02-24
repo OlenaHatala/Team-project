@@ -89,6 +89,8 @@ const create  = asyncHandler(async (req, res) => {
         sunday: []
     }]
 
+    const members = new Map()
+
     try {
         const board = await Board.create({
             owner_id,
@@ -100,7 +102,8 @@ const create  = asyncHandler(async (req, res) => {
             markup,
             tickets,
             address,
-            auto_open
+            auto_open, 
+            members
         })
         for (i = 0; i<6; i++)
         {
