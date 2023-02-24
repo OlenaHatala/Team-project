@@ -291,10 +291,14 @@ const update = asyncHandler(async (req, res) => {
 
 const read  = asyncHandler(async (req, res) =>{
     const { id } = req.body
-  try {const user = await Board.findById(id) 
+  try {const dbBoard = await Board.findById(id) 
+   const board = {_id: dbBoard._id, markup: dbBoard.markup, owner_id: dbBoard.owner_id, label: dbBoard.label, 
+    description: dbBoard.description, service_name: dbBoard.service_name, req_confirm: dbBoard.req_confirm,
+    book_num: dbBoard.book_num, auto_open: dbBoard.auto_open}
+
   res.status(200).json({
     message:"Get board",
-    user
+    board
   })
   } catch(error) {
     res.status(500).json({

@@ -36,10 +36,10 @@ const create = asyncHandler(async (req, res) => {
 
 const read = asyncHandler(async (req, res) => {
   const { id } = req.body
-  try {const user = await Ticket.findById(id) 
+  try {const ticket = await Ticket.findById(id) 
   res.status(200).json({
     message:"Get ticket",
-    user
+    ticket
   })
   } catch(error) {
     res.status(500).json({
