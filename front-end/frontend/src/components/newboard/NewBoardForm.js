@@ -8,8 +8,18 @@ import Schedule from "./Schedule";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
 import { useState } from "react";
+import useBoardContext from "../../hooks/useBoardContext";
 
 const NewBoardForm = () => {
+  const boardCtx = useBoardContext();
+  const {
+    setTickets,
+    setOwnerId,
+    setDetails,
+    setSettings,
+    setMarkup,
+    boardId,
+  } = boardCtx;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
@@ -20,6 +30,7 @@ const NewBoardForm = () => {
 
   const {
     page,
+    isNewBoard,
     details,
     settings,
     duration,
@@ -32,16 +43,18 @@ const NewBoardForm = () => {
     sun,
   } = useNewBoardContext();
 
-  const SubmitForm = async () => {
+  const SubmitForm = async (e) => {
+    e.preventDefault();
     setIsSubmitting(true);
+
     const days = {
-      monday: {open: mon.open, close: mon.close},
-      tuesday: {open: tue.open, close: tue.close},
-      wednesday: {open: wed.open, close: wed.close},
-      thursday: {open: thu.open, close: thu.close},
-      friday: {open: fri.open, close: fri.close},
-      saturday: {open: sat.open, close: sat.close},
-      sunday: {open: sun.open, close: sun.close},
+      monday: { open: mon.open, close: mon.close },
+      tuesday: { open: tue.open, close: tue.close },
+      wednesday: { open: wed.open, close: wed.close },
+      thursday: { open: thu.open, close: thu.close },
+      friday: { open: fri.open, close: fri.close },
+      saturday: { open: sat.open, close: sat.close },
+      sunday: { open: sun.open, close: sun.close },
     };
 
     days.monday.hours = [];
@@ -51,6 +64,13 @@ const NewBoardForm = () => {
     days.friday.hours = [];
     days.saturday.hours = [];
     days.sunday.hours = [];
+
+    if (!isNewBoard && boardId) {
+      //to do: send patch request to back-end
+      console.log("boardId in if");
+      console.log(boardId);
+      navigate(`/board/dash/${boardId}`);
+    }
 
     try {
       const response = await axiosPrivate.post(
@@ -64,25 +84,51 @@ const NewBoardForm = () => {
           book_num: settings.booknum,
           markup: { duration, days },
           address: details.address,
-          auto_open: {day: settings.openday, ahead: settings.ahead}
+          auto_open: { day: settings.openday, ahead: settings.ahead },
         }),
         {
           headers: { "Content-Type": "application/json" },
         }
       );
 
-      console.log(response?.board);
-      navigate("/success/?message=Board-was-created-successfuly");
+      console.log("!!!!!!!!!435345345!!!!!!!!");
+      const board = response?.data?.board;
+      console.log(board);
 
+      setOwnerId(board?.owner_id);
+      setDetails((prevDetails)=>{
+        console.log(prevDetails)
+        console.log({
+          boardname: board?.label,
+          desc: board?.description || "",
+          address: board?.address || "",
+          servname: board?.service_name,
+        });
+        return{
+        boardname: board?.label,
+        desc: board?.description || "",
+        address: board?.address || "",
+        servname: board?.service_name,
+      }});
+      setSettings({
+        reqconf: board?.req_confirm,
+        booknum: board?.book_num,
+        //to do: set openauto when property is added to back-end
+        openauto: true,
+        openday: board?.auto_open?.day,
+        ahead: board?.auto_open?.ahead,
+      });
+      setMarkup(board?.markup);
+      navigate(`/board/dash/${board?._id}`);
     } catch (err) {
       if (!err?.response) {
-        console.log('no res error');
+        console.log("no res error");
       } else if (err.response?.status === 200) {
-        console.log('200 error');
+        console.log("200 error");
       } else if (err.response?.status === 400) {
-        console.log('400 error');
+        console.log("400 error");
       } else {
-        console.log('unknown error');
+        console.log("unknown error");
       }
     } finally {
       setIsSubmitting(false);
@@ -92,10 +138,10 @@ const NewBoardForm = () => {
   const display = {
     details: <ServiceInfo />,
     settings: <Settings />,
-    schedule: <Schedule onSubmit={SubmitForm} isSubmitting={isSubmitting}/>,
+    schedule: <Schedule isSubmitting={isSubmitting} />,
   };
 
-  const content = <form>{display[page]}</form>;
+  const content = <form onSubmit={SubmitForm}>{display[page]}</form>;
 
   return content;
 };

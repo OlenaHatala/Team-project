@@ -2,14 +2,20 @@ import useNewBoardContext from "../../hooks/useNewBoardContext";
 import DayHours from "./DayHours";
 import classes from "./Schedule.module.css";
 
-const Schedule = ({ onSubmit, isSubmitting }) => {
-  const { duration, setDuration, saveSchedule } = useNewBoardContext();
-const Schedule = ({ onSubmit, isSubmitting }) => {
-  const { duration, setDuration, saveSchedule } = useNewBoardContext();
+const Schedule = ({ isSubmitting }) => {
+  const {isNewBoard, duration, setDuration, saveSchedule } = useNewBoardContext();
 
   const prevHandler = () => {
     saveSchedule();
   };
+
+  let submitLabel = "Create Board";
+  let submittingLabel = "Creating...";
+
+  if (isNewBoard) {
+    submitLabel = "Save";
+    submittingLabel = "Saving...";
+  }
 
   return (
     <>
@@ -19,13 +25,10 @@ const Schedule = ({ onSubmit, isSubmitting }) => {
             <button type="button" onClick={prevHandler}>
               Back
             </button>
-            <button type="button" onClick={prevHandler}>
-              Back
-            </button>
           </div>
           <div className={classes["right-btn"]}>
-            <button type="button" onClick={onSubmit}>
-              {isSubmitting ? "Creating..." : "Create Board"}
+            <button disabled={isSubmitting}>
+              {isSubmitting ? submittingLabel : submitLabel}
             </button>
           </div>
         </div>

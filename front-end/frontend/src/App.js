@@ -10,11 +10,9 @@ import { action as logoutAction } from "./pages/Logout";
 import EditAccountPage from "./pages/Account";
 import NewBoard from "./pages/NewBoard";
 import RequireAuth from "./components/auth/RequireAuth";
-<<<<<<< HEAD
 import BoardOwnerView from './pages/BoardOwnerView';
-=======
 import PersistLogin from "./components/auth/PersistLogin";
->>>>>>> d46a7f8 (submit new board form)
+
 
 const router = createBrowserRouter([
   {
