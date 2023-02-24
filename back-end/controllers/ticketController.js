@@ -36,8 +36,20 @@ const create = asyncHandler(async (req, res) => {
 
 const read = asyncHandler(async (req, res) => {
   const { id } = req.body
-  try {const ticket = await Ticket.findById(id) 
-  res.status(200).json({
+  try {
+    const ticket = await Ticket.findById(id) 
+    if(ticket)
+    {
+      res.status(200).json({
+        message:"Get ticket",
+        ticket
+      })
+    }
+    else
+    {
+      return res.status(400).json({ message: 'Ticket not found' })
+    }
+    res.status(200).json({
     message:"Get ticket",
     ticket
   })
