@@ -34,6 +34,21 @@ const create = asyncHandler(async (req, res) => {
 })
 
 
+const read = asyncHandler(async (req, res) => {
+  const { id } = req.body
+  try {const user = await Ticket.findById(id) 
+  res.status(200).json({
+    message:"Get ticket",
+    user
+  })
+  } catch(error) {
+    res.status(500).json({
+      message: "An error occurred",
+      error: error.message,
+    })
+  } 
+})
+
 const deleteTicket = async (req, res) => {
   const { id } = req.body;
 
@@ -57,6 +72,7 @@ const deleteTicket = async (req, res) => {
 
 module.exports = {
     create,
+    read, 
     //update,
     deleteTicket
 }
