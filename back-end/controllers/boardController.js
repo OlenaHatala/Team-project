@@ -180,6 +180,42 @@ const read  = asyncHandler(async (req, res) =>{
   }
 })
 
+const readOneWeek  = asyncHandler(async (req, res) =>{
+    const { id, numberOfWeek } = req.body
+  try {
+    const board = await Board.findById(id) 
+
+    const week_tickets = {monday: board.tickets[numberOfWeek].monday, tuesday: board.tickets[numberOfWeek].tuesday,
+        wednesday: board.tickets[numberOfWeek].wednesday, thursday : board.tickets[numberOfWeek].thursday, 
+        friday: board.tickets[numberOfWeek].friday, saturday: board.tickets[numberOfWeek].saturday, sunday: board.tickets[numberOfWeek].sunday}
+
+    const tickets = []
+
+    for(const day in week_tickets) {
+        let day_tickets = week_tickets[day]
+
+        for(const ticket_id in day_tickets)
+        {
+            const findTicket = await Ticket.findById(day_tickets[ticket_id])
+
+            if(findTicket){
+                tickets.push(findTicket)
+            }
+        }
+    }
+
+  res.status(200).json({
+    message:"Get week tickets",
+    tickets
+  })
+  } catch(error) {
+    res.status(500).json({
+      message: "An error occurred",
+      error: error.message,
+    })
+  }
+})
+
 const deleteBoard = async (req, res) => {
     const { id } = req.body;
 
@@ -204,6 +240,7 @@ const deleteBoard = async (req, res) => {
 module.exports = {
     create,
     read,
+    readOneWeek,
     //update,
     deleteBoard
 }
