@@ -20,12 +20,12 @@ const BoardOwnerView = () => {
     }
 
     const {boardId} = params;
-    console.log(boardId);
+    
   return (
-    <BoardProvider>
+    <>
         {ticketFormIsShown && <NewTicketForm onClose={hideTicketForm} />}
         <Week onShowTicketForm={showTicketForm} />
-    </BoardProvider>
+    </>
     )
 }
 

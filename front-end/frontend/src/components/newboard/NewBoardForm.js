@@ -7,26 +7,32 @@ import Settings from "./Settings";
 import Schedule from "./Schedule";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
-import { useState } from "react";
-import useBoardContext from "../../hooks/useBoardContext";
+import { useEffect, useState } from "react";
+
+import { useSelector, useDispatch } from "react-redux";
+import { selectBoard } from "../board/boardSlice";
+import { boardFetched, configuringEnded } from "../board/boardSlice";
 
 const NewBoardForm = () => {
-  const boardCtx = useBoardContext();
-  const {
-    setTickets,
-    setOwnerId,
-    setDetails,
-    setSettings,
-    setMarkup,
-    boardId,
-  } = boardCtx;
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const {
+    isConfiguring,
+    boardId,
+    details: currentDetails,
+    settings: currentSettings,
+    markup: currentMarkup,
+  } = useSelector(selectBoard);
+
+  console.log("currentMarkup");
+  console.log(currentMarkup);
 
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
 
   const { id } = useAuth();
-  console.log(id);
 
   const {
     page,
@@ -41,7 +47,36 @@ const NewBoardForm = () => {
     fri,
     sat,
     sun,
+    setMon,
+    setTue,
+    setWed,
+    setThu,
+    setFri,
+    setSat,
+    setSun,
+    setDetails,
+    setSettings,
+    setDuration,
+    setIsNewBoard,
   } = useNewBoardContext();
+
+  useEffect(() => {
+    if (isConfiguring) {
+      console.log(1);
+      setIsNewBoard(false);
+      setDetails(currentDetails);
+      setSettings(currentSettings);
+      setDuration(currentMarkup.duration);
+      setMon(currentMarkup.days.mon);
+      setTue(currentMarkup.days.tue);
+      setWed(currentMarkup.days.wed);
+      setThu(currentMarkup.days.thu);
+      setFri(currentMarkup.days.fri);
+      setSat(currentMarkup.days.sat);
+      setSun(currentMarkup.days.sun);
+      console.log(2);
+    }
+  }, []);
 
   const SubmitForm = async (e) => {
     e.preventDefault();
@@ -65,10 +100,9 @@ const NewBoardForm = () => {
     days.saturday.hours = [];
     days.sunday.hours = [];
 
-    if (!isNewBoard && boardId) {
+    if (isConfiguring) {
       //to do: send patch request to back-end
-      console.log("boardId in if");
-      console.log(boardId);
+      console.log(`boardId in if isConfiguring ${boardId}`);
       navigate(`/board/dash/${boardId}`);
     }
 
@@ -91,34 +125,58 @@ const NewBoardForm = () => {
         }
       );
 
-      console.log("!!!!!!!!!435345345!!!!!!!!");
       const board = response?.data?.board;
+
+      console.log("board!");
       console.log(board);
 
-      setOwnerId(board?.owner_id);
-      setDetails((prevDetails)=>{
-        console.log(prevDetails)
-        console.log({
-          boardname: board?.label,
-          desc: board?.description || "",
-          address: board?.address || "",
-          servname: board?.service_name,
-        });
-        return{
+      const resBoardId = board?._id;
+      const resOwnerId = board?.owner_id;
+      const resDetails = {
         boardname: board?.label,
         desc: board?.description || "",
         address: board?.address || "",
         servname: board?.service_name,
-      }});
-      setSettings({
+      };
+      const resSettings = {
         reqconf: board?.req_confirm,
         booknum: board?.book_num,
         //to do: set openauto when property is added to back-end
         openauto: true,
         openday: board?.auto_open?.day,
         ahead: board?.auto_open?.ahead,
-      });
-      setMarkup(board?.markup);
+      };
+      const resMarkup = board?.markup;
+
+      const daysRedux = {
+        mon: { open: resMarkup.days.monday.open, close: resMarkup.days.monday.close, disabled : false },
+        tue: { open: resMarkup.days.monday.open, close: resMarkup.days.monday.close, disabled : false },
+        wed: { open: resMarkup.days.monday.open, close: resMarkup.days.monday.close, disabled : false },
+        thu: { open: resMarkup.days.monday.open, close: resMarkup.days.monday.close, disabled : false },
+        fri: { open: resMarkup.days.monday.open, close: resMarkup.days.monday.close, disabled : false },
+        sat: { open: resMarkup.days.monday.open, close: resMarkup.days.monday.close, disabled : false },
+        sun: { open: resMarkup.days.monday.open, close: resMarkup.days.monday.close, disabled : false },
+      };
+
+      resMarkup.days = daysRedux;
+
+      //todo: add resTickets to reducer
+      const resTickets = board?.tickets;
+
+      dispatch(
+        boardFetched({
+          boardId: resBoardId,
+          ownerId: resOwnerId,
+          details: resDetails,
+          settings: resSettings,
+          markup: resMarkup,
+        })
+      );
+
+      dispatch(
+        configuringEnded()
+      );
+
       navigate(`/board/dash/${board?._id}`);
     } catch (err) {
       if (!err?.response) {

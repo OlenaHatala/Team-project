@@ -38,18 +38,12 @@ export const BoardProvider = ({ children }) => {
 const minHour = Math.min(...ticketsStartHours);
 const maxHour = Math.ceil(Math.max(...ticketsEndHours));
 
-console.log(maxHour);
-console.log(minHour);
-
   const minutePercentage = 100 / ((maxHour-minHour) * 60);
-  console.log(minutePercentage);
   let timeBorders = {
     upper:  new Date(`August 19, 1975 ${minHour}:00:00`),
     bottom: new Date(`August 19, 1975 ${maxHour}:00:00`),
   };
-
-  console.log(details);
-  console.log("PROVIDER");
+  
 
   return (
     <BoardContext.Provider

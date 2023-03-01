@@ -3,10 +3,13 @@ import DayTickets from "./DayTickets";
 import classes from "./Day.module.css";
 import useBoardContext from '../../hooks/useBoardContext';
 
+import { useSelector } from "react-redux";
+import { selectBoard } from "./boardSlice";
+
 const Day = ({day}) => {
 
   
-  const { timeBorders, minutePercentage } = useBoardContext();
+  const { timeBorders, minutePercentage } = useSelector(selectBoard);
 
   const hourHeight = minutePercentage * 60;
 

@@ -77,8 +77,7 @@ export const NewBoardProvider = ({ children }) => {
     address: "",
     servname: "",
   });
-  console.log(details);
-  console.log("NEWPROVIDER");
+
   const [settings, setSettings] = useState({
     reqconf: false,
     booknum: 1,

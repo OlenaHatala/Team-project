@@ -2,11 +2,17 @@ import { useState } from "react";
 
 import useBoardContext from "../../hooks/useBoardContext";
 
+import { useDispatch, useSelector } from "react-redux";
+import { selectBoard } from "./boardSlice";
+import {ticketAdded} from './boardSlice';
+
 import Modal from "../UI/Modal";
 import classes from "./NewTicketForm.module.css";
 
 const NewTicketForm = ({ onClose }) => {
-  const { setTickets } = useBoardContext();
+  //const { setTickets } = useBoardContext();
+
+  const dispatch = useDispatch();
 
   const [weekday, setWeekday] = useState("monday");
   const [time, setTime] = useState("18:00");
@@ -15,32 +21,34 @@ const NewTicketForm = ({ onClose }) => {
 
   const sumbitHandler = (e) => {
     e.preventDefault();
-    setTickets((prevTickets) => {
-      let newTickets = [];
-      let dayTickets = prevTickets[0][weekday];
-      let newTicketsDay = [];
-      let newTicket = {
-        id: "id1_333",
-        type: "ticket",
-        date: new Date(`July 4 1776 ${time}`),
-        duration,
-      };
-      for (let i = 0; i < dayTickets.length; i++) {
-        newTicketsDay.push(dayTickets[i]);
-      }
-      newTicketsDay.push(newTicket);
-      let weekTickets = { ...prevTickets[0] };
-      weekTickets[weekday] = newTicketsDay;
-      newTickets.push(weekTickets);
-      for (let i = 0; i < 6; i++) {
-        if (i === 0) {
-          continue;
-        }
-        newTickets.push(prevTickets[i]);
-      }
-      console.log(newTickets);
-      return newTickets;
-    });
+    // setTickets((prevTickets) => {
+    //   let newTickets = [];
+    //   let dayTickets = prevTickets[0][weekday];
+    //   let newTicketsDay = [];
+    //   let newTicket = {
+    //     id: "id1_333",
+    //     type: "ticket",
+    //     date: new Date(`July 4 1776 ${time}`),
+    //     duration,
+    //   };
+    //   for (let i = 0; i < dayTickets.length; i++) {
+    //     newTicketsDay.push(dayTickets[i]);
+    //   }
+    //   newTicketsDay.push(newTicket);
+    //   let weekTickets = { ...prevTickets[0] };
+    //   weekTickets[weekday] = newTicketsDay;
+    //   newTickets.push(weekTickets);
+    //   for (let i = 0; i < 6; i++) {
+    //     if (i === 0) {
+    //       continue;
+    //     }
+    //     newTickets.push(prevTickets[i]);
+    //   }
+    //   console.log(newTickets);
+    //   return newTickets;
+    // });
+
+    dispatch(ticketAdded(weekday, time, duration, available));
     onClose();
   };
 

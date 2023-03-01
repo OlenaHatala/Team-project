@@ -2,6 +2,9 @@ import React, { useCallback } from "react";
 import classes from "./DayTickets.module.css";
 import useBoardContext from '../../hooks/useBoardContext';
 
+import { useSelector } from "react-redux";
+import { selectBoard } from "./boardSlice";
+
 const timeString = (date) => {
   let minutes = date.getMinutes();
   let hours = date.getHours();
@@ -34,7 +37,7 @@ const sortTickets = (tickets) => {
 }
 
 const DayTickets = ({ day }) => {
-  const { timeBorders, tickets, minutePercentage } = useBoardContext();
+  const { timeBorders, tickets, minutePercentage } = useSelector(selectBoard);
   const dayTickets = tickets[0][day];
 
   const createDayArray = useCallback(
