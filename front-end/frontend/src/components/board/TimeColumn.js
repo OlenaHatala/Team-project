@@ -9,6 +9,9 @@ const TimeColumn = () => {
 
   const hourHeight = minutePercentage * 60;
 
+  console.log("timeBorders: ");
+  console.log(timeBorders);
+
   const firstHour = timeBorders.upper.getHours();
   let hours = [firstHour];
 
