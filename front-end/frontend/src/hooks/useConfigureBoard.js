@@ -1,42 +1,45 @@
-import { useNavigate } from "react-router-dom";
-import useBoardContext from "./useBoardContext";
-import useNewBoardContext from "./useNewBoardContext";
+// import { useNavigate } from "react-router-dom";
+// import useBoardContext from "./useBoardContext";
+// import useNewBoardContext from "./useNewBoardContext";
 
-const useConfigureBoard = () => {
-  const navigate = useNavigate();
-  const { details, settings, markup } = useBoardContext();
-  const {
-    setIsNewBoard,
-    setDetails,
-    setSettings,
-    setDuration,
-    setMon,
-    setTue,
-    setWed,
-    setThu,
-    setFri,
-    setSat,
-    setSun,
-  } = useNewBoardContext();
+// import { useSelector } from "react-redux";
+// import { selectBoard } from "../components/board/boardSlice"
 
-  const configureBoard = () => {
-    setIsNewBoard(false);
+// const useConfigureBoard = () => {
+//   const navigate = useNavigate();
+//   const { details, settings, markup } = useSelector(selectBoard);
+//   const {
+//     setIsNewBoard,
+//     setDetails,
+//     setSettings,
+//     setDuration,
+//     setMon,
+//     setTue,
+//     setWed,
+//     setThu,
+//     setFri,
+//     setSat,
+//     setSun,
+//   } = useNewBoardContext();
 
-    setDetails(details);
-    setSettings(settings);
-    setDuration(markup.duration);
-    setMon(markup.days.mon);
-    setTue(markup.days.tue);
-    setWed(markup.days.wed);
-    setThu(markup.days.thu);
-    setFri(markup.days.fri);
-    setSat(markup.days.sat);
-    setSun(markup.days.sun);
+//   const configureBoard = () => {
+//     setIsNewBoard(false);
 
-    navigate("/newboard");
-  };
+//     setDetails(details);
+//     setSettings(settings);
+//     setDuration(markup.duration);
+//     setMon(markup.days.mon);
+//     setTue(markup.days.tue);
+//     setWed(markup.days.wed);
+//     setThu(markup.days.thu);
+//     setFri(markup.days.fri);
+//     setSat(markup.days.sat);
+//     setSun(markup.days.sun);
 
-  return configureBoard;
-};
+//     navigate("/newboard");
+//   };
 
-export default useConfigureBoard;
+//   return configureBoard;
+// };
+
+// export default useConfigureBoard;

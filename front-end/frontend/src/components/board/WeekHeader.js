@@ -1,19 +1,29 @@
 import useConfigureBoard from "../../hooks/useConfigureBoard";
 import useBoardContext from "../../hooks/useBoardContext";
 
+import { useDispatch, useSelector } from "react-redux";
+import { selectBoard } from "./boardSlice";
+import { configuringStarted } from "./boardSlice";
+
 import classes from "./WeekHeader.module.css";
+import { useNavigate } from "react-router-dom";
 
 const WeekHeader = ({ onShowTicketForm }) => {
-  const { details } = useBoardContext();
+  const { details } = useSelector(selectBoard);
 
-  const configureBoard = useConfigureBoard();
-  console.log(details.boardname);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const configureBoardHandler = () => {
+    dispatch(configuringStarted());
+    navigate("/newboard");
+  }
   return (
     <>
       <h1>{details.boardname}</h1>
       <div className={classes["new-ticket"]}>
         <button onClick={onShowTicketForm}>Add new ticket</button>
-        <button onClick={configureBoard}>Configure Board</button>
+        <button onClick={configureBoardHandler}>Configure Board</button>
       </div>
       <div className={classes.days}>
         <div className={classes["day-button"]}>

@@ -4,8 +4,11 @@ import TimeColumn from './TimeColumn.js';
 import classes from './WeekBody.module.css';
 import useBoardContext from '../../hooks/useBoardContext';
 
+import { useSelector } from "react-redux";
+import { selectBoard } from "./boardSlice";
+
 const WeekBody = () => {
-  const { minutePercentage, timeBorders } = useBoardContext();
+  const { minutePercentage, timeBorders } = useSelector(selectBoard);
 
   return (
   <div className={classes.scroll}>

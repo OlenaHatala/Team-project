@@ -66,7 +66,7 @@ export const defaultOwnerId = "OWNER_ID";
 export const defaultBordId = "BOARD_ID";
 
 export const defaultDetails = {
-  boardname: "",
+  boardname: "The NAME",
   desc: "",
   address: "",
   servname: "",
@@ -121,9 +121,11 @@ export const defaultMarkup = {
   },
 };
 
+export const defaultMinutePercentage = 0.138;
+
 export const defaultTimeBorders = {
-    upper: Date.parse('2000-02-19T06:00:00'),
-    bottom: Date.parse('2000-02-19T06:00:00'),
+  upper:  new Date(`August 19, 1975 10:00:00`),
+  bottom: new Date(`August 19, 1975 19:00:00`),
   } 
 
 const BoardContext = createContext({

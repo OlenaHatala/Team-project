@@ -3,7 +3,12 @@ import useNewBoardContext from "../../hooks/useNewBoardContext";
 import classes from "./DayHours.module.css";
 
 const DayHours = ({ dayName, label }) => {
+  console.log(dayName);
+  console.log("dayName");
   const setDayFunctionName = `set${dayName}`;
+  
+  let ctx = useNewBoardContext();
+  console.log(ctx["mon"]);
 
   const { [dayName.toLowerCase()]: day, [setDayFunctionName]: setDay } =
     useNewBoardContext();
