@@ -28,8 +28,8 @@ app.use("/api/board", require("./routes/boardRoutes"))
 
 
 
-const server = app.listen(process.env.PORT, () =>
-  console.log(`Server Connected to port ${process.env.PORT}`)
+const server = app.listen(process.env.API_PORT, () =>
+  console.log(`Server Connected to port ${process.env.API_PORT}`)
 )
 // Handling Error
 process.on("unhandledRejection", err => {

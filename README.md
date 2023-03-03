@@ -32,7 +32,8 @@ in the chosen directory.
  4. Change api localhost port, if needed (default - 3500).
  5. Navigate to ***/front-end/frontend*** and add **".env"** file.
  6. Copy content of **"/front-end/frontend.env.example"** file and paste to newly created file.
- 7. Match api localhost port in *"REACT_APP_API_URL"* connection string with localhost port in **"/back-end/.env"** file.
+ 7. Match api localhost port in *"REACT_APP_API_URL"* connection string with localhost port in the **"/back-end/.env"** file.
+ 8. Change front-end localhost port, if needed (default - 3000).
 
 
 
