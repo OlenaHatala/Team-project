@@ -123,10 +123,17 @@ exports.login = async (req, res, next) => {
 exports.read = async(req, res, next) => {
   const { id } = req.body
   try {const user = await User.findById(id)
-  res.status(200).json({
-    message:"Get user",
-    user
-  })
+    if(user)
+    {
+      res.status(200).json({
+        message:"Get user",
+        user
+      })
+    }
+    else
+    {
+      return res.status(400).json({ message: 'User not found' })
+    }
   } catch(error) {
     res.status(500).json({
       message: "An error occurred",
