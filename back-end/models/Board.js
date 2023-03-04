@@ -123,7 +123,7 @@ const BoardSchema = new Mongoose.Schema({
             
         address: {
             type: String,
-            required: true,
+            required: false,
         },
         auto_open: {
             day: { type: String },

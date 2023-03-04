@@ -37,6 +37,13 @@ const create = asyncHandler(async (req, res) => {
 
 const update = async (req, res) => {
   const {id, ticketData} = req.body;
+
+  const ticket = await Ticket.findById(id).exec()
+
+  if (!ticket) {
+      return res.status(400).json({ message: 'Ticket not found' })
+  }
+
   if (!ticketData || !id){
     res.status(404).json({ message: "Data or ID is not present" });
   }
@@ -97,10 +104,6 @@ const update = async (req, res) => {
   else if (id && ticketData && !(Object.keys(newData).length)) {
     res.status(204).json({ message: "Data is not present" });
   }
-
-  
-
-
 };
 
 
