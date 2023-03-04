@@ -5,7 +5,6 @@ const asyncHandler = require('express-async-handler')
 
 const create = asyncHandler(async (req, res) => {
     const { table_id, user_id, datetime, duration, is_outdated, enabled, confirmed } = req.body
-    console.log(Date.now());
     if (!table_id || !user_id || !datetime || !duration || !is_outdated || !enabled || !confirmed) {
         return res.status(400).json({ message: 'All fields are required' })
     }
@@ -69,24 +68,16 @@ const update = async (req, res) => {
   if (Object.keys(newData).length) {
 
     try {
-      console.log("start")
       await Ticket.findByIdAndUpdate(
         id, newData
       );
       
-      console.log("after await")
       const ticket = await Ticket.findById(id) 
-      console.log(ticket.table_id)
       const board = await Board.findById(ticket.table_id)
-
-      console.log(board)
-      console.log("board created")
 
       if (ticket.user_id)
       {
-        console.log("if ticket.user()")
         board.members.push([ticket.user_id, ticket.confirmed])
-        console.log("memmbers push")
       }
 
       board.save()
@@ -94,7 +85,6 @@ const update = async (req, res) => {
       res.status(201).json({ message: "Update successful", ticket });
       }
       catch(error){
-        console.log("catch error")
         res
           .status(400)
           .json({ message: "An error occurred", error: error.message });
@@ -183,7 +173,6 @@ const deleteTicket = async (req, res) => {
                   const result = await ticket.deleteOne()
 
                   const reply = `Ticket '${result.title}' with ID ${result._id} deleted`
-                  console.log(board.tickets[i][day])
                   
                   res.status(201).json(reply)
                 }                

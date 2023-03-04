@@ -30,7 +30,6 @@ const compareMarkup = (a, b) => {
 
 const create  = asyncHandler(async (req, res) =>{
     const {owner_id, address, description, label,service_name, req_confirm, book_num, markup, auto_open} = req.body
-    // let {address, description} = req.body
 
     const required_fields_present = (owner_id && label && service_name && req_confirm && book_num && markup && auto_open)
     if ( !required_fields_present){
@@ -303,7 +302,6 @@ const update = asyncHandler(async (req, res) => {
             })
 
     } catch (error) {
-        console.log("error")
         res.status(400).json({
             message: "Board was not saved",
             error: error.message,
