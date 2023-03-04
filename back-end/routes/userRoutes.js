@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { register, login, update, deleteUser, logout, refresh} = require("../controllers/authController");
+const { register, login, update, deleteUser, logout, refresh, read} = require("../controllers/authController");
 
 
 
@@ -11,5 +11,6 @@ router.route("/update").patch(update);
 router.route("/deleteUser").delete(deleteUser);
 router.route("/logout").post(logout);
 router.route("/refresh").get(refresh);
+router.route("/read").get(read);
 
 module.exports = router;

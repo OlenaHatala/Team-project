@@ -33,6 +33,34 @@ const create = asyncHandler(async (req, res) => {
       }
 })
 
+
+const read = asyncHandler(async (req, res) => {
+  const { id } = req.body
+  try {
+    const ticket = await Ticket.findById(id) 
+    if(ticket)
+    {
+      res.status(200).json({
+        message:"Get ticket",
+        ticket
+      })
+    }
+    else
+    {
+      return res.status(400).json({ message: 'Ticket not found' })
+    }
+    res.status(200).json({
+    message:"Get ticket",
+    ticket
+  })
+  } catch(error) {
+    res.status(500).json({
+      message: "An error occurred",
+      error: error.message,
+    })
+  } 
+})
+
 const deleteTicket = async (req, res) => {
   const { id } = req.body;
 
@@ -141,6 +169,7 @@ const update = async (req, res) => {
 
 module.exports = {
     create,
+    read, 
     update,
     deleteTicket
 }
