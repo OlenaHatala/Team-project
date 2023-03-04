@@ -242,3 +242,5 @@ exports.deleteUser = async (req, res, next) => {
     );
 };
 
+// to do delete boards
+

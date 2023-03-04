@@ -5,10 +5,10 @@ const asyncHandler = require('express-async-handler')
 
 const create = asyncHandler(async (req, res) => {
     const { table_id, user_id, datetime, duration, is_outdated, enabled, confirmed } = req.body
-    console.log(Date.now());
     if (!table_id || !user_id || !datetime || !duration || !is_outdated || !enabled || !confirmed) {
         return res.status(400).json({ message: 'All fields are required' })
     }
+    // to do add to the board and user
 
     try {
         await Ticket.create({
@@ -32,6 +32,70 @@ const create = asyncHandler(async (req, res) => {
         })
       }
 })
+
+
+const update = async (req, res) => {
+  const {id, ticketData} = req.body;
+
+  const ticket = await Ticket.findById(id).exec()
+
+  if (!ticket) {
+      return res.status(400).json({ message: 'Ticket not found' })
+  }
+
+  if (!ticketData || !id){
+    res.status(404).json({ message: "Data or ID is not present" });
+  }
+
+  let newData = {};
+
+  if(ticketData?.datetime){
+    newData.datetime = ticketData.datetime
+  }
+  if(ticketData?.duration){
+    newData.duration = ticketData.duration
+  }
+  if(ticketData?.is_outdated){
+    newData.is_outdated = ticketData.is_outdated
+  }
+  if(ticketData?.enabled){
+    newData.enabled = ticketData.enabled
+  }
+  if(ticketData?.confirmed){
+    newData.confirmed = ticketData.confirmed
+  }
+
+  if (Object.keys(newData).length) {
+
+    try {
+      await Ticket.findByIdAndUpdate(
+        id, newData
+      );
+      
+      const ticket = await Ticket.findById(id) 
+      const board = await Board.findById(ticket.table_id)
+
+      if (ticket.user_id)
+      {
+        board.members.push([ticket.user_id, ticket.confirmed])
+      }
+
+      board.save()
+  
+      res.status(201).json({ message: "Update successful", ticket });
+      }
+      catch(error){
+        res
+          .status(400)
+          .json({ message: "An error occurred", error: error.message });
+      };
+  } 
+  
+  else if (id && ticketData && !(Object.keys(newData).length)) {
+    res.status(204).json({ message: "Data is not present" });
+  }
+};
+
 
 
 const read = asyncHandler(async (req, res) => {
@@ -109,7 +173,6 @@ const deleteTicket = async (req, res) => {
                   const result = await ticket.deleteOne()
 
                   const reply = `Ticket '${result.title}' with ID ${result._id} deleted`
-                  console.log(board.tickets[i][day])
                   
                   res.status(201).json(reply)
                 }                
@@ -117,55 +180,6 @@ const deleteTicket = async (req, res) => {
         }
      }
 }
-
-const update = async (req, res) => {
-  const {id, ticketData} = req.body;
-  if (!ticketData || !id){
-    res.status(404).json({ message: "Data or ID is not present" });
-  }
-
-  let newData = {};
-
-  if(ticketData?.datetime){
-    newData.datetime = ticketData.datetime
-  }
-  if(ticketData?.duration){
-    newData.duration = ticketData.duration
-  }
-  if(ticketData?.is_outdated){
-    newData.is_outdated = ticketData.is_outdated
-  }
-  if(ticketData?.enabled){
-    newData.enabled = ticketData.enabled
-  }
-  if(ticketData?.confirmed){
-    newData.confirmed = ticketData.confirmed
-  }
-
-  if (Object.keys(newData).length) {
-
-    try {
-      await Ticket.findByIdAndUpdate(
-        id, newData
-      );
-
-      const ticket = await Ticket.findById(id) 
-
-    res.status(201).json({ message: "Update successful", ticket });
-      }
-      catch(error){
-        console.log("catch error")
-        res
-          .status(400)
-          .json({ message: "An error occurred", error: error.message });
-      };
-  } 
-  
-  else if (id && ticketData && !(Object.keys(newData).length)) {
-    res.status(204).json({ message: "Data is not present" });
-  }
-};
-
 
 module.exports = {
     create,

@@ -12,7 +12,6 @@ const TicketSchema = new Mongoose.Schema({
         },
         datetime: {
             type: Date,
-            //min: new Date(),
             required: true,
         },
         duration: {

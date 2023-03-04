@@ -28,10 +28,19 @@ const compareMarkup = (a, b) => {
     return true
 }
 
-const create  = asyncHandler(async (req, res) => {
-    const {owner_id, label, service_name, req_confirm, book_num, markup, auto_open} = req.body
-    let address = req.body.address ? req.body.address : " ";
-    let description = req.body.description ? req.body.description : " ";
+const create  = asyncHandler(async (req, res) =>{
+    const {owner_id, address, description, label,service_name, req_confirm, book_num, markup, auto_open} = req.body
+
+    const required_fields_present = (owner_id && label && service_name && req_confirm && book_num && markup && auto_open)
+    if ( !required_fields_present){
+        return res.status(400).json({ 
+            message: "Not all required fields are present",
+          })
+        }
+
+    // address = address ? address : " ";
+    // description = description ? description : " ";
+
 
     const tickets = 
     [{
@@ -89,19 +98,24 @@ const create  = asyncHandler(async (req, res) => {
         sunday: []
     }]
 
+    const members = new Map()
+
     try {
         const board = await Board.create({
             owner_id,
             label,
-            description,
+            description: description ? description: "",
             service_name,
             req_confirm,
             book_num,
             markup,
             tickets,
-            address,
-            auto_open
+            address: address ? address: "",
+            auto_open, 
+            members
         })
+
+
         for (i = 0; i<6; i++)
         {
             for (const day in markup.days) {
@@ -163,6 +177,13 @@ const create  = asyncHandler(async (req, res) => {
 const update = asyncHandler(async (req, res) => {
     const {id, label, description, service_name, req_confirm, book_num, markup, address, auto_open, apply_new_markup} = req.body
 
+    const required_fields_present = (id && label && service_name && req_confirm && book_num && markup && auto_open && apply_new_markup)
+    if ( !required_fields_present){
+        return res.status(400).json({
+            message: "Not all required fields are present",
+          })
+    }
+
     try {
         const board = await Board.findByIdAndUpdate(
             id,
@@ -177,9 +198,8 @@ const update = asyncHandler(async (req, res) => {
                 auto_open
             }
         )
-
-        if (!(compareMarkup(markup, board.markup)) && apply_new_markup) {
-
+        if ((!(compareMarkup(markup, board.markup))) && (apply_new_markup === "true")) {
+            
             for (i = 0; i < 6; i++) {
 
                 const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
@@ -271,15 +291,15 @@ const update = asyncHandler(async (req, res) => {
                 {
                    tickets: board.tickets
                 }
-            )
+            ) 
+        }
 
-            const updated_board = await Board.findById(id);
+        const updated_board = await Board.findById(id);
 
             res.status(200).json({
                 message: "Board updated succesfully", 
                 board: updated_board
             })
-        }
 
     } catch (error) {
         res.status(400).json({

@@ -123,16 +123,16 @@ const BoardSchema = new Mongoose.Schema({
             
         address: {
             type: String,
-            required: true,
+            required: false,
         },
         auto_open: {
             day: { type: String },
             ahead: { type: Number }
         },
-        // members: {
-        //     type: Array,
-        //     default:[]
-        // }
+        members: {
+            type: Array,
+            default: []
+        }
     },
     {versionKey: false}
 );
