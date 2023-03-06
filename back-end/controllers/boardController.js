@@ -1,5 +1,7 @@
 const Board = require('../models/Board')
 const Ticket = require('../models/Ticket')
+const User = require('../models/User')
+
 const asyncHandler = require('express-async-handler')
 
 const week_index = {
@@ -29,9 +31,10 @@ const compareMarkup = (a, b) => {
 }
 
 const create  = asyncHandler(async (req, res) =>{
-    const {owner_id, address, description, label,service_name, req_confirm, book_num, markup, auto_open} = req.body
+    const { address, description, label,service_name, req_confirm, book_num, markup, auto_open} = req.body
+    const { user_id: owner_id } = req;
 
-    const required_fields_present = (owner_id && label && service_name && req_confirm && book_num && markup && auto_open)
+    const required_fields_present = (label && service_name && req_confirm && book_num && markup && auto_open)
     if ( !required_fields_present){
         return res.status(400).json({ 
             message: "Not all required fields are present",
@@ -163,9 +166,14 @@ const create  = asyncHandler(async (req, res) =>{
                 .status(200)
                 .json({ message: "An error occurred", error: error.message });
             }
-            res.status(201).json({ message: "Created successfully", board});
         });
 
+        const owner = await User.findById(owner_id).exec();
+        owner.created_tables.push(board._id);
+        await owner.save();
+
+        res.status(201).json({ message: "Created successfully", board});
+        
     } catch (error) {
         res.status(400).json({
             message: "Board was not created",
@@ -176,12 +184,17 @@ const create  = asyncHandler(async (req, res) =>{
 
 const update = asyncHandler(async (req, res) => {
     const {id, label, description, service_name, req_confirm, book_num, markup, address, auto_open, apply_new_markup} = req.body
+    const { created_tables } = req;
 
     const required_fields_present = (id && label && service_name && req_confirm && book_num && markup && auto_open && apply_new_markup)
     if ( !required_fields_present){
         return res.status(400).json({
             message: "Not all required fields are present",
           })
+    }
+
+    if (created_tables.length === 0 || !created_tables.find(boardId => boardId === id)) {
+        return res.status(403).json({ message: 'Forbidden' })
     }
 
     try {
@@ -309,8 +322,14 @@ const update = asyncHandler(async (req, res) => {
     }
 })
 
-const read  = asyncHandler(async (req, res) =>{
+const read = asyncHandler(async (req, res) =>{
     const { id } = req.body
+    const { created_tables } = req;
+
+    if (created_tables.length === 0 || !created_tables.find(boardId => boardId === id)) {
+        return res.status(403).json({ message: 'Forbidden' })
+    }
+
   try {const dbBoard = await Board.findById(id) 
     if(dbBoard)
     {
@@ -336,6 +355,12 @@ const read  = asyncHandler(async (req, res) =>{
 
 const readOneWeek  = asyncHandler(async (req, res) =>{
     const { id, numberOfWeek } = req.body
+    const { created_tables } = req;
+
+    if (created_tables.length === 0 || !created_tables.find(boardId => boardId === id)) {
+        return res.status(403).json({ message: 'Forbidden' })
+    }
+
   try {
     const board = await Board.findById(id) 
 
@@ -372,10 +397,17 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
 
 const deleteBoard = async (req, res) => {
     const { id } = req.body;
+    const { created_tables, user_id: owner_id } = req;
+
+    if (created_tables.length === 0 || !created_tables.find(boardId => boardId === id)) {
+        return res.status(403).json({ message: 'Forbidden' })
+    }
 
     if (!id) {
         return res.status(400).json({ message: 'Board ID required' })
     }
+
+    try {
 
     const board = await Board.findById(id).exec()
 
@@ -406,10 +438,21 @@ const deleteBoard = async (req, res) => {
     }
         
     const result = await board.deleteOne()
-
+    
     const reply = `Board '${result.title}' with ID ${result._id} deleted`
 
-    res.json(reply)
+    const owner = await User.findById(owner_id).exec();
+    owner.created_tables = owner.created_tables.filter(boardId => boardId.toString() !== id);
+    await owner.save();
+
+    return res.json(reply)
+
+ } catch (error) {
+    res.status(400).json({
+        message: "Board was not deleted",
+        error: error.message,
+    })
+}
 }
 
 
