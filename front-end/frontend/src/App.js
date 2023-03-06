@@ -11,6 +11,7 @@ import { checkAuthLoader, tokenLoader } from "./util/auth";
 import EditAccountPage from "./pages/Account";
 import AccountRootLayout from "./pages/AccountRoot";
 import NewBoard from "./pages/NewBoard";
+import TakenTicketList from "./components/takenTickets/TakenTicketList";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "login",
     element: <Login />
+  },
+  {
+    path: "tickets",
+    element: <TakenTicketList />
   },
   {
     path: "/",
