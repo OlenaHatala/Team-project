@@ -7,7 +7,7 @@ import Schedule from "./Schedule";
 import { useNavigate } from "react-router-dom";
 
 const NewBoardForm = () => {
-
+  const navigate = useNavigate();
   const {
     page,
     details,
