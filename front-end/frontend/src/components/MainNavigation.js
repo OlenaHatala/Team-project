@@ -31,6 +31,17 @@ function MainNavigation() {
               New Board
             </NavLink>
           </li>
+          <li>
+          <NavLink
+              to="/tickets"
+              className={({ isActive }) =>
+                isActive ? classes.active : undefined
+              }
+              end
+            >
+              Taken tickets
+            </NavLink>
+          </li>
           {!token && (
             <li>
               <NavLink
