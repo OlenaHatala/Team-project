@@ -5,6 +5,11 @@ const BoardSchema = new Mongoose.Schema({
             type:  Mongoose.Schema.Types.ObjectId,
             required: true,
         },
+        url: {
+            type: String,
+            default: "",
+            required: false,
+        },
         label: {
             type: String,
             required: true,

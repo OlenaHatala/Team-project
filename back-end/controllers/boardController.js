@@ -41,7 +41,7 @@ const create  = asyncHandler(async (req, res) =>{
     // address = address ? address : " ";
     // description = description ? description : " ";
 
-
+    
     const tickets = 
     [{
         monday:  [],
@@ -98,8 +98,9 @@ const create  = asyncHandler(async (req, res) =>{
         sunday: []
     }]
 
-    const members = new Map()
+    const createURL = req.protocol + "://" + req.get("host") + "/boards/" 
 
+    const members = new Map()
     try {
         const board = await Board.create({
             owner_id,
@@ -114,7 +115,8 @@ const create  = asyncHandler(async (req, res) =>{
             auto_open, 
             members
         })
-
+        
+        board.url = createURL + board.id
 
         for (i = 0; i<6; i++)
         {
@@ -165,6 +167,7 @@ const create  = asyncHandler(async (req, res) =>{
             }
             res.status(201).json({ message: "Created successfully", board});
         });
+
 
     } catch (error) {
         res.status(400).json({
