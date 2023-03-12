@@ -12,13 +12,21 @@ import { eyeOff } from "react-icons-kit/feather/eyeOff";
 
 import classes from "./authForm.module.css";
 import axios from "../../api/axios";
+import useAuth from "../../hooks/useAuth";
 
 const API_LOGIN_URL = "/auth/login";
 
 function LoginForm() {
+  const { setAuth, accessToken } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+
+  useEffect(() => {
+    if (accessToken) {
+      navigate(from);
+    }
+  }, [accessToken, from, navigate]);
 
   const userRef = useRef();
   const errRef = useRef();
@@ -65,30 +73,17 @@ function LoginForm() {
       setUser("");
       setPwd("");
 
-      //test token
-      const token = "test token";
+      const accessToken = response?.data?.accessToken;
+      const responseUser = response?.data?.user;
 
-      // TODO: remove console.logs before deployment
-
-      console.log("putting data from response to localStorage");
-      console.log(response.data.user);
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("userId", response.data.user._id);
-      localStorage.setItem("userEmail", response.data.user.email);
-      localStorage.setItem("userSurname", response.data.user.surname);
-      localStorage.setItem("userName", response.data.user.name);
-      localStorage.setItem(
-        "userMobileNumber",
-        response.data.user.mobile_number
-      );
-
-      console.log("localStorage has user data");
-
-      const expiration = new Date();
-      expiration.setHours(expiration.getHours() + 1);
-
-      localStorage.setItem("expiration", expiration.toISOString());
+      setAuth({
+        id: responseUser._id,
+        email: responseUser.email,
+        surname: responseUser.surname,
+        name: responseUser.name,
+        mobileNum: responseUser.mobile_number,
+        accessToken,
+      });
 
       navigate(from, { replace: true });
     } catch (err) {

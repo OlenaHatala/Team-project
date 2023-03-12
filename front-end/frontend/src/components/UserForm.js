@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  useNavigation,
-  useNavigate,
-} from "react-router-dom";
+import { useNavigation, useNavigate } from "react-router-dom";
 
 import classes from "./UserForm.module.css";
-import axios from "../api/axios";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useAuth from "../hooks/useAuth";
 
-const API_EDIT_USER_URL = "/auth/update";
+const API_EDIT_USER_URL = "/user/update";
+const API_GET_USER_URL = "/user/read";
+
+import { validateUserData } from "../utils/validation/userValidation";
+import useUserApi from "../hooks/useUserApi";
 
 const NAME_REGEX = /^[A-z][A-z-_]{1,15}$/;
 const MNUMBER_REGEX =
@@ -15,29 +17,95 @@ const MNUMBER_REGEX =
 const EMAIL_REGEX =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-function UserForm({ user }) {
+function UserForm() {
+  console.log("USERFORM");
+  const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
+  const {
+    setAccInfo,
+    name: ctxFirstname,
+    surname: ctxLastname,
+    email: ctxEmail,
+    mobileNum: ctxNumber,
+  } = useAuth();
+
+  const { fetchUser, updateUser } = useUserApi();
 
   const [isEditing, setIsEditing] = useState(false);
 
-  const [firstname, setFirstname] = useState(user.firstname);
-  const [lastname, setLastname] = useState(user.lastname);
-  const [email, setEmail] = useState(user.email);
-  const [number, setNumber] = useState(user.number);
+  const [firstname, setFirstname] = useState(ctxFirstname);
+  const [lastname, setLastname] = useState(ctxLastname);
+  const [email, setEmail] = useState(ctxEmail);
+  const [number, setNumber] = useState(ctxNumber);
 
   const [focusedInput, setFocusedInput] = useState("");
 
   const [errMsg, setErrMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const firstnameInputRef = useRef();
   const errRef = useRef();
+  const successRef = useRef();
+  const getEffectRun = useRef(false);
 
   const navigation = useNavigation();
 
   const isSubmitting = navigation.state === "submitting";
 
   useEffect(() => {
+    if (getEffectRun.current === false) {
+
+      console.log("EFFECT");
+      const getUserFromAPI = async () => {
+        try {
+          const response = await axiosPrivate.get(API_GET_USER_URL, {
+            headers: { "Content-Type": "application/json" },
+          });
+          const responseUser = response?.data?.user;
+  
+          console.log("setting new acc info to CTX:");
+          console.log({
+            email: responseUser.email,
+            surname: responseUser.surname,
+            name: responseUser.name,
+            mobileNum: responseUser.mobile_number,
+          });
+  
+          setAccInfo({
+            email: responseUser.email,
+            surname: responseUser.surname,
+            name: responseUser.name,
+            mobileNum: responseUser.mobile_number,
+          });
+  
+          console.log("AFTER: setting new acc info to CTX");
+        } catch (err) {
+          setSuccessMsg("");
+          if (!err?.response) {
+            setErrMsg("Server failed to send your data");
+          } else if (err.response?.status === 400) {
+            setErrMsg(
+              err.response?.data?.message ||
+                "Server failed to send your data. Try to sign in again"
+            );
+          } else {
+            setErrMsg("Server failed to send your data");
+          }
+          errRef.current.focus();
+        }
+      };
+  
+      getUserFromAPI();
+
+      return () => {
+        getEffectRun.current = true;
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     setErrMsg("");
+    setSuccessMsg("");
   }, [firstname, lastname, email, number]);
 
   useEffect(() => {
@@ -51,10 +119,10 @@ function UserForm({ user }) {
 
   function cancelHandler() {
     setIsEditing(false);
-    setFirstname(user.firstname);
-    setLastname(user.lastname);
-    setEmail(user.email);
-    setNumber(user.number);
+    setFirstname(ctxFirstname);
+    setLastname(ctxLastname);
+    setEmail(ctxEmail);
+    setNumber(ctxNumber);
   }
 
   function editHandler() {
@@ -68,72 +136,32 @@ function UserForm({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //validation
-    const v1 = NAME_REGEX.test(firstname);
-    const v2 = NAME_REGEX.test(lastname);
-    const v3 = MNUMBER_REGEX.test(number);
-    const v4 = EMAIL_REGEX.test(email);
+    const userData = {firstname, lastname, email, number};
 
-    if (!v1) {
-      setErrMsg("First name should have 2 to 16 letters.");
-      return;
+    const validationStatus = validateUserData(userData);
+
+    if (validationStatus !== "ok") {
+      return validationStatus;
     }
-
-    if (!v2) {
-      setErrMsg("Last name should have 2 to 16 letters.");
-      return;
-    }
-
-    if (!v3) {
-      setErrMsg("Phone number is not valid.");
-      return;
-    }
-
-    if (!v4) {
-      setErrMsg("Email is not valid.");
-      return;
-    }
-
-    const userData = {
-      name: firstname,
-      surname: lastname,
-      email: email,
-      mobile_number: number,
-    };
-
-    const id = localStorage.getItem("userId");
-
-    try {
-      const response = await axios.patch(
-        API_EDIT_USER_URL,
-        JSON.stringify({ id, userData }),
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-      
-      localStorage.setItem("userEmail", response.data.user.email);
-      localStorage.setItem("userSurname", response.data.user.surname);
-      localStorage.setItem("userName", response.data.user.name);
-      localStorage.setItem(
-        "userMobileNumber",
-        response.data.user.mobile_number
-        );
-        
-      navigate("/success/?message=Personal-data-was-saved-successfuly");
-    } catch (err) {
-      if (!err?.response) {
-        setErrMsg("No Server Response");
-      } else if (err.response?.status === 409) {
-        setErrMsg(err.response?.data?.message || "Changing data failed");
-      } else if (err.response?.status === 400) {
-        setErrMsg(err.response?.data?.message || "Invalid Entry");
-      } else {
-        setErrMsg("Changing data failed");
-      }
+    const response = await updateUser(userData);
+    console.log(response);
+    if (response?.user) {
+      console.log(response.user.email);
+      setAccInfo({
+        email: response.user.email,
+        surname: response.user.surname,
+        name: response.user.name,
+        mobileNum: response.user.mobileNum,
+      });
+      setErrMsg("");
+      setSuccessMsg("Data was changed successfully");
+      successRef.current.focus();
+    } else if (response?.error) {
+      setSuccessMsg("");
+      setErrMsg(response.error);
       errRef.current.focus();
     }
+    cancelHandler();
   };
 
   return (
@@ -144,6 +172,13 @@ function UserForm({ user }) {
         aria-live="assertive"
       >
         {errMsg}
+      </p>
+      <p
+        ref={successRef}
+        className={successMsg ? classes.successmsg : classes.offscreen}
+        aria-live="assertive"
+      >
+        {successMsg}
       </p>
       <div className={classes.header}>
         <h2>Personal information</h2>{" "}
@@ -259,48 +294,3 @@ function UserForm({ user }) {
 }
 
 export default UserForm;
-
-// export async function action({ request, params }) {
-//   const data = await request.formData();
-
-//   const userData = {
-//     name: data.get("firstname"),
-//     surname: data.get("lastname"),
-//     email: data.get("email"),
-//     mobile_number: data.get("number"),
-//   };
-
-//   const userId = localStorage.getItem("userId");
-//   let url = `${API_URL}/api/auth/update/`;
-
-//   //const token = getAuthToken();
-
-//   const response = await fetch(url, {
-//     method: "PATCH",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({ id: userId, userData }),
-//   });
-
-//   if (response.status === 422) {
-//     return response;
-//   }
-
-//   if (!response.ok) {
-//     throw json({ message: "Could not save user info." }, { status: 500 });
-//   }
-
-//   if (response.status === 422) {
-//     return response;
-//   }
-
-//   const resData = await response.json();
-
-//   localStorage.setItem("userEmail", resData.user.email);
-//   localStorage.setItem("userSurname", resData.user.surname);
-//   localStorage.setItem("userName", resData.user.name);
-//   localStorage.setItem("userMobileNumber", resData.user.mobile_number);
-
-//   return redirect("/success/?message=Personal-data-was-saved-successfuly");
-// }
