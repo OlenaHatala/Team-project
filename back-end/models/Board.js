@@ -5,11 +5,6 @@ const BoardSchema = new Mongoose.Schema({
             type:  Mongoose.Schema.Types.ObjectId,
             required: true,
         },
-        url: {
-            type: String,
-            default: "",
-            required: false,
-        },
         label: {
             type: String,
             required: true,
@@ -135,6 +130,10 @@ const BoardSchema = new Mongoose.Schema({
             ahead: { type: Number }
         },
         members: {
+            type: Array,
+            default: []
+        },
+        requests: {
             type: Array,
             default: []
         }
