@@ -50,7 +50,6 @@ const create = asyncHandler(async (req, res) => {
       }
 })
 
-
 const update = async (req, res) => {
   const {id, ticketData} = req.body;
 
@@ -244,8 +243,6 @@ const update = async (req, res) => {
     res.status(204).json({ message: "Data is not present" });
   }
 };
-
-
 
 const read = asyncHandler(async (req, res) => {
   const { id } = req.body

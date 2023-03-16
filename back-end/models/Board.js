@@ -132,6 +132,10 @@ const BoardSchema = new Mongoose.Schema({
         members: {
             type: Array,
             default: []
+        },
+        requests: {
+            type: Array,
+            default: []
         }
     },
     {versionKey: false}
