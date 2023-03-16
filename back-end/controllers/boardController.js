@@ -457,8 +457,14 @@ const addMember = asyncHandler(async (req, res) => {
         const board = await Board.findById(board_id);
         const user = await User.findById(user_id);
         if(!board){
-            res.status(404).json({
+            return res.status(404).json({
                 message: "Board with that id doesn`t exist",
+            })
+        }
+
+        if(!user){
+            return res.status(404).json({
+                message: "User with that id doesn`t exist",
             })
         }
        
@@ -499,7 +505,7 @@ const addMember = asyncHandler(async (req, res) => {
           }) 
     }
     catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             error: error.message,
         })
     }
