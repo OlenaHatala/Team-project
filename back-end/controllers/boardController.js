@@ -28,7 +28,13 @@ const compareMarkup = (a, b) => {
     }
     return true
 }
-
+function addMinutes(date, minutes) {
+    if (!(date instanceof Date)) {
+        throw new Error('Invalid date object');
+      }
+    return new Date(date.getTime() + minutes * 60000);
+  }
+  
 const create  = asyncHandler(async (req, res) =>{
     const {owner_id, address, description, label,service_name, req_confirm, book_num, markup, auto_open} = req.body
 
@@ -116,56 +122,56 @@ const create  = asyncHandler(async (req, res) =>{
 
         for (i = 0; i<6; i++)
         {
-            for (const day in markup.days) {
-            const open_hour = markup.days[day].open.split(':')[0];
-            const open_min = markup.days[day].open.split(':')[1];
-            
-            const close_hour = markup.days[day].close.split(':')[0];
-            const close_min = markup.days[day].close.split(':')[1];
-
-            const duration = markup.duration
-            
-            const open_time = new Date(2000, 1, 1)
-            open_time.setMinutes(open_min)
-            open_time.setHours(open_hour)
-            const close_time = new Date(2000, 1, 1)
-            close_time.setHours(close_hour)
-            close_time.setMinutes(close_min)
-
-            let ticket_time = open_time.getTime()
-            const add_min = (min) => {
-                ticket_time = ticket_time + min * 60000
-            }
-            add_min(duration)
-            while(ticket_time < close_time.getTime())
+            for (const day in markup.days) 
             {
+                const open_hour = markup.days[day].open.split(':')[0];
+                const open_min = markup.days[day].open.split(':')[1];
+
+                const close_hour = markup.days[day].close.split(':')[0];
+                const close_min = markup.days[day].close.split(':')[1];
+
+                const duration = markup.duration
+
                 const current_day = new Date().getDay()
-                
                 num_of_days = 8 - current_day + 7 * i + week_index[day]
 
-                const ticket_datetime = new Date(new Date().getTime() + num_of_days*24*60*60*1000)
-                
-                const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_datetime, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
-                
-                board.tickets[i][day].push(ticket._id)
+                const open_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
+                open_time.setMinutes(open_min)
+                open_time.setHours(open_hour )
 
-                add_min(duration)
-            } 
+                const timezoneOffset = open_time.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
+                var new_open_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+                var ticket_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
 
-        }
-           
+
+                const close_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
+                close_time.setHours(close_hour)
+                close_time.setMinutes(close_min)
+
+                const new_close_time = new Date(close_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+
+                while(addMinutes(ticket_time, duration) <= new_close_time)
+                {
+                    
+                    const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
+                    
+                    board.tickets[i][day].push(ticket._id)
+
+                    ticket_time = addMinutes(ticket_time, duration)
+                } 
+            }
+
         }
         board.save((error) => {
             if (error) {
-              return res
-                .status(200)
+                return res
+                .status(201)
                 .json({ message: "An error occurred", error: error.message });
             }
-            res.status(201).json({ message: "Created successfully", board});
+            res.status(200).json({ message: "Created successfully", board});
         });
-
-
-    } catch (error) {
+    }
+    catch (error) {
         res.status(400).json({
             message: "Board was not created",
             error: error.message,
@@ -199,6 +205,9 @@ const update = asyncHandler(async (req, res) => {
         )
         if ((!(compareMarkup(markup, board.markup))) && (apply_new_markup === "true")) {
             
+            
+
+            //old
             for (i = 0; i < 6; i++) {
 
                 const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
@@ -244,41 +253,42 @@ const update = asyncHandler(async (req, res) => {
                           
                     }
                     
-                    for (const day in markup.days) {
+                    for (const day in markup.days) 
+                    {
                         const open_hour = markup.days[day].open.split(':')[0];
                         const open_min = markup.days[day].open.split(':')[1];
-                        
+
                         const close_hour = markup.days[day].close.split(':')[0];
                         const close_min = markup.days[day].close.split(':')[1];
-            
+
                         const duration = markup.duration
-                        
-                        const open_time = new Date(2000, 1, 1)
+
+                        const current_day = new Date().getDay()
+                        num_of_days = 8 - current_day + 7 * i + week_index[day]
+
+                        const open_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
                         open_time.setMinutes(open_min)
-                        open_time.setHours(open_hour)
-                        const close_time = new Date(2000, 1, 1)
+                        open_time.setHours(open_hour )
+
+                        const timezoneOffset = open_time.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
+                        var new_open_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+                        var ticket_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+
+
+                        const close_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
                         close_time.setHours(close_hour)
                         close_time.setMinutes(close_min)
-            
-                        let ticket_time = open_time.getTime()
-                        const add_min = (min) => {
-                            ticket_time = ticket_time + min * 60000
-                        }
-                        
-                        add_min(duration)
-                        while(ticket_time <= close_time.getTime())
-                        {
-                            const current_day = new Date().getDay()
-                            
-                            num_of_days = 8 - current_day + 7 * i + week_index[day]
 
-                            const ticket_datetime = new Date(new Date().getTime() + num_of_days*24*60*60*1000)
+                        const new_close_time = new Date(close_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+
+                        while(addMinutes(ticket_time, duration) <= new_close_time)
+                        {
                             
-                            const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_datetime, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
+                            const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
                             
                             board.tickets[i][day].push(ticket._id)
 
-                            add_min(duration)
+                            ticket_time = addMinutes(ticket_time, duration)
                         } 
                     }
                 }
@@ -295,10 +305,10 @@ const update = asyncHandler(async (req, res) => {
 
         const updated_board = await Board.findById(id);
 
-            res.status(200).json({
-                message: "Board updated succesfully", 
-                board: updated_board
-            })
+        res.status(200).json({
+            message: "Board updated succesfully", 
+            board: updated_board
+        })
 
     } catch (error) {
         res.status(400).json({
