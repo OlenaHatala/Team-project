@@ -1,4 +1,5 @@
 const Board = require('../models/Board')
+const User = require('../models/User')
 const Ticket = require('../models/Ticket')
 const User = require('../models/User')
 
@@ -29,7 +30,13 @@ const compareMarkup = (a, b) => {
     }
     return true
 }
-
+function addMinutes(date, minutes) {
+    if (!(date instanceof Date)) {
+        throw new Error('Invalid date object');
+      }
+    return new Date(date.getTime() + minutes * 60000);
+  }
+  
 const create  = asyncHandler(async (req, res) =>{
     const { address, description, label,service_name, req_confirm, book_num, markup, auto_open} = req.body
     const { user_id: owner_id } = req;
@@ -41,10 +48,7 @@ const create  = asyncHandler(async (req, res) =>{
           })
         }
 
-    // address = address ? address : " ";
-    // description = description ? description : " ";
-
-
+    
     const tickets = 
     [{
         monday:  [],
@@ -101,7 +105,6 @@ const create  = asyncHandler(async (req, res) =>{
         sunday: []
     }]
 
-    const members = new Map()
 
     try {
         const board = await Board.create({
@@ -114,67 +117,64 @@ const create  = asyncHandler(async (req, res) =>{
             markup,
             tickets,
             address: address ? address: "",
-            auto_open, 
-            members
+            auto_open
         })
-
+        const user = await User.findById(owner_id);
+        user.created_tables.push(board._id);
+        user.save();
 
         for (i = 0; i<6; i++)
         {
-            for (const day in markup.days) {
-            const open_hour = markup.days[day].open.split(':')[0];
-            const open_min = markup.days[day].open.split(':')[1];
-            
-            const close_hour = markup.days[day].close.split(':')[0];
-            const close_min = markup.days[day].close.split(':')[1];
-
-            const duration = markup.duration
-            
-            const open_time = new Date(2000, 1, 1)
-            open_time.setMinutes(open_min)
-            open_time.setHours(open_hour)
-            const close_time = new Date(2000, 1, 1)
-            close_time.setHours(close_hour)
-            close_time.setMinutes(close_min)
-
-            let ticket_time = open_time.getTime()
-            const add_min = (min) => {
-                ticket_time = ticket_time + min * 60000
-            }
-            add_min(duration)
-            while(ticket_time < close_time.getTime())
+            for (const day in markup.days) 
             {
+                const open_hour = markup.days[day].open.split(':')[0];
+                const open_min = markup.days[day].open.split(':')[1];
+
+                const close_hour = markup.days[day].close.split(':')[0];
+                const close_min = markup.days[day].close.split(':')[1];
+
+                const duration = markup.duration
+
                 const current_day = new Date().getDay()
-                
                 num_of_days = 8 - current_day + 7 * i + week_index[day]
 
-                const ticket_datetime = new Date(new Date().getTime() + num_of_days*24*60*60*1000)
-                
-                const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_datetime, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
-                
-                board.tickets[i][day].push(ticket._id)
+                const open_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
+                open_time.setMinutes(open_min)
+                open_time.setHours(open_hour )
 
-                add_min(duration)
-            } 
+                const timezoneOffset = open_time.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
+                var new_open_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+                var ticket_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
 
-        }
-           
+
+                const close_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
+                close_time.setHours(close_hour)
+                close_time.setMinutes(close_min)
+
+                const new_close_time = new Date(close_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+
+                while(addMinutes(ticket_time, duration) <= new_close_time)
+                {
+                    
+                    const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
+                    
+                    board.tickets[i][day].push(ticket._id)
+
+                    ticket_time = addMinutes(ticket_time, duration)
+                } 
+            }
+
         }
         board.save((error) => {
             if (error) {
-              return res
-                .status(200)
+                return res
+                .status(201)
                 .json({ message: "An error occurred", error: error.message });
             }
+            res.status(200).json({ message: "Created successfully", board});
         });
-
-        const owner = await User.findById(owner_id).exec();
-        owner.created_tables.push(board._id);
-        await owner.save();
-
-        res.status(201).json({ message: "Created successfully", board});
-        
-    } catch (error) {
+    }
+    catch (error) {
         res.status(400).json({
             message: "Board was not created",
             error: error.message,
@@ -213,6 +213,9 @@ const update = asyncHandler(async (req, res) => {
         )
         if ((!(compareMarkup(markup, board.markup))) && (apply_new_markup === "true")) {
             
+            
+
+            //old
             for (i = 0; i < 6; i++) {
 
                 const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
@@ -258,41 +261,42 @@ const update = asyncHandler(async (req, res) => {
                           
                     }
                     
-                    for (const day in markup.days) {
+                    for (const day in markup.days) 
+                    {
                         const open_hour = markup.days[day].open.split(':')[0];
                         const open_min = markup.days[day].open.split(':')[1];
-                        
+
                         const close_hour = markup.days[day].close.split(':')[0];
                         const close_min = markup.days[day].close.split(':')[1];
-            
+
                         const duration = markup.duration
-                        
-                        const open_time = new Date(2000, 1, 1)
+
+                        const current_day = new Date().getDay()
+                        num_of_days = 8 - current_day + 7 * i + week_index[day]
+
+                        const open_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
                         open_time.setMinutes(open_min)
-                        open_time.setHours(open_hour)
-                        const close_time = new Date(2000, 1, 1)
+                        open_time.setHours(open_hour )
+
+                        const timezoneOffset = open_time.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
+                        var new_open_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+                        var ticket_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+
+
+                        const close_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
                         close_time.setHours(close_hour)
                         close_time.setMinutes(close_min)
-            
-                        let ticket_time = open_time.getTime()
-                        const add_min = (min) => {
-                            ticket_time = ticket_time + min * 60000
-                        }
-                        
-                        add_min(duration)
-                        while(ticket_time <= close_time.getTime())
-                        {
-                            const current_day = new Date().getDay()
-                            
-                            num_of_days = 8 - current_day + 7 * i + week_index[day]
 
-                            const ticket_datetime = new Date(new Date().getTime() + num_of_days*24*60*60*1000)
+                        const new_close_time = new Date(close_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+
+                        while(addMinutes(ticket_time, duration) <= new_close_time)
+                        {
                             
-                            const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_datetime, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
+                            const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
                             
                             board.tickets[i][day].push(ticket._id)
 
-                            add_min(duration)
+                            ticket_time = addMinutes(ticket_time, duration)
                         } 
                     }
                 }
@@ -309,10 +313,10 @@ const update = asyncHandler(async (req, res) => {
 
         const updated_board = await Board.findById(id);
 
-            res.status(200).json({
-                message: "Board updated succesfully", 
-                board: updated_board
-            })
+        res.status(200).json({
+            message: "Board updated succesfully", 
+            board: updated_board
+        })
 
     } catch (error) {
         res.status(400).json({
@@ -395,6 +399,138 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
   }
 })
 
+const getBoard = asyncHandler(async (req, res) => {
+    const {board_id, user_id} = req.body;
+
+    try {
+            
+        const board = await Board.findById(board_id);
+        const {owner_id, label, description, service_name, req_confirm, book_num, markup, tickets, address, auto_open, members, requests} = board
+
+        var available_tickets = [];
+        if (board.members.includes(user_id) || user_id == board.owner_id ){
+            
+            for (i = 0; i < 6; i++) {
+
+                const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
+                wednesday: board.tickets[i].wednesday, thursday : board.tickets[i].thursday, 
+                friday: board.tickets[i].friday, saturday: board.tickets[i].saturday, sunday: board.tickets[i].sunday}
+
+
+                for (const day in week_tickets) {
+                    let day_tickets = week_tickets[day]
+
+                    for (j in day_tickets)
+                    {
+                        const found_ticket = await Ticket.findById(day_tickets[j]).exec()
+
+                        if (found_ticket.enabled==true && !found_ticket.user_id && found_ticket.is_outdated === false) {
+                            available_tickets.push(found_ticket);
+                        }
+
+                    }
+                
+                } 
+            }
+           
+            res.status(200).json({
+                label,
+                description,
+                service_name,
+                address,
+                available_tickets
+              })
+        }
+        else{
+            if (!board.requests.includes(user_id))
+            { 
+                board.requests.push(user_id); 
+            }
+           
+            board.save();
+            res.status(200).json({
+                message: "User added to requests ",
+                label,
+                description,
+                
+              })
+        }
+    }catch (error) {
+        res.status(400).json({
+            message: "Board with that id doesn`t exist",
+            error: error.message,
+        })
+    }
+
+})
+
+const addMember = asyncHandler(async (req, res) => {
+    const {board_id, user_id, is_approved } = req.body;
+    const required_fields_present = (board_id && user_id && is_approved)
+    if ( !required_fields_present){
+        return res.status(400).json({ 
+            message: "Not all required fields are present",
+          })
+        }
+
+    try {
+        const board = await Board.findById(board_id);
+        const user = await User.findById(user_id);
+        if(!board){
+            return res.status(404).json({
+                message: "Board with that id doesn`t exist",
+            })
+        }
+
+        if(!user){
+            return res.status(404).json({
+                message: "User with that id doesn`t exist",
+            })
+        }
+       
+        if(is_approved === "false"){
+            board.requests = board.requests.filter((requested_id)=>{ 
+                return requested_id != user_id;
+            })
+            board.save();
+            return res.status(404).json({
+                message:"Owner denied request. User deleted from requests.",
+                members: board.members
+              }) 
+        }
+        if(!board.requests.includes(user_id) && board.members.includes(user_id)){
+            return res.status(204).json({});
+        }
+        else if(!board.requests.includes(user_id) && !board.members.includes(user_id)){
+            return res.status(404).json({
+                message:"Requested Id not found",
+                members: board.members
+              }) 
+        }
+        if(is_approved === "true" && !board.members.includes(user_id)){
+            board.members.push(user_id);
+            user.membered_tables.push(board_id);
+            user.save();
+        }
+        
+        board.requests = board.requests.filter((requested_id)=>{ 
+            return requested_id != user_id;
+        })
+        board.save();
+
+
+        return res.status(200).json({
+            message:"User Added to members",
+            members: board.members
+          }) 
+    }
+    catch (error) {
+        return res.status(500).json({
+            error: error.message,
+        })
+    }
+})
+
 const deleteBoard = async (req, res) => {
     const { id } = req.body;
     const { created_tables, user_id: owner_id } = req;
@@ -414,6 +550,22 @@ const deleteBoard = async (req, res) => {
     if (!board) {
         return res.status(400).json({ message: 'Board not found' })
     }
+
+    const owner = await User.findById(board.owner_id);
+    owner.created_tables = owner.created_tables.filter((requested_id)=>{ 
+        return requested_id != id;
+    })
+    owner.save();
+
+    for(var user_id in board.members){
+        const member = await User.findById(board.members[user_id]);
+        member.membered_tables = member.membered_tables.filter((requested_id)=>{ 
+            return requested_id != id;
+        })
+        member.save();
+    }
+
+
     for (i = 0; i<6; i++)
     {  
         const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
@@ -455,11 +607,12 @@ const deleteBoard = async (req, res) => {
 }
 }
 
-
 module.exports = {
     create,
     read,
     readOneWeek,
     update,
+    getBoard,
+    addMember,
     deleteBoard
 }
