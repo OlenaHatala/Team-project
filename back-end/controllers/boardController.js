@@ -1,7 +1,6 @@
 const Board = require('../models/Board')
 const User = require('../models/User')
 const Ticket = require('../models/Ticket')
-const User = require('../models/User')
 
 const asyncHandler = require('express-async-handler')
 
@@ -119,9 +118,6 @@ const create  = asyncHandler(async (req, res) =>{
             address: address ? address: "",
             auto_open
         })
-        const user = await User.findById(owner_id);
-        user.created_tables.push(board._id);
-        user.save();
 
         for (i = 0; i<6; i++)
         {
@@ -171,11 +167,15 @@ const create  = asyncHandler(async (req, res) =>{
                 .status(201)
                 .json({ message: "An error occurred", error: error.message });
             }
-            res.status(200).json({ message: "Created successfully", board});
         });
+        const owner = await User.findById(owner_id).exec();
+        owner.created_tables.push(board._id);
+        await owner.save();
+
+        return res.status(200).json({ message: "Created successfully", board});
     }
     catch (error) {
-        res.status(400).json({
+        return res.status(400).json({
             message: "Board was not created",
             error: error.message,
         })
@@ -313,13 +313,13 @@ const update = asyncHandler(async (req, res) => {
 
         const updated_board = await Board.findById(id);
 
-        res.status(200).json({
+        return res.status(200).json({
             message: "Board updated succesfully", 
             board: updated_board
         })
 
     } catch (error) {
-        res.status(400).json({
+        return res.status(400).json({
             message: "Board was not saved",
             error: error.message,
         })
@@ -400,7 +400,8 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
 })
 
 const getBoard = asyncHandler(async (req, res) => {
-    const {board_id, user_id} = req.body;
+    const {board_id} = req.body;
+    const {user_id} = req;
 
     try {
             
@@ -466,7 +467,14 @@ const getBoard = asyncHandler(async (req, res) => {
 
 const addMember = asyncHandler(async (req, res) => {
     const {board_id, user_id, is_approved } = req.body;
+    const {created_tables} = req;
+
     const required_fields_present = (board_id && user_id && is_approved)
+
+    if (created_tables.length === 0 || !created_tables.find(boardId => boardId === board_id)) {
+        return res.status(403).json({ message: 'Forbidden' })
+    }
+
     if ( !required_fields_present){
         return res.status(400).json({ 
             message: "Not all required fields are present",
@@ -550,12 +558,6 @@ const deleteBoard = async (req, res) => {
     if (!board) {
         return res.status(400).json({ message: 'Board not found' })
     }
-
-    const owner = await User.findById(board.owner_id);
-    owner.created_tables = owner.created_tables.filter((requested_id)=>{ 
-        return requested_id != id;
-    })
-    owner.save();
 
     for(var user_id in board.members){
         const member = await User.findById(board.members[user_id]);
