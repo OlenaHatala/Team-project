@@ -1,5 +1,5 @@
-import UserForm from "../components/UserForm";
-import Card from "../components/UI/Card";
+import { UserForm } from "../modules/account";
+import Card from "../modules/common/UI/Card";
 
 function EditAccountPage() {
   return (

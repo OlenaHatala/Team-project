@@ -1,8 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import { AuthProvider } from "./context/AuthContext";
-import { NewBoardProvider } from "./context/NewBoardContext";
+import { Provider } from "react-redux";
+import { store } from "./app/store";
+
+import { NewBoardProvider } from "./modules/newBoard";
 
 import App from "./App";
 
@@ -11,10 +13,10 @@ import "./index.css";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <AuthProvider>
-        <NewBoardProvider>
-          <App />
-        </NewBoardProvider>
-    </AuthProvider>
+    <Provider store={store}>
+      <NewBoardProvider>
+        <App />
+      </NewBoardProvider>
+    </Provider>
   </React.StrictMode>
 );

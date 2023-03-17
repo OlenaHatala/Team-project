@@ -23,7 +23,7 @@ exports.read = async(req, res, next) => {
 }
 
 exports.update = async (req, res, next) => {
-  const { user_id: id } = req;
+  const { user_id: id} = req;
   const { name, surname, email, mobile_number } = req.body;
 
   if (name || surname || email || mobile_number) {
@@ -39,6 +39,7 @@ exports.update = async (req, res, next) => {
         user.save((err) => {
           //Monogodb error checker
           if (err) {
+            console.log(22222222222);
             return res
               .status(400)
               .json({ message: "An error occurred", error: err.message });
@@ -47,6 +48,7 @@ exports.update = async (req, res, next) => {
         });
       })
       .catch((error) => {
+        console.log(3333);
         res
           .status(400)
           .json({ message: "An error occurred", error: error.message });

@@ -10,8 +10,6 @@ const verifyJWT = (req, res, next) => {
 
     const token = authHeader.split(' ')[1]
 
-    console.log(token.substring(460, 487));
-
     jwt.verify(
         token,
         process.env.ACCESS_TOKEN_SECRET,
@@ -21,7 +19,6 @@ const verifyJWT = (req, res, next) => {
             req.taken_tickets = decoded.UserInfo.taken_tickets,
             req.created_tables = decoded.UserInfo.created_tables,
             req.membered_tables = decoded.UserInfo.membered_tables
-            console.log(decoded.UserInfo.created_tables);
             next()
         }
     )

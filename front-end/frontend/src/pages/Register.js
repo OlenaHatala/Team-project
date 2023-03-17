@@ -1,10 +1,8 @@
-import Card from "../components/UI/Card";
-import AuthHeader from '../components/auth/AuthHeader';
-import RegisterForm from "../components/auth/RegisterForm";
-
+import Card from "../modules/common/UI/Card";
+import AuthHeader from "../modules/common/components/AuthHeader";
+import { RegisterForm } from "../modules/register";
 
 function Register() {
-  
   return (
     <>
       <AuthHeader />

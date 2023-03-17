@@ -41,8 +41,6 @@ exports.register = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
-  console.log("process.env.NODE_ENV")
-  console.log(process.env.NODE_ENV)
   const { email, password } = req.body
   // Check if email and password is provided
   if (!email && !password) {
@@ -73,7 +71,6 @@ exports.login = async (req, res, next) => {
     } else {
       bcrypt.compare(password, foundUser.password).then(function (result) 
       {
-        console.log(`${process.env.REFRESH_TOKEN_DURATION}`)
         if (result) {
           const accessToken = jwt.sign(
             {
@@ -101,7 +98,6 @@ exports.login = async (req, res, next) => {
           )
         
             const age = +((process.env.REFRESH_TOKEN_DURATION).slice(0, -1));
-            console.log(age);
 
           res.cookie('jwt', refreshToken, {
             secure: true,
@@ -131,7 +127,6 @@ exports.login = async (req, res, next) => {
 
 exports.refresh = (req, res) => {
   const cookies = req.cookies
-  console.log(cookies.jwt);
 
   if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
 
