@@ -3,8 +3,7 @@ const Board = require('../models/Board')
 const asyncHandler = require('express-async-handler')
 
 function endTicket(ticket)
-{
-
+{  
   console.log("---------end ticket function---------")
 
   start = ticket.datetime
@@ -19,6 +18,32 @@ function betweenTickets(ticketBefore, ticketAfter, addTicket)
 
   return  addTicket.start >= endTicket(ticketBefore) && endTicket(addTicket) <= ticketAfter.start
 };
+
+function findFreeSpace(recordedDates, targetDate, targetDateDuration) {
+  const targetDataDurationInMs = targetDateDuration * 60000;
+  const targetDateStart = targetDate.getTime();
+  const targetDateEnd = targetDateStart + targetDataDurationInMs;
+  let isAvailable = true;
+
+  for (let i = 0; i < recordedDates.length; i++) {
+    const recordedDate = recordedDates[i].datetime.getTime();
+    const recordedDurationInMs = recordedDates[i].duration * 60000;
+    const recordedDateEnd = recordedDate + recordedDurationInMs;
+
+    // Check if the target event overlaps with the recorded event
+    if (
+      (recordedDate >= targetDateStart && recordedDate < targetDateEnd) ||
+      (recordedDateEnd > targetDateStart && recordedDateEnd <= targetDateEnd) ||
+      (recordedDate < targetDateStart && recordedDateEnd > targetDateEnd)
+    ) {
+      isAvailable = false;
+      break;
+    }
+  }
+
+  return isAvailable;
+};
+
 
 const create = asyncHandler(async (req, res) => {
     const { table_id, user_id, datetime, duration, is_outdated, enabled, confirmed } = req.body
@@ -52,7 +77,7 @@ const create = asyncHandler(async (req, res) => {
 
 const update = async (req, res) => {
   const {id, ticketData} = req.body;
-
+  
   const ticket = await Ticket.findById(id).exec()
 
   if (!ticket) {
@@ -65,139 +90,63 @@ const update = async (req, res) => {
 
   try{
     const board = await Board.findById(ticket.table_id)
-    //console.log(board)
   }catch{
     return res.status(400).json({ message: 'Board not found' })
   }
   let newData = {};
 
-  
-
   if(ticketData?.datetime){    
-    //newData.datetime = ticketData.datetime
-    let currentDate = new Date();
-    let diffDate = (ticket.datetime - currentDate) / (1000 * 60 * 60 * 24)
-    weekIndex = Math.floor(diffDate/6); 
-    dayIndex = parseInt(diffDate % 7);
-    console.log(ticket.datetime - currentDate);
-    console.log(diffDate);
-    console.log(weekIndex);
-    console.log(dayIndex);
-
+    let currentDate = new Date(); // today
+    let diffTime = ticket.datetime.getTime() - currentDate.getTime(); // difference in milliseconds
+    let diffDays = diffTime / (1000 * 60 * 60 * 24); // difference in days
+    let weekIndex = Math.floor(diffDays / 7); // add 1 to start counting from week 1
+    let dayIndex = ticket.datetime.getDay() - 1; // use Math.floor instead of parseInt for consistency
+    
     const board = await Board.findById(ticket.table_id)
-    //console.log(board)
     if (!board) {
         return res.status(400).json({ message: 'Board not found' })
     }
-
     
     const week_tickets = [board.tickets[weekIndex].monday, board.tickets[weekIndex].tuesday,
       board.tickets[weekIndex].wednesday, board.tickets[weekIndex].thursday, 
       board.tickets[weekIndex].friday, board.tickets[weekIndex].saturday, board.tickets[weekIndex].sunday];
-      //console.log(week_tickets)
     
 
-    const tickets_id = week_tickets[dayIndex];
-    //console.log(week_tickets);
-
+    const day_tickets = week_tickets[dayIndex];
+    
     const arrTickets = [];  
 
-    //console.log(ticket)  
-    for(i in tickets_id)
+    for(i in day_tickets)
     {
-      //console.log(i);
-      const findId = await Ticket.findById(tickets_id[i]);
-      //console.log(findId);
+      const findId = await Ticket.findById(day_tickets[i]);
       if(findId)
       {
         arrTickets.push(findId);
       }
     } 
-    //console.log(arrTickets);
-
-    ticketBefore = null;
-    ticketAfter =  null;
-    prevTicket = null;
-
-
-    const timeString = (date) => {
-      let minutes = date.getMinutes();
-      let hours = date.getHours();
-    
-      let minutesStr = "";
-      let hoursStr = "";
-    
-      if (minutes < 10) {
-        minutesStr = "0" + minutes.toString();
-      } else {
-        minutesStr = minutes.toString();
-      }
-    
-      if (hours < 10) {
-        hoursStr = "0" + hours.toString();
-      } else {
-        hoursStr = hours.toString();
-      }
-    
-      return hoursStr + minutesStr;
-    }
-
 
     const sortTickets = (tickets) => {
-      tickets.sort(function (a, b) {
-        if(timeString(a.datetime) < timeString(b.datetime)) { return -1; }
-        if(timeString(a.datetime) > timeString(b.datetime)) { return 1; }
+      tickets.sort((a, b) => {
+        if (a.datetime < b.datetime) { return -1; }
+        if (a.datetime > b.datetime) { return 1; }
         return 0;
       });
-      return tickets
+      return tickets;
     }
 
-    console.log(sortTickets(arrTickets));
+    sortTickets(arrTickets);
 
-    for(i in arrTickets)
+    const newTicketDate = new Date(new Date(ticketData.datetime).toISOString());
+
+    if(findFreeSpace(arrTickets, newTicketDate, ticketData.duration) != true)
     {
-      //console.log(i);
-
-      if(arrTickets[i].id === id)
-      {
-        console.log("---------equals id---------")
-        console.log(arrTickets[i].id)
-        console.log(id)
-        continue;
-      }
-      if(arrTickets[i].datetime === ticket.datetime)
-      {
-        console.log("---------equals datetimes---------")
-        console.log(arrTickets[i].datetime)
-        console.log(ticket.datetime)
-        return res.status(400).json({ message: 'Ticket already exists at this time' });
-      }
-      else if(arrTickets[i].datetime < ticket.datetime)
-      {
-        console.log("---------less datetimes---------")
-        console.log(arrTickets[i].datetime)
-        console.log(ticket.datetime)
-        continue;
-      }
-      else if(arrTickets[i].datetime > ticket.datetime)
-      {
-        console.log("---------more datetimes---------")
-        console.log(arrTickets[i].datetime)
-        console.log(ticket.datetime)
-        ticketBefore = prevTicket;
-        ticketAfter = arrTickets[i];
-        break;
-      }
-      prevTicket = arrTickets[i];
+      res.status(400).json({ message: 'Ticket already exists at this time' });
     }
-    if(!(betweenTickets(ticketBefore, ticketAfter, ticket)))
+    else
     {
-      console.log("---------last if---------")
-
-      return res.status(400).json({ message: 'Ticket already exists at this time' });
+      newData.datetime = newTicketDate;
     }
   }
-  console.log("hello")
   
   if(ticketData?.duration){
     newData.duration = ticketData.duration
@@ -219,11 +168,9 @@ const update = async (req, res) => {
         id, newData
       );
       
-      const ticket = await Ticket.findById(id) 
-      console.log(ticket)
-      // const board = await Board.findById(ticket.table_id)
-      // console.log(board)
-
+      const ticket = await Ticket.findById(id)
+      const board = await Board.findById(ticket.table_id)
+      
       if (ticket.user_id)
       {
         board.members.push([ticket.user_id, ticket.confirmed])
