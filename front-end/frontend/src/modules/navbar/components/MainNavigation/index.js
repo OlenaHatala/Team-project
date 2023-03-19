@@ -33,6 +33,18 @@ export function MainNavigation() {
               New Board
             </NavLink>
           </li>
+          {userEmail && (
+            <li>
+              <NavLink
+                to="/boards"
+                className={({ isActive }) =>
+                  isActive ? classes.active : undefined
+                }
+              >
+                My Boards
+              </NavLink>
+            </li>
+          )}
           {!userEmail && (
             <li>
               <NavLink
