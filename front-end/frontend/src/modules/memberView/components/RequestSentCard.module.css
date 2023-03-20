@@ -1,0 +1,10 @@
+.reqsent-container {
+    max-width: 600px;
+    margin-inline: auto;
+    margin-block: 50px;
+    min-height: 400px;
+}
+
+.reqsent-inner {
+    min-height: 200px;
+}
