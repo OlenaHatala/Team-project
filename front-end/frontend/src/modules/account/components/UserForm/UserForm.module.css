@@ -1,0 +1,165 @@
+.form {
+  margin: 2rem auto;
+}
+
+.form label,
+.form input,
+.form textarea {
+  display: block;
+  width: 100%;
+}
+
+.form input,
+.form textarea {
+  color: black;
+  font: inherit;
+  padding: 0.25rem;
+  background-color: white;
+  border-color: gray;
+  border: 4px;
+  border-radius: 1px;
+}
+
+.form input {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  border-bottom: 2px solid #8c5bff;
+  padding: 15px;
+  color: #a0a0a0;
+  font-size: 18px;
+  text-decoration: none solid rgb(243, 243, 243);
+  caret-color: transparent;
+}
+
+.form input:focus {
+  border-color: #f3f3f3;
+  color: #ffff;
+  caret-color: #f3f3f3;
+}
+
+.form label {
+  white-space: nowrap;
+  font-size: 14px;
+  color: #ad7ada;
+  text-decoration: none solid rgb(173, 122, 218);
+  letter-spacing: 2px;
+}
+
+.input {
+  margin-bottom: 45px;
+  text-align: left;
+}
+
+.profile-photo img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.profile-photo {
+  margin: auto;
+  width: 70%;
+  margin-top: 0;
+}
+
+.body {
+  display: flex;
+  justify-content: center;
+  width: auto;
+}
+
+.image-block {
+  padding: 1rem;
+  margin: 0 auto;
+  width: 30%;
+  min-width: 70px;
+}
+
+.input-block {
+  margin: auto;
+  width: 50%;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.actions button {
+  margin-top: 2rem;
+  font: inherit;
+  cursor: pointer;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  background-color: rgb(150, 120, 209);
+  color: rgb(28, 0, 51);
+  border: none;
+}
+
+.actions button:hover {
+  background-color: rgb(219, 201, 255);
+}
+
+.header {
+  margin-bottom: 3rem;
+}
+
+.focused label {
+  color: #f2ddff;
+}
+
+.errmsg {
+  background-color: rgba(255, 0, 0, 0.10);
+  color: rgb(230, 63, 63);
+  font-weight: bold;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  margin: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.successmsg {
+  background-color: rgba(255, 230, 146, 0.247);
+  color: rgb(255, 243, 203);
+  font-weight: bold;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  margin: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+@media (max-width: 584px) {
+  .body {
+    max-width: 100%;
+  }
+
+  .input-block {
+    width: 100%;
+  }
+
+  .image-block {
+    width: 100%;
+  }
+
+  .body {
+    display: block;
+    width: auto;
+  }
+
+  .image-block {
+    width: 50%;
+  }
+
+  .profile-photo {
+    width: 90%;
+  }
+}
