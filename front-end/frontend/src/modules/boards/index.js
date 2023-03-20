@@ -1,1 +1,1 @@
-export { BoardList } from "./components/BoardList";
+export { BoardList } from "./components/board_list/BoardList";

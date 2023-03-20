@@ -1,0 +1,31 @@
+.table-info {
+    background-color: #feaec9;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    width:  50px;
+    height:  17px;
+    padding-left: 5px;
+    font-size: 14px;
+  }
+  
+  .count-window {
+    height: 80%;
+    width: 50%;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    background-color: #ffffff;
+    margin-right: 3px;
+  }
+
+
+  @media only screen and (min-width: 768px) {
+      .count-window {
+        height: 80%;
+        width: 50%;
+      }
+
+  }
