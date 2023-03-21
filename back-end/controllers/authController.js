@@ -72,10 +72,10 @@ exports.login = async (req, res, next) => {
       bcrypt.compare(password, foundUser.password).then(function (result) 
       {
         if (result) {
-          
           const accessToken = jwt.sign(
             {
               "UserInfo": {
+                "_id": foundUser._id,
                 "name": foundUser.name,
                 "surname": foundUser.surname,
                 "mobile_number": foundUser.mobile_number,
@@ -88,21 +88,22 @@ exports.login = async (req, res, next) => {
             },
         
             process.env.ACCESS_TOKEN_SECRET,
-            {expiresIn: '15m'}
+            {expiresIn: `${process.env.ACCESS_TOKEN_DURATION}`}
           )
         
           const refreshToken = jwt.sign(
             { "email": foundUser.email, "password": foundUser.password},
             process.env.REFRESH_TOKEN_SECRET,
-            { expiresIn: '7d' }
+            { expiresIn: `${process.env.REFRESH_TOKEN_DURATION}` }
           )
         
+            const age = +((process.env.REFRESH_TOKEN_DURATION).slice(0, -1));
+
           res.cookie('jwt', refreshToken, {
-            httpOnly: true,
-            //secure: true,
-            // to do: add secure true after testing
+            secure: true,
             sameSite: 'None',
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            httpOnly: true,
+            maxAge: age * 24 * 60 * 60 * 1000
           })
 
           res.status(200).json({
@@ -124,28 +125,6 @@ exports.login = async (req, res, next) => {
   }
 };
 
-exports.read = async(req, res, next) => {
-  const { id } = req.body
-  try {const user = await User.findById(id)
-    if(user)
-    {
-      res.status(200).json({
-        message:"Get user",
-        user
-      })
-    }
-    else
-    {
-      return res.status(400).json({ message: 'User not found' })
-    }
-  } catch(error) {
-    res.status(500).json({
-      message: "An error occurred",
-      error: error.message,
-    })
-  } 
-}
-
 exports.refresh = (req, res) => {
   const cookies = req.cookies
 
@@ -166,6 +145,7 @@ exports.refresh = (req, res) => {
       const accessToken = jwt.sign(
         {
           "UserInfo": {
+            "_id": foundUser._id,
             "name": foundUser.name,
             "surname": foundUser.surname,
             "mobile_number": foundUser.mobile_number,
@@ -177,7 +157,7 @@ exports.refresh = (req, res) => {
           }
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '15m'}
+        { expiresIn: `${process.env.ACCESS_TOKEN_DURATION}`}
       )
 
       res.json({ accessToken })
@@ -191,56 +171,3 @@ exports.logout = (req, res) => {
   res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true })
   res.json({ message: 'Cookie cleared' })
 }
-
-
-exports.update = async (req, res, next) => {
-  const {id, userData} = req.body;
-  const { name, surname, email, mobile_number} = userData;
-
-  if (id && (name || surname || email || mobile_number)) {
-    // Finds the user with the id
-
-    await User.findById(id)
-    .then((user) => {
-        user.name = name ? name : user.name
-        user.surname = surname ? surname : user.surname
-        user.email = email ? email : user.email
-        user.mobile_number = mobile_number ? mobile_number : user.mobile_number
-
-        user.save((err) => {
-          //Monogodb error checker
-          if (err) {
-            return res
-              .status("400")
-              .json({ message: "An error occurred", error: err.message });
-          }
-          res.status("201").json({ message: "Update successful", user });
-        });
-      })
-      .catch((error) => {
-        res
-          .status(400)
-          .json({ message: "An error occurred", error: error.message });
-      });
-  } else {
-    res.status(400).json({ message: "First name or Id not present" });
-  }
-};
-
-
-exports.deleteUser = async (req, res, next) => {
-  const { id } = req.body;
-  await User.findById(id)
-    .then((user) => user.remove())
-    .then((user) =>
-      res.status(201).json({ message: "User successfully deleted", user })
-    )
-    .catch((error) =>
-      res
-        .status(400)
-        .json({ message: "An error occurred", error: error.message })
-    );
-};
-
-// to do delete boards
-

@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 
-import PageContent from "../components/PageContent";
+import PageContent from '../modules/common/UI/PageContent';
 
 function SuccessPage() {
   const [searchParams] = useSearchParams();

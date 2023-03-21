@@ -1,11 +1,12 @@
-import PageContent from '../components/PageContent';
+import PageContent from '../modules/common/UI/PageContent';
+import { useSelectUser } from '../modules/auth';
 
 function HomePage() {
-  const userData = localStorage.getItem('useData');
-  console.log(userData);
+  const user = useSelectUser();
+  const welcome = user ? `Welcome ${user.email}!` : "";
   return (
     <PageContent title="Welcome!">
-      <p>Browse all our amazing events!</p>
+      <h1>{welcome}</h1>
     </PageContent>
   );
 }
