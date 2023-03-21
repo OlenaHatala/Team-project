@@ -1,7 +1,7 @@
 import React from "react";
-import Card from "../components/UI/Card";
-import NewBoardForm from "../components/newboard/NewBoardForm";
-import { NewBoardProvider } from "../context/NewBoardContext";
+
+import Card from "../modules/common/UI/Card";
+import { NewBoardForm, NewBoardProvider } from "../modules/newBoard";
 
 const NewBoard = () => {
   return (
