@@ -29,23 +29,16 @@ function findFreeSpace(recordedDates, targetDate, targetDateDuration) {
 };
 
 const create = asyncHandler(async (req, res) => {
-  const { table_id, user_id, datetime, duration, is_outdated, enabled, confirmed } = req.body;  
+  const { table_id, user_id, datetime, duration, is_outdated, enabled, confirmed } = req.body
   if (!table_id || !user_id || !datetime || !duration || !is_outdated || !enabled || !confirmed) {
       return res.status(400).json({ message: 'All fields are required' })
   }
-  const new_table_id = new ObjectId(table_id);
-  const new_user_id = new ObjectId(user_id);
-  
-  // to do add to the board and user  
+  // to do add to the board and user
 
-  try {   
-      const existingTicket = await Ticket.findOne({ datetime });
-      if (existingTicket) {
-        return res.status(400).json({ message: 'A ticket already exists with this datetime' });
-      }
+  try {
       await Ticket.create({
-      table_id: new_table_id,
-      user_id: new_user_id,         
+      table_id,
+      user_id, 
       datetime, 
       duration, 
       is_outdated, 
@@ -63,7 +56,7 @@ const create = asyncHandler(async (req, res) => {
         error: error.message,
       })
     }
-});
+})
 
 const read = asyncHandler(async (req, res) => {
   const { id } = req.body
