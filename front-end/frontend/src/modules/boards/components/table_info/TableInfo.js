@@ -23,7 +23,7 @@ const TableInfo = (props) => {
   return (
     <div className={classes.table}>
       <div className={classes["table-details"]}>
-      <span className={classes["calendar-icon"]}><Icon icon={calendar} size={50} style={{ color: '#1C1333' }}/></span>
+      <span className={classes["calendar-icon"]}><Icon icon={calendar} size={50} /></span>
         <div className={classes["table-title"]}>
           <div className={classes["board-name-block"]}>
               <div className={classes["board-name-info"]}>
@@ -46,7 +46,7 @@ const TableInfo = (props) => {
           <div className={classes["address-info"]}>{props.address}</div>
           
         </div>
-        <span className={classes["circleRight-icon"]}><Icon icon={circleRight} size={36} style={{ color: '#717171' }}/></span>
+        <span className={classes["circleRight-icon"]}><Icon icon={circleRight} size={36} /></span>
       </div>
     </div>
   );
