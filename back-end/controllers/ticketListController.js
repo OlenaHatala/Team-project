@@ -25,7 +25,7 @@ const ticketlist = asyncHandler(async (req, res) => {
 
   try {
     let taken_tickets_arr = [];
-    for (id in taken_tickets_arr) {
+    for (id in taken_tickets) {
       const found_ticket = await Ticket.findById(taken_tickets[id]).exec();
       const ticketData = getListTiketData(found_ticket);
       taken_tickets_arr.push(ticketData);
