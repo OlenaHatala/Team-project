@@ -32,36 +32,49 @@ function findFreeSpace(recordedDates, targetDate, targetDateDuration) {
 const create = asyncHandler(async (req, res) => {
   const { table_id, user_id, datetime, duration, is_outdated, enabled, confirmed } = req.body; 
   if (!table_id || !datetime || !duration || !is_outdated || !enabled || !confirmed) {
-      return res.status(400).json({ message: 'All fields are required' })
+    return res.status(400).json({ message: 'All fields are required' });
   }
   const new_table_id = new ObjectId(table_id);
   const new_user_id = user_id === "" ? null : new ObjectId(user_id); // convert empty string to null
 
   try {   
-      const existingTicket = await Ticket.findOne({ datetime });
-      if (existingTicket) {
-        return res.status(400).json({ message: 'A ticket already exists with this datetime' });
-      }
-      const newTicket = new Ticket({
-        table_id: new_table_id,
-        user_id: new_user_id,         
-        datetime, 
-        duration, 
-        is_outdated, 
-        enabled, 
-        confirmed
-      });
-      const savedTicket = await newTicket.save();
-      res.status(200).json({
-        message: "Ticket created successfully",
-        ticket: savedTicket,
-      });
-    } catch (error) {
-      res.status(400).json({
-        message: "Ticket was not created",
-        error: error.message,
-      });
+    const existingTicket = await Ticket.findOne({ datetime });
+    if (existingTicket) {
+      return res.status(400).json({ message: 'A ticket already exists with this datetime' });
     }
+
+    const end_datetime = new Date(new Date(datetime).getTime() + duration * 60 * 1000);
+    const overlappingTicket = await Ticket.findOne({
+      $or: [
+        { datetime: { $lte: datetime }, end_datetime: { $gte: datetime } },
+        { datetime: { $gte: datetime }, datetime: { $lte: end_datetime } }
+      ]
+    });
+    if (overlappingTicket) {
+      return res.status(400).json({ message: 'The ticket overlaps with an existing ticket' });
+    }
+
+    const newTicket = new Ticket({
+      table_id: new_table_id,
+      user_id: new_user_id,         
+      datetime, 
+      duration, 
+      is_outdated, 
+      enabled, 
+      confirmed,
+      end_datetime
+    });
+    const savedTicket = await newTicket.save();
+    res.status(200).json({
+      message: "Ticket created successfully",
+      ticket: savedTicket,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Ticket was not created",
+      error: error.message,
+    });
+  }
 });
 
 // const create = asyncHandler(async (req, res) => {
@@ -70,36 +83,32 @@ const create = asyncHandler(async (req, res) => {
 //       return res.status(400).json({ message: 'All fields are required' })
 //   }
 //   const new_table_id = new ObjectId(table_id);
-
-//   const new_user_id = user_id || null;
-//   console.log(new_user_id);
-  
-//   // to do add to the board and user  
+//   const new_user_id = user_id === "" ? null : new ObjectId(user_id); // convert empty string to null
 
 //   try {   
 //       const existingTicket = await Ticket.findOne({ datetime });
 //       if (existingTicket) {
 //         return res.status(400).json({ message: 'A ticket already exists with this datetime' });
 //       }
-//       await Ticket.create({
-//       table_id: new_table_id,
-//       user_id: new_user_id,         
-//       datetime, 
-//       duration, 
-//       is_outdated, 
-//       enabled, 
-//       confirmed
-//       }).then((ticket) =>
-//         res.status(200).json({
-//           message: "Ticket created successfully",
-//           ticket,
-//         })
-//       )
+//       const newTicket = new Ticket({
+//         table_id: new_table_id,
+//         user_id: new_user_id,         
+//         datetime, 
+//         duration, 
+//         is_outdated, 
+//         enabled, 
+//         confirmed
+//       });
+//       const savedTicket = await newTicket.save();
+//       res.status(200).json({
+//         message: "Ticket created successfully",
+//         ticket: savedTicket,
+//       });
 //     } catch (error) {
 //       res.status(400).json({
 //         message: "Ticket was not created",
 //         error: error.message,
-//       })
+//       });
 //     }
 // });
 
