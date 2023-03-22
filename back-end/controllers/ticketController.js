@@ -1,23 +1,8 @@
 const Ticket = require('../models/Ticket')
 const Board = require('../models/Board')
 const asyncHandler = require('express-async-handler')
+const { ObjectId } = require('mongodb');
 
-function endTicket(ticket)
-{  
-  console.log("---------end ticket function---------")
-
-  start = ticket.datetime
-  duration = ticket.duration
-  end = start.setMinutes(start.getMinutes() + duration)
-  return end;
-};
-
-function betweenTickets(ticketBefore, ticketAfter, addTicket)
-{
-  console.log("---------between tickets function---------")
-
-  return  addTicket.start >= endTicket(ticketBefore) && endTicket(addTicket) <= ticketAfter.start
-};
 
 function findFreeSpace(recordedDates, targetDate, targetDateDuration) {
   const targetDataDurationInMs = targetDateDuration * 60000;
@@ -44,36 +29,69 @@ function findFreeSpace(recordedDates, targetDate, targetDateDuration) {
   return isAvailable;
 };
 
-
 const create = asyncHandler(async (req, res) => {
-    const { table_id, user_id, datetime, duration, is_outdated, enabled, confirmed } = req.body
-    if (!table_id || !user_id || !datetime || !duration || !is_outdated || !enabled || !confirmed) {
-        return res.status(400).json({ message: 'All fields are required' })
-    }
-    // to do add to the board and user
+  const { table_id, user_id, datetime, duration, is_outdated, enabled, confirmed } = req.body;  
+  if (!table_id || !user_id || !datetime || !duration || !is_outdated || !enabled || !confirmed) {
+      return res.status(400).json({ message: 'All fields are required' })
+  }
+  const new_table_id = new ObjectId(table_id);
+  const new_user_id = new ObjectId(user_id);
+  
+  // to do add to the board and user  
 
-    try {
-        await Ticket.create({
-        table_id,
-        user_id, 
-        datetime, 
-        duration, 
-        is_outdated, 
-        enabled, 
-        confirmed
-        }).then((ticket) =>
-          res.status(200).json({
-            message: "Ticket created successfully",
-            ticket,
-          })
-        )
-      } catch (error) {
-        res.status(400).json({
-          message: "Ticket was not created",
-          error: error.message,
-        })
+  try {   
+      const existingTicket = await Ticket.findOne({ datetime });
+      if (existingTicket) {
+        return res.status(400).json({ message: 'A ticket already exists with this datetime' });
       }
-})
+      await Ticket.create({
+      table_id: new_table_id,
+      user_id: new_user_id,         
+      datetime, 
+      duration, 
+      is_outdated, 
+      enabled, 
+      confirmed
+      }).then((ticket) =>
+        res.status(200).json({
+          message: "Ticket created successfully",
+          ticket,
+        })
+      )
+    } catch (error) {
+      res.status(400).json({
+        message: "Ticket was not created",
+        error: error.message,
+      })
+    }
+});
+
+const read = asyncHandler(async (req, res) => {
+  const { id } = req.body
+  try {
+    const ticket = await Ticket.findById(id) 
+    if(ticket)
+    {
+      res.status(200).json({
+        message:"Get ticket",
+        ticket
+      })
+    }
+    else
+    {
+      return res.status(400).json({ message: 'Ticket not found' })
+    }
+    res.status(200).json({
+    message:"Get ticket",
+    ticket
+  })
+  } catch(error) {
+    res.status(500).json({
+      message: "An error occurred",
+      error: error.message,
+    })
+  } 
+});
 
 const update = async (req, res) => {
   const {id, ticketData} = req.body;
@@ -191,33 +209,6 @@ const update = async (req, res) => {
   }
 };
 
-const read = asyncHandler(async (req, res) => {
-  const { id } = req.body
-  try {
-    const ticket = await Ticket.findById(id) 
-    if(ticket)
-    {
-      res.status(200).json({
-        message:"Get ticket",
-        ticket
-      })
-    }
-    else
-    {
-      return res.status(400).json({ message: 'Ticket not found' })
-    }
-    res.status(200).json({
-    message:"Get ticket",
-    ticket
-  })
-  } catch(error) {
-    res.status(500).json({
-      message: "An error occurred",
-      error: error.message,
-    })
-  } 
-})
-
 const deleteTicket = async (req, res) => {
   const { id } = req.body;
 
@@ -272,7 +263,7 @@ const deleteTicket = async (req, res) => {
             }
         }
      }
-}
+};
 
 module.exports = {
     create,
