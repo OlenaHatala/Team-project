@@ -14,6 +14,10 @@ const getListTiketData = (ticket) => {
 const ticketlist = asyncHandler(async (req, res) => {
   const { user_id } = req.body;
   const found_user = await User.findById(user_id);
+  if(!found_user)
+  {
+    return res.status(400).json({ message: 'User not found' })
+  }
   const taken_tickets = found_user.taken_tickets;
   if (taken_tickets.length === 0) {
     return res.status(204).json({});
@@ -22,7 +26,7 @@ const ticketlist = asyncHandler(async (req, res) => {
   try {
     let taken_tickets_arr = [];
     for (id in taken_tickets_arr) {
-      const found_ticket = await Ticket.findById(taken_tickets_arr[id]).exec();
+      const found_ticket = await Ticket.findById(taken_tickets[id]).exec();
       const ticketData = getListTiketData(found_ticket);
       taken_tickets_arr.push(ticketData);
     }
