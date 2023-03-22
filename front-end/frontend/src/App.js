@@ -11,6 +11,7 @@ import NewBoard from "./pages/NewBoard";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { MemberViewPage } from "./pages/MemberView";
+import { TakenTickets } from "./pages/TakenTickets";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         element: <RequireAuth />,
         children: [
+          {
+            path: "tickets",
+            element: <TakenTickets />,
+          },
           {
             path: "newboard",
             element: <NewBoard />,
