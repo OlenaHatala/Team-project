@@ -35,7 +35,6 @@ const create = asyncHandler(async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' })
   }
   const new_table_id = new ObjectId(table_id);
-  const new_user_id = new ObjectId(user_id);
   
   // to do add to the board and user  
 
@@ -46,7 +45,7 @@ const create = asyncHandler(async (req, res) => {
       }
       await Ticket.create({
       table_id: new_table_id,
-      user_id: new_user_id,         
+      user_id,         
       datetime, 
       duration, 
       is_outdated, 
