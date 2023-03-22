@@ -10,6 +10,7 @@ import EditAccountPage from "./pages/Account";
 import NewBoard from "./pages/NewBoard";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import { MemberViewPage } from "./pages/MemberView";
 import BoardsPage from "./pages/Boards";
 
 const router = createBrowserRouter([
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
           {
             path: "/account",
             element: <EditAccountPage />,
+          },
+          {
+            path: "board/:boardId",
+            element: <MemberViewPage />,
           },
         ],
       },

@@ -368,6 +368,11 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
   try {
     const board = await Board.findById(id) 
 
+    if(numberOfWeek > 5 || numberOfWeek < 0) 
+    {
+        return res.status(400).json({ message: 'Incorect number of the week' })
+    }
+
     const week_tickets = {monday: board.tickets[numberOfWeek].monday, tuesday: board.tickets[numberOfWeek].tuesday,
         wednesday: board.tickets[numberOfWeek].wednesday, thursday : board.tickets[numberOfWeek].thursday, 
         friday: board.tickets[numberOfWeek].friday, saturday: board.tickets[numberOfWeek].saturday, sunday: board.tickets[numberOfWeek].sunday}
