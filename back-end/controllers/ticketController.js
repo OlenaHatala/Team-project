@@ -25,7 +25,6 @@ function findFreeSpace(recordedDates, targetDate, targetDateDuration) {
       break;
     }
   }
-
   return isAvailable;
 };
 
@@ -37,21 +36,39 @@ const create = asyncHandler(async (req, res) => {
   const new_table_id = new ObjectId(table_id);
   const new_user_id = user_id === "" ? null : new ObjectId(user_id); // convert empty string to null
 
-  try {   
-    const existingTicket = await Ticket.findOne({ datetime });
-    if (existingTicket) {
-      return res.status(400).json({ message: 'A ticket already exists with this datetime' });
+  try { 
+    const newTicketDate = new Date(new Date(datetime).toISOString());  
+    let currentDate = new Date(); // today
+    let diffTime = newTicketDate.getTime() - currentDate.getTime(); // difference in milliseconds
+    let diffDays = diffTime / (1000 * 60 * 60 * 24); // difference in days
+    let weekIndex = Math.floor(diffDays / 7); // add 1 to start counting from week 1
+    let dayIndex = newTicketDate.getDay() - 1; // use Math.floor instead of parseInt for consistency
+    
+    const board = await Board.findById(table_id)
+    if (!board) {
+        return res.status(400).json({ message: 'Board not found' })
     }
+    
+    const week_tickets = [board.tickets[weekIndex].monday, board.tickets[weekIndex].tuesday,
+      board.tickets[weekIndex].wednesday, board.tickets[weekIndex].thursday, 
+      board.tickets[weekIndex].friday, board.tickets[weekIndex].saturday, board.tickets[weekIndex].sunday];    
 
-    const end_datetime = new Date(new Date(datetime).getTime() + duration * 60 * 1000);
-    const overlappingTicket = await Ticket.findOne({
-      $or: [
-        { datetime: { $lte: datetime }, end_datetime: { $gte: datetime } },
-        { datetime: { $gte: datetime }, datetime: { $lte: end_datetime } }
-      ]
-    });
-    if (overlappingTicket) {
-      return res.status(400).json({ message: 'The ticket overlaps with an existing ticket' });
+    const day_tickets = week_tickets[dayIndex];
+    
+    const arrTickets = [];  
+
+    for(i in day_tickets)
+    {
+      const findId = await Ticket.findById(day_tickets[i]);
+      if(findId)
+      {
+        arrTickets.push(findId);
+      }
+    } 
+
+    if(findFreeSpace(arrTickets, newTicketDate, duration) != true)
+    {
+      res.status(400).json({ message: 'Ticket already exists at this time' });
     }
 
     const newTicket = new Ticket({
@@ -61,8 +78,7 @@ const create = asyncHandler(async (req, res) => {
       duration, 
       is_outdated, 
       enabled, 
-      confirmed,
-      end_datetime
+      confirmed
     });
     const savedTicket = await newTicket.save();
     res.status(200).json({
@@ -76,6 +92,54 @@ const create = asyncHandler(async (req, res) => {
     });
   }
 });
+
+// const create = asyncHandler(async (req, res) => {
+//   const { table_id, user_id, datetime, duration, is_outdated, enabled, confirmed } = req.body; 
+//   if (!table_id || !datetime || !duration || !is_outdated || !enabled || !confirmed) {
+//     return res.status(400).json({ message: 'All fields are required' });
+//   }
+//   const new_table_id = new ObjectId(table_id);
+//   const new_user_id = user_id === "" ? null : new ObjectId(user_id); // convert empty string to null
+
+//   try {   
+//     const existingTicket = await Ticket.findOne({ datetime });
+//     if (existingTicket) {
+//       return res.status(400).json({ message: 'A ticket already exists with this datetime' });
+//     }
+
+//     const end_datetime = new Date(new Date(datetime).getTime() + duration * 60 * 1000);
+//     const overlappingTicket = await Ticket.findOne({
+//       $or: [
+//         { datetime: { $lte: datetime }, end_datetime: { $gte: datetime } },
+//         { datetime: { $gte: datetime }, datetime: { $lte: end_datetime } }
+//       ]
+//     });
+//     if (overlappingTicket) {
+//       return res.status(400).json({ message: 'The ticket overlaps with an existing ticket' });
+//     }
+
+//     const newTicket = new Ticket({
+//       table_id: new_table_id,
+//       user_id: new_user_id,         
+//       datetime, 
+//       duration, 
+//       is_outdated, 
+//       enabled, 
+//       confirmed,
+//       end_datetime
+//     });
+//     const savedTicket = await newTicket.save();
+//     res.status(200).json({
+//       message: "Ticket created successfully",
+//       ticket: savedTicket,
+//     });
+//   } catch (error) {
+//     res.status(400).json({
+//       message: "Ticket was not created",
+//       error: error.message,
+//     });
+//   }
+// });
 
 const read = asyncHandler(async (req, res) => {
   const { id } = req.body
