@@ -3,6 +3,15 @@ const Board = require('../models/Board')
 const asyncHandler = require('express-async-handler')
 const { ObjectId } = require('mongodb');
 
+const week_day = {
+  0: 'monday',
+  1: 'tuesday',
+  2: 'wednesday',
+  3: 'thursday',
+  4: 'friday',
+  5: 'saturday',
+  6: 'sunday',
+}
 
 function findFreeSpace(recordedDates, targetDate, targetDateDuration) {
   const targetDataDurationInMs = targetDateDuration * 60000;
@@ -28,6 +37,8 @@ function findFreeSpace(recordedDates, targetDate, targetDateDuration) {
   return isAvailable;
 };
 
+
+
 const create = asyncHandler(async (req, res) => {
   const { table_id, user_id, datetime, duration, is_outdated, enabled, confirmed } = req.body; 
   if (!table_id || !datetime || !duration || !is_outdated || !enabled || !confirmed) {
@@ -43,6 +54,9 @@ const create = asyncHandler(async (req, res) => {
     let diffDays = diffTime / (1000 * 60 * 60 * 24); // difference in days
     let weekIndex = Math.floor(diffDays / 7); // add 1 to start counting from week 1
     let dayIndex = newTicketDate.getDay() - 1; // use Math.floor instead of parseInt for consistency
+
+    console.log(weekIndex);
+    console.log(dayIndex);
     
     const board = await Board.findById(table_id)
     if (!board) {
@@ -54,6 +68,7 @@ const create = asyncHandler(async (req, res) => {
       board.tickets[weekIndex].friday, board.tickets[weekIndex].saturday, board.tickets[weekIndex].sunday];    
 
     const day_tickets = week_tickets[dayIndex];
+    // board.tickets[weekIndex].
     
     const arrTickets = [];  
 
@@ -65,6 +80,8 @@ const create = asyncHandler(async (req, res) => {
         arrTickets.push(findId);
       }
     } 
+
+    console.log(arrTickets);
 
     if(findFreeSpace(arrTickets, newTicketDate, duration) != true)
     {
@@ -90,6 +107,15 @@ const create = asyncHandler(async (req, res) => {
       enabled, 
       confirmed
     });
+    board.tickets[weekIndex][week_day[weekIndex]].push(ticket._id)
+    board.save((error) => {
+      if (error) {
+          return res
+          .status(201)
+          .json({ message: "An error occurred", error: error.message });
+      }
+  });
+
     res.status(200).json({
       message: "Ticket created successfully",
       ticket,
