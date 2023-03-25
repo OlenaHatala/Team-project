@@ -54,9 +54,6 @@ const create = asyncHandler(async (req, res) => {
     let diffDays = diffTime / (1000 * 60 * 60 * 24); // difference in days
     let weekIndex = Math.floor(diffDays / 7); // add 1 to start counting from week 1
     let dayIndex = newTicketDate.getDay() - 1; // use Math.floor instead of parseInt for consistency
-
-    console.log(weekIndex);
-    console.log(dayIndex);
     
     const board = await Board.findById(table_id)
     if (!board) {
@@ -79,9 +76,7 @@ const create = asyncHandler(async (req, res) => {
       {
         arrTickets.push(findId);
       }
-    } 
-
-    console.log(arrTickets);
+    }
 
     if(findFreeSpace(arrTickets, newTicketDate, duration) != true)
     {
