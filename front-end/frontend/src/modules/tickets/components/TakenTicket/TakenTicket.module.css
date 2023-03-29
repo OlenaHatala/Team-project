@@ -58,8 +58,8 @@
       background-color: #7ac48f;
     }
 
-  .ticket-header.declined{
-      background-color: #f05316;
+  .ticket-header.outdated{
+      background-color: #9b9595;
     }
 
 

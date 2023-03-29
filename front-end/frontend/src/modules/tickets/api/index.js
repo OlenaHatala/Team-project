@@ -20,12 +20,25 @@ export const ticketsApiSlice = apiSlice.injectEndpoints({
             } else {
                 taken_tickets_arr = responseData.taken_tickets_arr.map((ticketData) => {
                     const date = new Date(ticketData.datetime);
+                    let status;
+                    if(ticketData.is_confirmed)
+                    {
+                        status = "confirmed";
+                    }
+                    else
+                    {
+                        status = "wait";
+                    }
+                    if(ticketData.is_outdated)
+                    {
+                        status = "outdated";
+                    }
                     return {
                         id: ticketData._id,
                         boardName: ticketData.boardlabel,
                         date: date,
                         time: getStartTime(date),
-                        status: ticketData.is_confirmed ? "confirmed" : "wait",
+                        status,
                         isOutdated: ticketData.is_outdated,
                         duration: ticketData.duration,
                     };

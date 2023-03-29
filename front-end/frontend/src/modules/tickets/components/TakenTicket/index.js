@@ -6,6 +6,7 @@ import {clock} from 'react-icons-kit/icomoon/clock';
 
 const TakenTicket = (props) => {
   console.log(props)
+  console.log(props.status)
     return (
         <div className={classes.ticket}>
         <div className={`${classes["ticket-header"]} ${classes[`${props.status}`]}`}>
