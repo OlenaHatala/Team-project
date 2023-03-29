@@ -240,7 +240,7 @@ async function delete_outdated_week(id){
     }
 }
 
-cron.schedule('51 17 * * 3', async () => {
+cron.schedule('59 23 * * 0', async () => {
     try {
         const boards = await Board.find().exec();
         
