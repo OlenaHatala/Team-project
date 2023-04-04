@@ -1,4 +1,3 @@
-//import nodeSchedule from 'node-schedule'
 const cron = require('node-cron');
 const mongoose = require('mongoose');
 
@@ -18,6 +17,16 @@ const week_index = {
     'sunday': 6,
 }
 
+const ticketsDay = {
+    'sun': 0,
+    'mon': 1,
+    'tue': 2,
+    'wed': 3,
+    'thu': 4,
+    'fri': 5,
+    'sat': 6
+
+}
 
 const compareMarkup = (a, b) => {
 
@@ -34,6 +43,7 @@ const compareMarkup = (a, b) => {
     }
     return true
 }
+
 function addMinutes(date, minutes) {
     if (!(date instanceof Date)) {
         throw new Error('Invalid date object');
@@ -157,14 +167,31 @@ function addMinutes(date, minutes) {
 
                 while(addMinutes(ticket_time, duration) <= new_close_time)
                 {
-                    
-                    const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
+                    if (i < board.auto_open.ahead)
+                    {
+                        const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: true, confirmed: false})
+
+                    }
+                    else
+                    {
+                        const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
+                    }
                     
                     board.tickets[i][day].push(ticket._id)
 
                     ticket_time = addMinutes(ticket_time, duration)
+
+                    // previous version
+
+                    // const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
+                    
+                    // board.tickets[i][day].push(ticket._id)
+
+                    // ticket_time = addMinutes(ticket_time, duration)
                 } 
             }
+
+            
 
         }
         board.save((error) => {
@@ -254,6 +281,8 @@ cron.schedule('59 23 * * 0', async () => {
         console.error('An error occurred while deleting weeks for all boards:', error.message);
     }
 });
+
+
 const createWeek  = asyncHandler(async (req, res) =>{
     const { board_id, week_id} = req.body
     const { user_id } = req;
