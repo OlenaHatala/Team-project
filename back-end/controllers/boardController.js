@@ -167,16 +167,13 @@ function addMinutes(date, minutes) {
 
                 while(addMinutes(ticket_time, duration) <= new_close_time)
                 {
+                    ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
+                    console.log(board.auto_open.ahead)
                     if (i < board.auto_open.ahead)
                     {
-                        const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: true, confirmed: false})
-
+                        ticket.enabled = true
+                        ticket.save()
                     }
-                    else
-                    {
-                        const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
-                    }
-                    
                     board.tickets[i][day].push(ticket._id)
 
                     ticket_time = addMinutes(ticket_time, duration)
@@ -803,14 +800,14 @@ const deleteBoard = async (req, res) => {
 
                 const result_ticket = await found_ticket.deleteOne()
 
-                const reply = `Ticket '${result_ticket.title}' with ID ${result_ticket._id} deleted`
+                const reply = `Ticket with ID ${result_ticket._id} deleted`
             }
         }
     }
         
     const result = await board.deleteOne()
     
-    const reply = `Board '${result.title}' with ID ${result._id} deleted`
+    const reply = `Board with ID ${result._id} deleted`
 
     const owner = await User.findById(owner_id).exec();
     owner.created_tables = owner.created_tables.filter(boardId => boardId.toString() !== id);
