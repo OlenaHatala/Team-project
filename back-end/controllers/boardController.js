@@ -301,14 +301,12 @@ cron.schedule('05 00 * * *', async () => {
 
             else if (board.auto_open.day == "null")
             {
-
                 changed = false
                 for (i = 0; i < 6; i++) 
                 {
                     const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
                     wednesday: board.tickets[i].wednesday, thursday : board.tickets[i].thursday, 
                     friday: board.tickets[i].friday, saturday: board.tickets[i].saturday, sunday: board.tickets[i].sunday}
-                    
                     for (const day in week_tickets)
                     {
                         let day_tickets = week_tickets[day]
@@ -316,50 +314,31 @@ cron.schedule('05 00 * * *', async () => {
                         for (let t in day_tickets)
                         {
                             const found_ticket = await Ticket.findById(day_tickets[t]).exec()
-
-                            if (found_ticket.enabled == true)
-                            {
-                                break
-                            }
-
+                            if (found_ticket.enabled == true) { break }
                             else
                             {
                                 await Ticket.findByIdAndUpdate(
                                     day_tickets[t], {enabled: true}
                                 );
-
                                 changed = true
                             }
                         }
-
-                        if(changed)
-                        {
-                            break;
-                        }
+                        if(changed) { break; }
                     }
-
-                    if(changed)
-                    {
-                        break
-                    }
+                    if(changed) { break }
                 }
-
             }
-
             else
             {
-
                 if (ticketsDay[board.auto_open.day] === today.getDay())
                 {
                     const week_tickets = {monday: board.tickets[board.auto_open.ahead - 1].monday, tuesday: board.tickets[board.auto_open.ahead - 1].tuesday,
                                         wednesday: board.tickets[board.auto_open.ahead - 1].wednesday, thursday : board.tickets[board.auto_open.ahead - 1].thursday, 
                                         friday: board.tickets[board.auto_open.ahead - 1].friday, saturday: board.tickets[board.auto_open.ahead - 1].saturday, sunday: board.tickets[board.auto_open.ahead - 1].sunday}
 
-
                     for(const i in week_tickets) 
                     {
                         let day_tickets = week_tickets[i]
-
                         for(const ticket_id in day_tickets)
                         {
                             await Ticket.findByIdAndUpdate(
@@ -378,10 +357,6 @@ cron.schedule('05 00 * * *', async () => {
         })
     }
 })
-
-
-
-
 
 const createWeek  = asyncHandler(async (req, res) =>{
     const { board_id, week_id} = req.body
@@ -413,8 +388,6 @@ const createWeek  = asyncHandler(async (req, res) =>{
                 const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
                     wednesday: board.tickets[i].wednesday, thursday : board.tickets[i].thursday, 
                     friday: board.tickets[i].friday, saturday: board.tickets[i].saturday, sunday: board.tickets[i].sunday}
-
-                
 
                 for (const day in week_tickets) {
                     if( week_tickets[day].length != 0){
@@ -450,7 +423,6 @@ const createWeek  = asyncHandler(async (req, res) =>{
                     var new_open_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
                     var ticket_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
 
-
                     const close_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
                     close_time.setHours(close_hour)
                     close_time.setMinutes(close_min)
@@ -459,7 +431,6 @@ const createWeek  = asyncHandler(async (req, res) =>{
 
                     while(addMinutes(ticket_time, duration) <= new_close_time)
                     {
-                        
                         const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: board.markup.duration,is_outdated: false, enabled: false, confirmed: false})
                         
                         board.tickets[i][day].push(ticket._id)
@@ -483,7 +454,6 @@ const createWeek  = asyncHandler(async (req, res) =>{
                 .json({ message: "An error occurred", error: error.message });
             }
         });
-
         return res.status(200).json({ message: "Created successfully", board});
     }
     catch (error) {
