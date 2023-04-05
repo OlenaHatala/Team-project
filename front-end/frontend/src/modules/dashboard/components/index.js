@@ -1,0 +1,1 @@
+export { DashboardIndex } from "./dashboardIndex";
