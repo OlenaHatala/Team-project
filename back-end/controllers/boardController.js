@@ -25,7 +25,6 @@ const ticketsDay = {
     'thu': 4,
     'fri': 5,
     'sat': 6
-
 }
 
 const compareMarkup = (a, b) => {
@@ -135,6 +134,7 @@ function addMinutes(date, minutes) {
             auto_open
         })
 
+        var count_tickets = 0
         for (i = 0; i<6; i++)
         {
             for (const day in markup.days) 
@@ -164,32 +164,35 @@ function addMinutes(date, minutes) {
                 close_time.setMinutes(close_min)
 
                 const new_close_time = new Date(close_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+                
 
                 while(addMinutes(ticket_time, duration) <= new_close_time)
                 {
                     ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
-                    console.log(board.auto_open.ahead)
-                    if (i < board.auto_open.ahead)
+                    if (board.auto_open.day == null)
                     {
-                        ticket.enabled = true
-                        ticket.save()
+                        if (count_tickets < board.auto_open.ahead)
+                        {
+                            ticket.enabled = true
+                            
+                            count_tickets++
+                        }
                     }
+                    else
+                    {
+                        if (i < board.auto_open.ahead)
+                        {
+                            ticket.enabled = true
+                        }
+                    }
+                    ticket.save()
                     board.tickets[i][day].push(ticket._id)
 
                     ticket_time = addMinutes(ticket_time, duration)
 
-                    // previous version
-
-                    // const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
-                    
-                    // board.tickets[i][day].push(ticket._id)
-
-                    // ticket_time = addMinutes(ticket_time, duration)
+                  
                 } 
             }
-
-            
-
         }
         board.save((error) => {
             if (error) {
