@@ -51,7 +51,7 @@ function addMinutes(date, minutes) {
   }
 
 
-  const create  = asyncHandler(async (req, res) =>{
+const create  = asyncHandler(async (req, res) =>{
     const { address, description, label,service_name, req_confirm, book_num, markup, auto_open} = req.body
     const { user_id: owner_id } = req;
 
@@ -169,7 +169,7 @@ function addMinutes(date, minutes) {
                 while(addMinutes(ticket_time, duration) <= new_close_time)
                 {
                     ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
-                    if (board.auto_open.day == null)
+                    if (board.auto_open.day == "null")
                     {
                         if (count_tickets < board.auto_open.ahead)
                         {
