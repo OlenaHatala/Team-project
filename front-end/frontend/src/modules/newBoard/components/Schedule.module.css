@@ -1,154 +1,139 @@
-html, body {
-    height: 300vh;
+html,
+body {
+  height: 300vh;
 }
 
 .container {
-    background-color: #1c1333;
-    height: 100%;
-    width: 100%;
-    place-items: center;
+  background-color: #1c1333;
+  height: 100%;
+  width: 100%;
+  place-items: center;
 }
 
 .header {
-    padding-top: 10px;
+  padding-top: 10px;
 }
 
 fieldset legend {
-    padding-top: 5%;
-    padding-bottom: 5%;
-    font-size: 25px;
-    text-align: center;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  font-size: 25px;
+  text-align: center;
 }
 
 .fieldset-nav {
-    height: 5rem;
-    display: flex;
-    justify-content: space-between;
-  }
-  
+  height: 5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
 .fieldset-nav button {
-    padding: 0 10px;
-    margin: 20px;
-    width: 7rem;
+  padding: 0 10px;
+  margin: 20px;
+  width: 7rem;
 }
-  
+
 .left-btn {
-    float: left;
+  float: left;
 }
-  
+
 .left-btn button {
-    text-align: center;
+  text-align: center;
 }
-  
+
 .right-btn {
-    padding: 0px 0px 0px 20px;
-    text-align: center;
+  padding: 0px 0px 0px 20px;
+  text-align: center;
 }
-  
 
 .week {
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
-    text-align: center;
-    gap: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  text-align: center;
+  gap: 20px;
 }
 
-#days-text{
-    color: #F3F3F3;
+#days-text {
+  color: #f3f3f3;
 }
 
 .day input {
-    border-bottom: 1px dotted #8c5bff;
-    padding: 9px 0;
-    color: #F3F3F3;
+  border-bottom: 1px dotted #8c5bff;
+  padding: 9px 0;
+  color: #f3f3f3;
 }
 
-
-.week button, button {
-    background-color: #a977d6;
-    width: 100%;
-    height: 40px;
-    text-align: center;
-    border-radius: 4px;
-    border: none;
-    overflow: hidden;
-    color:#1c1333;
-    font-weight: bold;
+.week button,
+button {
+  background-color: #a977d6;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  border-radius: 4px;
+  border: none;
+  overflow: hidden;
+  color: #1c1333;
+  font-weight: bold;
 }
 
-button:hover{
-    background-color: #bb93dd;
-    cursor: pointer;
+button:hover {
+  background-color: #bb93dd;
+  cursor: pointer;
 }
 
 .day label {
-    color: #f3f3f3;
-    margin-top: 20px;
+  color: #f3f3f3;
+  margin-top: 20px;
 }
 
 .number-input {
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    gap: 10px;
-    padding-bottom: 5%;
-    font-size: 18px;
-    padding-top: 30px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 10px;
+  padding-bottom: 5%;
+  font-size: 18px;
+  padding-top: 30px;
 }
 
-.number-input label{
-    width: auto;
+.number-input label {
+  width: auto;
 }
 
 .number-input input {
-    padding: 9px 0;
-    border: 0;
-    outline: 0;
-    background: transparent;
-    text-align: center;
-    border-bottom: 2px solid #8c5bff;
-    color: #f3f3f3;
-    right: 30px;
-    font-size: 16px;
+  padding: 9px 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  text-align: center;
+  border-bottom: 2px solid #8c5bff;
+  color: #f3f3f3;
+  right: 30px;
+  font-size: 16px;
+}
+
+.disabled-button {
+  background-color: #8d8b92;
+}
+
+.disabled-button:hover {
+  background-color: #8d8b92;
 }
 
 @media (max-width: 1000px) {
-    .week{
-        display: block;
-        text-align: center;
-    }
+  .week {
+    display: block;
+    text-align: center;
+  }
 
-    .day{
-        margin: 10px;
-    }
-
+  .day {
+    margin: 10px;
+  }
 }
 
-input[type="time"]::-webkit-calendar-picker-indicator{
-    filter: invert(99%) sepia(0%) saturate(23%) hue-rotate(75deg) brightness(113%) contrast(91%);;
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(99%) sepia(0%) saturate(23%) hue-rotate(75deg) brightness(113%)
+    contrast(91%);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

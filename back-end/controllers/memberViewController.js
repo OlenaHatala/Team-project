@@ -8,7 +8,7 @@ const getBoard = asyncHandler(async (req, res) => {
   const { user_id } = req;
   try {
     const board = await Board.findById(boardId);
-    const { label, description, service_name, address } = board;
+    const { label, description, service_name, address, _id } = board;
 
     var available_tickets = [];
     if (board.members.includes(user_id) || user_id == board.owner_id) {
@@ -40,6 +40,7 @@ const getBoard = asyncHandler(async (req, res) => {
         }
       }
       return res.status(200).json({
+        _id,
         label,
         description,
         service_name,
@@ -47,12 +48,12 @@ const getBoard = asyncHandler(async (req, res) => {
         available_tickets,
       });
     } else {
-      res.status(200).json({
+      return res.status(200).json({
         message: "User is not a member",
       });
     }
   } catch (error) {
-    res.status(400).json({
+    return res.status(400).json({
       message: "Board with that id doesn`t exist",
       error: error.message,
     });
@@ -71,13 +72,13 @@ const joinBoard = asyncHandler(async (req, res) => {
       board.save();
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "User added to requests",
       label,
       description,
     });
   } catch (error) {
-    res.status(400).json({
+    return res.status(400).json({
       message: "Board with that id doesn`t exist",
       error: error.message,
     });

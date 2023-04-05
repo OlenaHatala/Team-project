@@ -1,0 +1,96 @@
+.form h3 {
+  text-align: center;
+  font-size: 28px;
+  padding: 0;
+  margin: 0;
+  color: black;
+  padding-top: 20px;
+}
+
+.time {
+  width: 100%;
+  display: flex;
+  padding-top: 25px;
+}
+
+.time-picker {
+  margin: auto;
+  text-align: center;
+  width: 30%;
+}
+
+.time-picker h4 {
+  margin: 8px;
+  color: black;
+}
+
+.picker-btn {
+  width: 80%;
+  height: 2.5rem;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  border-bottom: 2px solid #8c5bff;
+  color: black;
+  font-size: 18px;
+  text-decoration: none solid rgb(243, 243, 243);
+  caret-color: transparent;
+  text-align: center;
+  padding: 0;
+}
+
+.picker-btn:focus {
+  border-color: black;
+}
+
+.item-checkbox {
+  width: 100%;
+  padding-top: 58px;
+  padding-left: 2%;
+}
+
+.item-checkbox .checkbox-text {
+  cursor: pointer;
+}
+
+.item-checkbox label {
+  display: inline;
+  padding-left: 8px;
+  color: black;
+}
+
+.buttons-container {
+  display: flex;
+  width: 100%;
+  padding-top: 36px;
+  padding-right: 20px;
+}
+
+.button-inner {
+  display: flex;
+  justify-content: right;
+  width: 100%;
+  gap: 10px;
+}
+
+.button-inner .close-btn,
+.add-btn {
+  width: 140px;
+  height: 40px;
+  font: inherit;
+  cursor: pointer;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  background-color: rgb(150, 120, 209);
+  color: rgb(28, 0, 51);
+  border: none;
+}
+
+.button-inner .close-btn:hover,
+.add-btn:hover {
+  background-color: rgb(170, 145, 219);
+}
+
+.time-picker input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: brightness(100%) contrast(100%);
+}

@@ -11,6 +11,7 @@ import NewBoard from "./pages/NewBoard";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { MemberViewPage } from "./pages/MemberView";
+import { DashboardPage } from "./pages/Dashboard";
 import { TakenTickets } from "./pages/TakenTickets";
 
 const router = createBrowserRouter([
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
           {
             path: "/account",
             element: <EditAccountPage />,
+          },
+          {
+            path: "/dashboard/:boardId",
+            element: <DashboardPage />,
           },
           {
             path: "board/:boardId",
