@@ -178,7 +178,7 @@ const create  = asyncHandler(async (req, res) =>{
                             count_tickets++
                         }
                     }
-                    else
+                    else if (board.auto_open.day != "none")
                     {
                         if (i < board.auto_open.ahead)
                         {
