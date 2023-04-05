@@ -60,6 +60,18 @@ export function MainNavigation() {
           {userEmail && (
             <li>
               <NavLink
+                to="/tickets"
+                className={({ isActive }) =>
+                  isActive ? classes.active : undefined
+                }
+              >
+                My Tickets
+              </NavLink>
+            </li>
+          )}
+          {userEmail && (
+            <li>
+              <NavLink
                 to="/account"
                 className={({ isActive }) =>
                   isActive ? classes.active : undefined

@@ -1,0 +1,1 @@
+export { BoardWeekIndex } from "./BoardWeekIndex";

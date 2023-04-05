@@ -1,0 +1,66 @@
+.ticket {
+    width: 97%;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 12;
+    position: relative;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.301);
+}
+
+.confirmed-ticket {
+    background-color:rgb(143, 143, 207);
+}
+
+.requested-ticket {
+    background-color:rgb(207, 167, 143);
+}
+
+.outdated-ticket {
+    background-color:rgb(172, 172, 172);
+}
+
+.ebabled-ticket {
+    background-color:rgb(151, 207, 143);
+}
+
+.disbabled-ticket {
+    background-color:rgb(176, 212, 211);
+}
+
+.confirmed-ticket:hover {
+    background-color:rgb(143, 143, 220);
+}
+
+.requested-ticket:hover {
+    background-color:rgb(207, 167, 143);
+}
+
+.outdated-ticket:hover {
+    background-color:rgb(189, 189, 189);
+}
+
+.ebabled-ticket:hover {
+    background-color:rgb(159, 209, 152);
+}
+
+.disbabled-ticket:hover {
+    background-color:rgb(187, 221, 219);
+}
+
+.quick-actions {
+    display: flex;
+    width: 48px;
+    height: 22px;
+}
+
+.action-container {
+    margin: auto;
+    width: 22px;
+    height: 100%;
+}
+
+.action-section {
+    display: flex;
+    justify-content: flex-end;
+    height: 20px;
+}

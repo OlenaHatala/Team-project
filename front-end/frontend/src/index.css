@@ -69,8 +69,14 @@ ul {
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
-  background-color: red;
+  background-color: #c2c2c2;
 }
 
+.testweek {
+  background-color: #c2c2c2;
+  min-width: 1100px;
+  width: 65vw;
+  height: 80vh;
+}
 
 

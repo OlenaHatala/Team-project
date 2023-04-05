@@ -1,18 +1,23 @@
 const User = require("../models/User");
 const Ticket = require("../models/Ticket");
+const Board = require('../models/Board')
 const asyncHandler = require("express-async-handler");
 
-const getListTiketData = (ticket) => {
+const getListTiketData = async (ticket) => {
+  const board = await Board.findById(ticket.table_id).exec();
     const ticketData = {
         _id: ticket._id,
         datetime: ticket.datetime,
-        duration: ticket.duration
+        duration: ticket.duration,
+        is_outdated: ticket.is_outdated,
+        is_confirmed: ticket.confirmed,
+        boardlabel: board.label
     }
     return ticketData;
 }
 
 const ticketlist = asyncHandler(async (req, res) => {
-  const { user_id } = req.body;
+  const { user_id } = req;
   const found_user = await User.findById(user_id);
   if(!found_user)
   {
@@ -27,7 +32,7 @@ const ticketlist = asyncHandler(async (req, res) => {
     let taken_tickets_arr = [];
     for (id in taken_tickets) {
       const found_ticket = await Ticket.findById(taken_tickets[id]).exec();
-      const ticketData = getListTiketData(found_ticket);
+      const ticketData = await getListTiketData(found_ticket);
       taken_tickets_arr.push(ticketData);
     }
     return res.status(200).json({
