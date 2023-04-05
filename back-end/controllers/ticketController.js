@@ -2,6 +2,8 @@ const Ticket = require('../models/Ticket')
 const Board = require('../models/Board')
 const asyncHandler = require('express-async-handler')
 const { ObjectId } = require('mongodb');
+const User = require('../models/User');
+const Mongoose = require("mongoose")
 
 const week_day = {
   0: 'monday',
@@ -127,10 +129,10 @@ const read = asyncHandler(async (req, res) => {
   const { id } = req.body
   try {
     const ticket = await Ticket.findById(id) 
-    if(ticket)
+    if(!ticket)
     {
-      res.status(200).json({
-        message:"Get ticket",
+      return res.status(200).json({
+        message:"Ticket not found",
         ticket
       })
     }
@@ -138,10 +140,7 @@ const read = asyncHandler(async (req, res) => {
     {
       return res.status(400).json({ message: 'Ticket not found' })
     }
-    res.status(200).json({
-    message:"Get ticket",
-    ticket
-  })
+
   } catch(error) {
     res.status(500).json({
       message: "An error occurred",
@@ -266,6 +265,88 @@ const update = async (req, res) => {
   }
 };
 
+const takeTicket = asyncHandler(async (req, res) => {
+  const { user_id} = req
+  const {ticket_id} = req.body
+
+  try {
+    const ticket = await Ticket.findById(ticket_id) 
+    if(!ticket)
+    { return res.status(200).json({
+        message:"Ticket not found",
+      })}
+
+    const board = await Board.findById(ticket.table_id);
+    if(!board)
+    { return res.status(200).json({
+        message:"Table not found",
+      })
+    }
+
+    const user = await User.findById(user_id) 
+    if(!board)
+    { return res.status(200).json({
+        message:"User not found",
+      })
+    }
+    const ticket_obj_id = new ObjectId(ticket_id)
+    const table_obj_id = new ObjectId(user_id.table_id)
+
+    if(!ticket.enabled){
+      return res.status(200).json({
+        message:"Ticket is not enabled",
+      })
+    }
+    if(ticket.user_id){
+      return res.status(200).json({
+        message:"Ticket is already taken",
+      })
+    }
+    if(ticket.is_outdated){
+      return res.status(200).json({
+        message:"Ticket is outdated",
+      })
+    }
+    if(board.members.includes(user_id))
+    {
+      await Ticket.findByIdAndUpdate(
+        ticket_obj_id, {user_id: user._id}
+      );
+
+      if( !board.req_confirm ){
+        await Ticket.findByIdAndUpdate(
+          ticket_obj_id, {confirmed: true}
+        );
+      }
+      else {
+        var uncnf_tickets = board.unconfirmed_tickets;
+        uncnf_tickets.push(ticket._id)
+        await Board.findByIdAndUpdate(
+          table_obj_id, {unconfirmed_tickets: uncnf_tickets}
+        );
+      }
+
+      var tak_tickets = user.taken_tickets;
+      tak_tickets.push(ticket_obj_id);
+
+      await Ticket.findByIdAndUpdate(
+        ticket_obj_id, {taken_tickets: tak_tickets}
+      );
+      return res.status(201).json({ message: "Success", ticket1 });
+    }
+
+    else {
+      { return res.status(400).json({ message: 'You are not a member of the table' }) }
+    }
+    
+  } catch(error) {
+    res.status(500).json({
+      message: "An error occurred",
+      error: error.message,
+    })
+  } 
+});
+
 const deleteTicket = async (req, res) => {
   const { id } = req.body;
 
@@ -326,5 +407,6 @@ module.exports = {
     create,
     read, 
     update,
+    takeTicket,
     deleteTicket
 }
