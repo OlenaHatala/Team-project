@@ -282,6 +282,106 @@ cron.schedule('59 23 * * 0', async () => {
     }
 });
 
+cron.schedule('05 00 * * *', async () => {
+    const today = new Date()
+    const dayOfWeek = today.getDay();
+    
+    try {
+        const boards = await Board.find().exec();
+
+        for (const j in boards)
+        {
+            const board = await Board.findById(boards[j].id)
+
+            if (board.auto_open.day == "none")
+            {
+                //console.log('autoopening is disabled')
+                continue
+            }
+
+            else if (board.auto_open.day == "null")
+            {
+
+                changed = false
+                for (i = 0; i < 6; i++) 
+                {
+                    const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
+                    wednesday: board.tickets[i].wednesday, thursday : board.tickets[i].thursday, 
+                    friday: board.tickets[i].friday, saturday: board.tickets[i].saturday, sunday: board.tickets[i].sunday}
+                    
+                    for (const day in week_tickets)
+                    {
+                        let day_tickets = week_tickets[day]
+                        
+                        for (let t in day_tickets)
+                        {
+                            const found_ticket = await Ticket.findById(day_tickets[t]).exec()
+
+                            if (found_ticket.enabled == true)
+                            {
+                                break
+                            }
+
+                            else
+                            {
+                                await Ticket.findByIdAndUpdate(
+                                    day_tickets[t], {enabled: true}
+                                );
+
+                                changed = true
+                            }
+                        }
+
+                        if(changed)
+                        {
+                            break;
+                        }
+                    }
+
+                    if(changed)
+                    {
+                        break
+                    }
+                }
+
+            }
+
+            else
+            {
+
+                if (ticketsDay[board.auto_open.day] === today.getDay())
+                {
+                    const week_tickets = {monday: board.tickets[board.auto_open.ahead - 1].monday, tuesday: board.tickets[board.auto_open.ahead - 1].tuesday,
+                                        wednesday: board.tickets[board.auto_open.ahead - 1].wednesday, thursday : board.tickets[board.auto_open.ahead - 1].thursday, 
+                                        friday: board.tickets[board.auto_open.ahead - 1].friday, saturday: board.tickets[board.auto_open.ahead - 1].saturday, sunday: board.tickets[board.auto_open.ahead - 1].sunday}
+
+
+                    for(const i in week_tickets) 
+                    {
+                        let day_tickets = week_tickets[i]
+
+                        for(const ticket_id in day_tickets)
+                        {
+                            await Ticket.findByIdAndUpdate(
+                                day_tickets[ticket_id], {enabled: true}
+                                );
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch (error){
+        return res.status(400).json({
+            message: "Something went wrong",
+            error: error.message,
+        })
+    }
+})
+
+
+
+
 
 const createWeek  = asyncHandler(async (req, res) =>{
     const { board_id, week_id} = req.body
