@@ -137,7 +137,6 @@ const BoardSchema = new Mongoose.Schema({
             type: Array,
             default: []
         }
-        
     },
     {versionKey: false}
 );

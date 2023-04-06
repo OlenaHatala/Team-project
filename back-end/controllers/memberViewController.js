@@ -4,7 +4,7 @@ const Ticket = require("../models/Ticket");
 const asyncHandler = require("express-async-handler");
 
 const getBoard = asyncHandler(async (req, res) => {
-  const { boardIdSUPER } = req.params;
+  const { boardId } = req.params;
   const { user_id } = req;
   try {
     const board = await Board.findById(boardId);
