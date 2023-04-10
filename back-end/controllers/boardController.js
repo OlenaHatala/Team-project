@@ -44,7 +44,7 @@ cron.schedule('05 00 * * *', async () => {
                 continue
             }
 
-            else if (board.auto_open.day == "null")
+            else if (board.auto_open.day == "every")
             {
                 changed = false
                 for (i = 0; i < 6; i++) 
@@ -279,7 +279,7 @@ const create  = asyncHandler(async (req, res) =>{
                 {
                     ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
 
-                    if (board.auto_open.day == "null")
+                    if (board.auto_open.day == "every")
                     {
                         if (count_tickets < board.auto_open.ahead)
                         {

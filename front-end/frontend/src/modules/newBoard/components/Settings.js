@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import useNewBoardContext from "../hooks/useNewBoardContext";
 
@@ -20,6 +20,12 @@ const Settings = () => {
   const nextHandler = () => {
     saveSettings("next", {reqconf, booknum, openauto, openday, ahead});
   };
+  useEffect(()=>{
+    if(openday!=="every")
+    {
+      setAhead(1);
+    }
+  },[openday])
 
   const openForContent =
     openday === "every" ? (
