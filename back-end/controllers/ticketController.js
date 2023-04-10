@@ -329,10 +329,10 @@ const takeTicket = asyncHandler(async (req, res) => {
       var tak_tickets = user.taken_tickets;
       tak_tickets.push(ticket_obj_id);
 
-      await Ticket.findByIdAndUpdate(
-        ticket_obj_id, {taken_tickets: tak_tickets}
+      await User.findByIdAndUpdate(
+        user_id, {taken_tickets: tak_tickets}
       );
-      return res.status(201).json({ message: "Success", ticket1 });
+      return res.status(201).json({ message: "Success" });
     }
 
     else {
@@ -346,6 +346,93 @@ const takeTicket = asyncHandler(async (req, res) => {
     })
   } 
 });
+
+const ticketConfirmation = asyncHandler(async (req, res) => {
+  const {ticket_id, is_approved } = req.body;
+  const {user_id} = req;
+
+  const required_fields_present = (ticket_id && is_approved)
+
+  if ( !required_fields_present){
+      return res.status(400).json({ 
+          message: "Not all required fields are present",
+        })
+  }
+
+  try {
+    const ticket = await Ticket.findById(ticket_id);
+    
+    if(!ticket){
+        return res.status(404).json({
+            message: "Ticket with that id doesn`t exist",
+        })
+    }
+    const board = await Board.findById(ticket.table_id);
+    if(!board){
+      return res.status(404).json({
+          message: "Board with that id doesn`t exist",
+      })
+    }
+    const owner = await User.findById(user_id);
+
+
+    if(!owner){
+        return res.status(404).json({
+            message: "Owner with that id doesn`t exist",
+        })
+    }
+
+    const user = await User.findById(ticket.user_id);
+    if(!user){
+        return res.status(404).json({
+            message: "User with that id doesn`t exist",
+        })
+    }
+
+    if(owner.id != board.owner_id){
+      return res.status(404).json({
+        message: "You are not the owner of this board",
+      })
+    }
+
+    if(is_approved === "true"){
+      await Ticket.findByIdAndUpdate(
+        ticket_id, {confirmed: true}
+      );
+    }
+    else if (is_approved === "false"){
+      await Ticket.findByIdAndUpdate(
+        ticket_id, {confirmed: false, user_id: null}
+      );
+      await User.findByIdAndUpdate(
+        user._id, {taken_tickets: user.taken_tickets.filter((requested_id)=>{ 
+          return requested_id != ticket_id;
+        })}
+      );
+      
+    }
+    else {
+      return res.status(404).json({
+        message:"Is approved has a bad value",
+      }) 
+    }
+    await Board.findByIdAndUpdate(
+      ticket.table_id, {unconfirmed_tickets: board.unconfirmed_tickets.filter((requested_id)=>{ 
+        return requested_id != ticket_id;
+      })}
+    );
+
+
+    return res.status(200).json({
+        message:"All is well",
+    }) 
+  }
+  catch (error) {
+      return res.status(500).json({
+          error: error.message,
+      })
+  }
+})
 
 const deleteTicket = async (req, res) => {
   const { id } = req.body;
@@ -408,5 +495,6 @@ module.exports = {
     read, 
     update,
     takeTicket,
+    ticketConfirmation,
     deleteTicket
 }
