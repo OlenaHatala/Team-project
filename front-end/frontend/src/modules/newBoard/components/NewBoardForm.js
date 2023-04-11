@@ -50,7 +50,7 @@ export const NewBoardForm = ({
       book_num: settings.booknum,
       markup: { duration, days },
       address: details.address,
-      auto_open: { day: settings.openday, ahead: settings.ahead },
+      auto_open: { day: settings.openauto ? settings.openday : 'none', ahead: settings.ahead },
     };
     onSubmit(boardData);
   };

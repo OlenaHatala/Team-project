@@ -4,6 +4,7 @@ import { useUpdateMutation } from "../api";
 import { NewBoardForm } from "../components/NewBoardForm";
 import { NewBoardProvider } from "../context/NewBoardContext";
 import { toggleShowConfigureBoardAction } from "../../dashboard/store";
+import classes from "./ConfigureBoardModal.module.css"
 
 const ConfigureBoardModal = ({ boardInfo }) => {
   const [update, { isLoading }] = useUpdateMutation();
@@ -30,12 +31,13 @@ const ConfigureBoardModal = ({ boardInfo }) => {
         {isLoading ? (
           <p>Updating tickets... Usually it takes around 20 second.</p>
         ) : null}
+        <div className={classes["super-div"]}>
         <NewBoardForm
           onSubmit={submitHandler}
           disableSubmit={isLoading}
           isUpdateForm={true}
           defaultValues={boardInfo}
-        />
+        /></div>
       </NewBoardProvider>
     </Modal>
   );
