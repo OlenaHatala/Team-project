@@ -1,12 +1,14 @@
-import { useNavigate } from "react-router-dom";
-
 import ServiceInfo from "./ServiceInfo";
 import useNewBoardContext from "../hooks/useNewBoardContext";
 import Settings from "./Settings";
 import Schedule from "./Schedule";
 
-export const NewBoardForm = () => {
-  const navigate = useNavigate();
+export const NewBoardForm = ({
+  onSubmit,
+  disableSubmit,
+  isUpdateForm,
+  defaultValues,
+}) => {
   const {
     page,
     details,
@@ -22,32 +24,47 @@ export const NewBoardForm = () => {
   } = useNewBoardContext();
 
   const SubmitForm = () => {
-    console.log(details);
-    console.log("settings:");
-    console.log(settings);
-    console.log(`duration: ${duration}`);
-    console.log("mon:");
-    console.log(mon);
-    console.log("tue:");
-    console.log(tue);
-    console.log("wed:");
-    console.log(wed);
-    console.log("thu:");
-    console.log(thu);
-    console.log("fri:");
-    console.log(fri);
-    console.log("sat:");
-    console.log(sat);
-    console.log("sun:");
-    console.log(sun);
+    let days = {
+      monday: { open: mon.open, close: mon.close },
+      tuesday: { open: tue.open, close: tue.close },
+      wednesday: { open: wed.open, close: wed.close },
+      thursday: { open: thu.open, close: thu.close },
+      friday: { open: fri.open, close: fri.close },
+      saturday: { open: sat.open, close: sat.close },
+      sunday: { open: sun.open, close: sun.close },
+    };
 
-    navigate("/success/?message=Board-was-created-successfuly");
+    days.monday.hours = [];
+    days.tuesday.hours = [];
+    days.wednesday.hours = [];
+    days.thursday.hours = [];
+    days.friday.hours = [];
+    days.saturday.hours = [];
+    days.sunday.hours = [];
+
+    const boardData = {
+      label: details.boardname,
+      description: details.desc,
+      service_name: details.servname,
+      req_confirm: settings.reqconf,
+      book_num: settings.booknum,
+      markup: { duration, days },
+      address: details.address,
+      auto_open: { day: settings.openauto ? settings.openday : 'none', ahead: settings.ahead },
+    };
+    onSubmit(boardData);
   };
 
   const display = {
     details: <ServiceInfo />,
     settings: <Settings />,
-    schedule: <Schedule onSubmit={SubmitForm} />,
+    schedule: (
+      <Schedule
+        onSubmit={SubmitForm}
+        disableSubmit={disableSubmit}
+        isUpdateForm={isUpdateForm}
+      />
+    ),
   };
 
   const content = <form>{display[page]}</form>;

@@ -4,7 +4,6 @@ import { MemberView } from "./MemberView";
 import { RequestSentCard } from "./RequestSentCard";
 
 export const VerifiedMembership = ({ boardId }) => {
-  console.log("VerifiedMembership");
   const [isAdded, setIsAdded] = useState(false);
 
   const [join] = useJoinMutation();
@@ -15,7 +14,6 @@ export const VerifiedMembership = ({ boardId }) => {
   } = useGetBoardQuery(boardId);
 
   useEffect(() => {
-    console.log(`effect: ${board?.message}`);
     const handleJoin = async () => {
       const response = await join(boardId).unwrap();
       if (response?.message === "User added to requests") {
@@ -35,7 +33,7 @@ export const VerifiedMembership = ({ boardId }) => {
   if (boardIsLoading) {
     content = <p>"Loading..."</p>;
   } else if (isSuccess && board?.label) {
-    content = <MemberView board={board} />;
+    content = <MemberView board={board} boardId={boardId}/>;
   } else if (isAdded) {
     content = <RequestSentCard />;
   }

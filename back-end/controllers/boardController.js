@@ -1,3 +1,6 @@
+const cron = require('node-cron');
+const mongoose = require('mongoose');
+
 const Board = require('../models/Board')
 const User = require('../models/User')
 const Ticket = require('../models/Ticket')
@@ -14,6 +17,126 @@ const week_index = {
     'sunday': 6,
 }
 
+const ticketsDay = {
+    'sun': 0,
+    'mon': 1,
+    'tue': 2,
+    'wed': 3,
+    'thu': 4,
+    'fri': 5,
+    'sat': 6
+}
+
+cron.schedule('05 00 * * *', async () => {
+    const today = new Date()
+    const dayOfWeek = today.getDay();
+    
+    try {
+        const boards = await Board.find().exec();
+
+        for (const j in boards)
+        {
+            const board = await Board.findById(boards[j].id)
+
+            if (board.auto_open.day == "none")
+            {
+                //console.log('autoopening is disabled')
+                continue
+            }
+
+            else if (board.auto_open.day == "every")
+            {
+                changed = false
+                for (i = 0; i < 6; i++) 
+                {
+                    const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
+                    wednesday: board.tickets[i].wednesday, thursday : board.tickets[i].thursday, 
+                    friday: board.tickets[i].friday, saturday: board.tickets[i].saturday, sunday: board.tickets[i].sunday}
+                    for (const day in week_tickets)
+                    {
+                        let day_tickets = week_tickets[day]
+                        
+                        for (let t in day_tickets)
+                        {
+                            const found_ticket = await Ticket.findById(day_tickets[t]).exec()
+                            if (found_ticket.enabled == true) { break }
+                            else
+                            {
+                                await Ticket.findByIdAndUpdate(
+                                    day_tickets[t], {enabled: true}
+                                );
+                                changed = true
+                            }
+                        }
+                        if(changed) { break; }
+                    }
+                    if(changed) { break; }
+                }
+            }
+            else
+            {
+                if (ticketsDay[board.auto_open.day] === today.getDay())
+                {
+                    const week_tickets = {monday: board.tickets[board.auto_open.ahead - 1].monday, tuesday: board.tickets[board.auto_open.ahead - 1].tuesday,
+                                        wednesday: board.tickets[board.auto_open.ahead - 1].wednesday, thursday : board.tickets[board.auto_open.ahead - 1].thursday, 
+                                        friday: board.tickets[board.auto_open.ahead - 1].friday, saturday: board.tickets[board.auto_open.ahead - 1].saturday, sunday: board.tickets[board.auto_open.ahead - 1].sunday}
+
+                    for(const i in week_tickets) 
+                    {
+                        let day_tickets = week_tickets[i]
+                        for(const ticket_id in day_tickets)
+                        {
+                            await Ticket.findByIdAndUpdate(
+                                day_tickets[ticket_id], {enabled: true}
+                                );
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch (error){
+        return res.status(400).json({
+            message: "Something went wrong",
+            error: error.message,
+        })
+    }
+})
+
+
+const getBoardTicketOwner = async (ticket) => {
+    let user = null;
+    if (ticket.user_id) {
+        const found_user = await User.findById(ticket.user_id);
+        user = {
+            name: found_user.name,
+            surname: found_user.surname,
+            mobile_number: found_user.mobile_number
+        };
+    }
+    return {
+        user,
+        _id: ticket._id,
+        table_id: ticket.table_id,
+        datetime: ticket.datetime,
+        is_outdated: ticket.is_outdated,
+        confirmed: ticket.confirmed,
+        enabled: ticket.enabled,
+        duration: ticket.duration,
+    };
+} 
+
+const getBoardTicketMember = (ticket) => {
+    return {
+        _id: ticket._id,
+        table_id: ticket.table_id,
+        datetime: ticket.datetime,
+        is_outdated: ticket.is_outdated,
+        confirmed: ticket.confirmed,
+        duration: ticket.duration,
+    };
+} 
+
 const compareMarkup = (a, b) => {
 
     if (a.duration !== b.duration) {
@@ -29,6 +152,7 @@ const compareMarkup = (a, b) => {
     }
     return true
 }
+
 function addMinutes(date, minutes) {
     if (!(date instanceof Date)) {
         throw new Error('Invalid date object');
@@ -40,7 +164,7 @@ const create  = asyncHandler(async (req, res) =>{
     const { address, description, label,service_name, req_confirm, book_num, markup, auto_open} = req.body
     const { user_id: owner_id } = req;
 
-    const required_fields_present = (label && service_name && req_confirm && book_num && markup && auto_open)
+    const required_fields_present = (label && service_name && book_num && markup && auto_open)
     if ( !required_fields_present){
         return res.status(400).json({ 
             message: "Not all required fields are present",
@@ -119,6 +243,8 @@ const create  = asyncHandler(async (req, res) =>{
             auto_open
         })
 
+        var count_tickets = 0
+
         for (i = 0; i<6; i++)
         {
             for (const day in markup.days) 
@@ -151,15 +277,31 @@ const create  = asyncHandler(async (req, res) =>{
 
                 while(addMinutes(ticket_time, duration) <= new_close_time)
                 {
-                    
-                    const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
-                    
+                    ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
+
+                    if (board.auto_open.day == "every")
+                    {
+                        if (count_tickets < board.auto_open.ahead)
+                        {
+                            ticket.enabled = true
+                            
+                            count_tickets++
+                        }
+                    }
+                    else if (board.auto_open.day != "none")
+                    {
+                        if (i < board.auto_open.ahead)
+                        {
+                            ticket.enabled = true
+                        }
+                    }
+
+                    ticket.save()
                     board.tickets[i][day].push(ticket._id)
 
                     ticket_time = addMinutes(ticket_time, duration)
                 } 
             }
-
         }
         board.save((error) => {
             if (error) {
@@ -358,16 +500,18 @@ const read = asyncHandler(async (req, res) =>{
 })
 
 const readOneWeek  = asyncHandler(async (req, res) =>{
-    const { id, numberOfWeek } = req.body
-    const { created_tables } = req;
+    const { id, numberOfWeek } = req.params
+    const { user_id } = req;
 
-    if (created_tables.length === 0 || !created_tables.find(boardId => boardId === id)) {
+    try {
+    const board = await Board.findById(id).exec()
+    const isOwner = board.owner_id == user_id
+    const showEnabledOnly = !isOwner;
+
+    if (!board.members.find(memberId => memberId === user_id ) && !isOwner) {
         return res.status(403).json({ message: 'Forbidden' })
     }
-
-  try {
-    const board = await Board.findById(id) 
-
+        
     if(numberOfWeek > 5 || numberOfWeek < 0) 
     {
         return res.status(400).json({ message: 'Incorect number of the week' })
@@ -377,7 +521,7 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
         wednesday: board.tickets[numberOfWeek].wednesday, thursday : board.tickets[numberOfWeek].thursday, 
         friday: board.tickets[numberOfWeek].friday, saturday: board.tickets[numberOfWeek].saturday, sunday: board.tickets[numberOfWeek].sunday}
 
-    const tickets = []
+    const tickets = {}
 
     for(const day in week_tickets) {
         let day_tickets = week_tickets[day]
@@ -385,13 +529,23 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
         for(const ticket_id in day_tickets)
         {
             const findTicket = await Ticket.findById(day_tickets[ticket_id])
+            let ticketData = null;
+            if (showEnabledOnly) {
+                if (findTicket.enabled==true && !findTicket.user_id && findTicket.is_outdated === false) {
+                    ticketData = getBoardTicketMember(findTicket)
+                }
+            } else {
+                ticketData = await getBoardTicketOwner(findTicket)
+            }
 
-            if(findTicket){
-                tickets.push(findTicket)
+            if(ticketData){
+                if (!tickets[day]?.length > 0) {
+                    tickets[day] = []
+                }
+                tickets[day].push(ticketData)
             }
         }
     }
-
   res.status(200).json({
     message:"Get week tickets",
     tickets

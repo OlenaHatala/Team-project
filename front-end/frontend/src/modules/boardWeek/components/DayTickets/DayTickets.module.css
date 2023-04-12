@@ -1,0 +1,31 @@
+.ticket-list {
+    width: 100%;
+    height: 100%;
+    color: #b2a4e5;
+    display: inline;
+    z-index: 11;
+}
+
+.empty-time {
+
+    z-index: 11;
+
+    width: 97%;
+    text-align: center;
+    position: relative; 
+}
+
+.spacer {
+
+    z-index: 11;
+    border-radius: 16px;
+
+    width: 97%;
+    text-align: center;
+    position: relative; 
+}
+
+.empty-time:hover{
+    background-color: rgba(0, 0, 0, 0.05);
+}
+

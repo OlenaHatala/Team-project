@@ -1,0 +1,24 @@
+.scroll {
+  background-color: #dfdfdf;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+.scroll::-webkit-scrollbar {
+  width: 15px;
+  border-radius: 20px;
+  background-color: #f3f3f3;
+}
+
+.scroll::-webkit-scrollbar-track {
+  border-radius: 20px;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background: rgb(165, 132, 202);
+  border-radius: 20px;
+}
