@@ -41,7 +41,7 @@ const Schedule = ({ onSubmit, disableSubmit, isUpdateForm }) => {
         </div>
       </header>
 
-      <fieldset>
+      <fieldset className={classes["form-fieldset"]}>
         <legend id="days-text">Working days</legend>
         <div className={classes.week}>
           <DayHours dayName="Mon" label="Monday" />

@@ -14,11 +14,15 @@ body {
   padding-top: 10px;
 }
 
-fieldset legend {
-  padding-top: 5%;
-  padding-bottom: 5%;
-  font-size: 25px;
+.form-fieldset legend {
   text-align: center;
+  padding: 10px;
+  font-size: 25px;
+  margin-bottom: 50px;
+}
+
+.fieldset-header {
+  margin-bottom: -3rem;
 }
 
 .fieldset-nav {
@@ -95,7 +99,7 @@ button:hover {
   gap: 10px;
   padding-bottom: 5%;
   font-size: 18px;
-  padding-top: 30px;
+  padding-top: 40px;
 }
 
 .number-input label {
