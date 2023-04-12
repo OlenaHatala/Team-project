@@ -67,7 +67,6 @@ const create = asyncHandler(async (req, res) => {
       board.tickets[weekIndex].friday, board.tickets[weekIndex].saturday, board.tickets[weekIndex].sunday];    
 
     const day_tickets = week_tickets[dayIndex];
-    // board.tickets[weekIndex].
     
     const arrTickets = [];  
 
@@ -131,14 +130,15 @@ const read = asyncHandler(async (req, res) => {
     const ticket = await Ticket.findById(id) 
     if(!ticket)
     {
-      return res.status(200).json({
+      return res.status(400).json({
         message:"Ticket not found",
-        ticket
       })
     }
     else
     {
-      return res.status(400).json({ message: 'Ticket not found' })
+      return res.status(200).json({ message: 'Ticket found' ,
+      ticket
+      })
     }
 
   } catch(error) {
