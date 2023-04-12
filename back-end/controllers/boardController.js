@@ -345,30 +345,21 @@ async function delete_outdated_week(id){
                         if (!found_ticket) {
                             continue
                         }
-                        console.log("1")
                         if(found_ticket.user_id){
-                            console.log("2")
-                            const user = await User.findById(found_ticket.user_id).exec();
-                            console.log("3")
 
-                            let tak_tickets = user.taken_tickets.filter((requested_id)=>{ 
-                                return requested_id != found_ticket._id;
+                            const user = await User.findById(found_ticket.user_id).exec();
+
+                            let tak_tickets = user.taken_tickets.filter(requested_id => {
+                                return requested_id.toString() !== found_ticket._id.toString() 
                             })
+
                             
-                            console.log(found_ticket._id)
-                            console.log(tak_tickets);
-                            console.log(user.taken_tickets)
                             await User.findByIdAndUpdate(
                                 found_ticket.user_id, {taken_tickets : tak_tickets}
                               );
-                            console.log("4")
-                            
-                            
+     
                         }
-                        console.log("5")
                         const result_ticket = await found_ticket.deleteOne()
-        
-                        const reply = `Ticket with ID deleted`
                     }
                 }
                 board.tickets[i] = week_tickets
@@ -385,12 +376,11 @@ async function delete_outdated_week(id){
                 }
             }
             else{
-                console.log("10")
                 board.tickets[i] = board.tickets[i+1]
             }
         }
         board.save();
-
+        console.log("Fine")
         
     }
     catch (error) {
@@ -398,13 +388,13 @@ async function delete_outdated_week(id){
     }
 }
 
-cron.schedule('04 23 * * 3', async () => {
+cron.schedule('32 00 * * 4', async () => {
     try {
         const boards = await Board.find().exec();
-        await delete_outdated_week(new ObjectId("642cfe5ab342e15f0e4310dc"));
-        // for (const board of boards) {
-        //     await delete_outdated_week(board._id);
-        // }
+        
+        for (const board of boards) {
+            await delete_outdated_week(board._id);
+        }
 
         console.log('Week deleted successfully for all boards');
     }
@@ -944,14 +934,14 @@ const deleteBoard = async (req, res) => {
 
                 const result_ticket = await found_ticket.deleteOne()
 
-                const reply = `Ticket '${result_ticket.title}' with ID ${result_ticket._id} deleted`
+                const reply = `Ticket with ID ${result_ticket._id} deleted`
             }
         }
     }
         
     const result = await board.deleteOne()
     
-    const reply = `Board '${result.title}' with ID ${result._id} deleted`
+    const reply = `Board with ID ${result._id} deleted`
 
     const owner = await User.findById(owner_id).exec();
     owner.created_tables = owner.created_tables.filter(boardId => boardId.toString() !== id);
