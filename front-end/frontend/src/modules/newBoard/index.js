@@ -1,1 +1,0 @@
-export { NewBoardIndex } from "./NewBoardIndex";
