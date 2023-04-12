@@ -324,6 +324,183 @@ const create  = asyncHandler(async (req, res) =>{
     }
 })
 
+async function delete_outdated_week(id){
+    try {
+        const board = await Board.findById(id).exec()
+        
+        for (i = 0; i<6; i++){
+            
+            const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
+                wednesday: board.tickets[i].wednesday, thursday : board.tickets[i].thursday, 
+                friday: board.tickets[i].friday, saturday: board.tickets[i].saturday, sunday: board.tickets[i].sunday}
+
+            
+            if(i == 0){
+                
+                for(var day in week_tickets){
+                    for (j in week_tickets[day])
+                    {
+                        const found_ticket = await Ticket.findById(week_tickets[day][j]).exec()
+        
+                        if (!found_ticket) {
+                            continue
+                        }
+        
+                        const result_ticket = await found_ticket.deleteOne()
+        
+                        const reply = `Ticket with ID ${result_ticket.id} deleted`
+                    }
+                }
+                board.tickets[i] = week_tickets
+            }
+            if(i == 5){
+                board.tickets[i] = {
+                    monday:  [],
+                    tuesday: [],
+                    wednesday: [],
+                    thursday: [],
+                    friday: [],
+                    saturday: [],
+                    sunday: []
+                }
+            }
+            else{
+                board.tickets[i] = board.tickets[i+1]
+            }
+        }
+        board.save();
+        
+    }
+    catch (error) {
+        console.log("error")
+    }
+}
+
+cron.schedule('59 23 * * 0', async () => {
+    try {
+        const boards = await Board.find().exec();
+        
+        for (const board of boards) {
+            await delete_outdated_week(board._id);
+        }
+
+        console.log('Week deleted successfully for all boards');
+    }
+    catch (error) {
+        console.error('An error occurred while deleting weeks for all boards:', error.message);
+    }
+});
+const createWeek  = asyncHandler(async (req, res) =>{
+    const { board_id, week_id} = req.body
+    const { user_id } = req;
+
+    const required_fields_present = (board_id && week_id && user_id )
+    if ( !required_fields_present){
+        return res.status(400).json({ 
+            message: "Not all required fields are present",
+          })
+        }
+
+    try {
+        const board = await Board.findById(board_id);
+        const weekObjectId = mongoose.Types.ObjectId(week_id);
+        if(board.owner_id != user_id)
+        {
+            return res.status(400).json({ 
+                message: "User does not own that board",
+              })
+        }
+        let found_week = false
+        for (i = 0; i<6; i++)
+        {
+            if(board.tickets[i]._id.equals(weekObjectId))
+            {
+                found_week = true
+                
+                const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
+                    wednesday: board.tickets[i].wednesday, thursday : board.tickets[i].thursday, 
+                    friday: board.tickets[i].friday, saturday: board.tickets[i].saturday, sunday: board.tickets[i].sunday}
+
+                
+
+                for (const day in week_tickets) {
+                    if( week_tickets[day].length != 0){
+                        return res.status(400).json({ 
+                            message: "You cannot schedule a week as long as you have at least one ticket on that week ",
+                          })
+                    }
+                } 
+
+                for (const day in board.markup.days) 
+                {
+                    const possible_days= ['monday', 'tuesday','wednesday','thursday','friday','saturday','sunday']
+                    if(!possible_days.includes(day))
+                    {
+                        break;
+                    }
+                    const open_hour = board.markup.days[day].open.split(':')[0];
+                    const open_min = board.markup.days[day].open.split(':')[1];
+
+                    const close_hour = board.markup.days[day].close.split(':')[0];
+                    const close_min = board.markup.days[day].close.split(':')[1];
+
+                    const duration = board.markup.duration
+
+                    const current_day = new Date().getDay()
+                    num_of_days = 8 - current_day + 7 * i + week_index[day]
+
+                    const open_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
+                    open_time.setMinutes(open_min)
+                    open_time.setHours(open_hour )
+
+                    const timezoneOffset = open_time.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
+                    var new_open_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+                    var ticket_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+
+
+                    const close_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
+                    close_time.setHours(close_hour)
+                    close_time.setMinutes(close_min)
+
+                    const new_close_time = new Date(close_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+
+                    while(addMinutes(ticket_time, duration) <= new_close_time)
+                    {
+                        
+                        const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: board.markup.duration,is_outdated: false, enabled: false, confirmed: false})
+                        
+                        board.tickets[i][day].push(ticket._id)
+
+                        ticket_time = addMinutes(ticket_time, duration)
+                    } 
+                }
+            }
+        }
+
+        if(!found_week)
+        {
+            return res.status(400).json({ 
+                message: "Board does not have week with that id",
+              })
+        }
+        board.save((error) => {
+            if (error) {
+                return res
+                .status(201)
+                .json({ message: "An error occurred", error: error.message });
+            }
+        });
+
+        return res.status(200).json({ message: "Created successfully", board});
+    }
+    catch (error) {
+        return res.status(400).json({
+            message: "Week was not created",
+            error: error.message,
+        })
+    }
+})
+
 const update = asyncHandler(async (req, res) => {
     const {id, label, description, service_name, req_confirm, book_num, markup, address, auto_open, apply_new_markup} = req.body
     const { created_tables } = req;
@@ -770,6 +947,7 @@ const deleteBoard = async (req, res) => {
 
 module.exports = {
     create,
+    createWeek,
     read,
     readOneWeek,
     update,
