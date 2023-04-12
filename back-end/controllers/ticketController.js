@@ -481,7 +481,7 @@ const deleteTicket = async (req, res) => {
 
                   const result = await ticket.deleteOne()
 
-                  const reply = `Ticket '${result.title}' with ID ${result._id} deleted`
+                  const reply = `Ticket with ID ${result._id} deleted`
                   
                   res.status(201).json(reply)
                 }                

@@ -752,7 +752,7 @@ const deleteBoard = async (req, res) => {
         
     const result = await board.deleteOne()
     
-    const reply = `Board '${result.title}' with ID ${result._id} deleted`
+    const reply = `Board with ID ${result._id} deleted`
 
     const owner = await User.findById(owner_id).exec();
     owner.created_tables = owner.created_tables.filter(boardId => boardId.toString() !== id);
