@@ -3,7 +3,7 @@ import { useCreateMutation } from "../api";
 import { NewBoardForm } from "../components/NewBoardForm";
 import { NewBoardProvider } from "../context/NewBoardContext";
 
-const NewBoardIndex = () => {
+export const NewBoardIndex = () => {
   const [create, { isLoading }] = useCreateMutation();
   const navigate = useNavigate();
   const submitHandler = async (boardData) => {
@@ -31,4 +31,3 @@ const NewBoardIndex = () => {
   );
 };
 
-export default NewBoardIndex;

@@ -1,1 +1,1 @@
-export { default as NewBoardIndex } from "./NewBoardIndex";
+export { NewBoardIndex } from "./NewBoardIndex";
