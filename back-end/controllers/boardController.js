@@ -855,7 +855,7 @@ const addMember = asyncHandler(async (req, res) => {
                 members: board.members
               }) 
         }
-        if(!board.requests.includes(user_obj_id) && board.members.includes(user_obj_id)){
+        if(!board.requests.includes(user_obj_id) && board.members.includes(user_id)){
             return res.status(204).json({});
         }
         else if(!board.requests.includes(user_id) && !board.members.includes(user_id)){
@@ -864,7 +864,7 @@ const addMember = asyncHandler(async (req, res) => {
                 members: board.members
               }) 
         }
-        if(is_approved === "true" && !board.members.includes(user_obj_id)){
+        if(is_approved === "true" && !board.members.includes(user_id)){
             board.members.push(user_obj_id);
             user.membered_tables.push(board_obj_id);
             user.save();
