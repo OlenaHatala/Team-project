@@ -4,7 +4,7 @@ import DayHours from "./DayHours";
 import classes from "./Schedule.module.css";
 
 const Schedule = ({ onSubmit, disableSubmit, isUpdateForm }) => {
-  const { duration, setDuration, saveSchedule } = useNewBoardContext();
+  const { duration, setDuration, apply_new_markup, setApplyNewMarkup, saveSchedule } = useNewBoardContext();
 
   const prevHandler = () => {
     saveSchedule();
@@ -69,6 +69,23 @@ const Schedule = ({ onSubmit, disableSubmit, isUpdateForm }) => {
             }}
           />
         </div>
+
+        {isUpdateForm && 
+        (<div className={`${classes.input} ${classes["inline-input-label"]}`}>
+          <div className={classes.inputcheck}>
+            <input
+              id="apply_new_markup"
+              type="checkbox"
+              checked={apply_new_markup}
+              onChange={(e) => {
+                setApplyNewMarkup(e.target.checked);
+              }}
+            />
+          </div>
+          <label htmlFor="apply_new_markup">
+            Apply new markup
+          </label>
+        </div>)}
       </fieldset>
     </>
   );
