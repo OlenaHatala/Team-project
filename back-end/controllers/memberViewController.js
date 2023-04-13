@@ -70,7 +70,7 @@ const joinBoard = asyncHandler(async (req, res) => {
 
     const user_obj_id = new ObjectId(user_id)
 
-    if (!board.requests.includes(user_obj_id)) {
+    if (!board.requests.includes(user_id)) {
       board.requests.push(user_obj_id);
       board.save();
     }
