@@ -855,7 +855,7 @@ const addMember = asyncHandler(async (req, res) => {
                 members: board.members
               }) 
         }
-        if(!board.requests.includes(user_obj_id) && board.members.includes(user_id)){
+        if(!board.requests.includes(user_id) && board.members.includes(user_id)){
             return res.status(204).json({});
         }
         else if(!board.requests.includes(user_id) && !board.members.includes(user_id)){
