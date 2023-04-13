@@ -1,5 +1,6 @@
 const Board = require("../models/Board");
 const Ticket = require("../models/Ticket");
+const { ObjectId } = require('mongodb');
 
 const asyncHandler = require("express-async-handler");
 
@@ -67,8 +68,10 @@ const joinBoard = asyncHandler(async (req, res) => {
     const board = await Board.findById(board_id);
     const { label, description } = board;
 
-    if (!board.requests.includes(user_id)) {
-      board.requests.push(user_id);
+    const user_obj_id = new ObjectId(user_id)
+
+    if (!board.requests.includes(user_obj_id)) {
+      board.requests.push(user_obj_id);
       board.save();
     }
 

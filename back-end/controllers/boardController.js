@@ -380,7 +380,6 @@ async function delete_outdated_week(id){
             }
         }
         board.save();
-        console.log("Fine")
         
     }
     catch (error) {
@@ -818,9 +817,12 @@ const addMember = asyncHandler(async (req, res) => {
     const {created_tables} = req;
 
     const required_fields_present = (board_id && user_id && is_approved)
+    const user_obj_id = new ObjectId(user_id)
+    const board_obj_id = new ObjectId(board_id)
+
 
     if (created_tables.length === 0 || !created_tables.find(boardId => boardId === board_id)) {
-        return res.status(403).json({ message: 'Forbidden' })
+        return res.status(403).json({ message: 'Forbiden' })
     }
 
     if ( !required_fields_present){
@@ -828,10 +830,9 @@ const addMember = asyncHandler(async (req, res) => {
             message: "Not all required fields are present",
           })
         }
-
     try {
-        const board = await Board.findById(board_id);
-        const user = await User.findById(user_id);
+        const board = await Board.findById(board_obj_id);
+        const user = await User.findById(user_obj_id);
         if(!board){
             return res.status(404).json({
                 message: "Board with that id doesn`t exist",
@@ -843,10 +844,10 @@ const addMember = asyncHandler(async (req, res) => {
                 message: "User with that id doesn`t exist",
             })
         }
-       
+
         if(is_approved === "false"){
             board.requests = board.requests.filter((requested_id)=>{ 
-                return requested_id != user_id;
+                return requested_id != user_obj_id;
             })
             board.save();
             return res.status(404).json({
@@ -854,7 +855,7 @@ const addMember = asyncHandler(async (req, res) => {
                 members: board.members
               }) 
         }
-        if(!board.requests.includes(user_id) && board.members.includes(user_id)){
+        if(!board.requests.includes(user_obj_id) && board.members.includes(user_obj_id)){
             return res.status(204).json({});
         }
         else if(!board.requests.includes(user_id) && !board.members.includes(user_id)){
@@ -863,17 +864,15 @@ const addMember = asyncHandler(async (req, res) => {
                 members: board.members
               }) 
         }
-        if(is_approved === "true" && !board.members.includes(user_id)){
-            board.members.push(user_id);
-            user.membered_tables.push(board_id);
+        if(is_approved === "true" && !board.members.includes(user_obj_id)){
+            board.members.push(user_obj_id);
+            user.membered_tables.push(board_obj_id);
             user.save();
         }
-        
         board.requests = board.requests.filter((requested_id)=>{ 
             return requested_id != user_id;
         })
         board.save();
-
 
         return res.status(200).json({
             message:"User Added to members",
@@ -930,6 +929,21 @@ const deleteBoard = async (req, res) => {
 
                 if (!found_ticket) {
                     continue
+                }
+
+                if(found_ticket.user_id){
+
+                    const user = await User.findById(found_ticket.user_id).exec();
+
+                    let tak_tickets = user.taken_tickets.filter(requested_id => {
+                        return requested_id.toString() !== found_ticket._id.toString() 
+                    })
+
+                    
+                    await User.findByIdAndUpdate(
+                        found_ticket.user_id, {taken_tickets : tak_tickets}
+                      );
+
                 }
 
                 const result_ticket = await found_ticket.deleteOne()
