@@ -31,43 +31,43 @@ const BoardSchema = new Mongoose.Schema({
                 monday: {  
                     open: {type: String}, 
                     close: {type: String},
-                    day_off: {type: Boolean}, 
+                    workday: {type: Boolean}, 
                     hours: {type: Array}
                 },
                 tuesday: {  
                     open: {type: String}, 
                     close: {type: String}, 
-                    day_off: {type: Boolean},
+                    workday: {type: Boolean},
                     hours: {type: Array}
                 },
                 wednesday:{
                     open: {type: String}, 
                     close: {type: String}, 
-                    day_off: {type: Boolean},
+                    workday: {type: Boolean},
                     hours: {type: Array}
                 },
                 thursday: {
                     open: {type: String}, 
                     close: {type: String}, 
-                    day_off: {type: Boolean},
+                    workday: {type: Boolean},
                     hours: {type: Array}
                 },
                 friday: {
                     open: {type: String}, 
                     close: {type: String}, 
-                    day_off: {type: Boolean},
+                    workday: {type: Boolean},
                     hours: {type: Array}
                 },
                 saturday: {
                     open: {type: String}, 
                     close: {type: String}, 
-                    day_off: {type: Boolean},
+                    workday: {type: Boolean},
                     hours: {type: Array}
                 },
                 sunday: {
                     open: {type: String}, 
                     close: {type: String}, 
-                    day_off: {type: Boolean},
+                    workday: {type: Boolean},
                     hours: {type: Array}
                 }
             },

@@ -248,58 +248,61 @@ const create  = asyncHandler(async (req, res) =>{
         {
             for (const day in markup.days) 
             {
-                const open_hour = markup.days[day].open.split(':')[0];
-                const open_min = markup.days[day].open.split(':')[1];
-
-                const close_hour = markup.days[day].close.split(':')[0];
-                const close_min = markup.days[day].close.split(':')[1];
-
-                const duration = markup.duration
-
-                const current_day = new Date().getDay()
-                num_of_days = 8 - current_day + 7 * i + week_index[day]
-
-                const open_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
-                open_time.setMinutes(open_min)
-                open_time.setHours(open_hour )
-
-                const timezoneOffset = open_time.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
-                var new_open_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
-                var ticket_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
-
-
-                const close_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
-                close_time.setHours(close_hour)
-                close_time.setMinutes(close_min)
-
-                const new_close_time = new Date(close_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
-
-                while(addMinutes(ticket_time, duration) <= new_close_time)
+                if (markup.days[day].workday)
                 {
-                    ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
+                    const open_hour = markup.days[day].open.split(':')[0];
+                    const open_min = markup.days[day].open.split(':')[1];
 
-                    if (board.auto_open.day == "every")
+                    const close_hour = markup.days[day].close.split(':')[0];
+                    const close_min = markup.days[day].close.split(':')[1];
+
+                    const duration = markup.duration
+
+                    const current_day = new Date().getDay()
+                    num_of_days = 8 - current_day + 7 * i + week_index[day]
+
+                    const open_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
+                    open_time.setMinutes(open_min)
+                    open_time.setHours(open_hour )
+
+                    const timezoneOffset = open_time.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
+                    var new_open_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+                    var ticket_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+
+
+                    const close_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
+                    close_time.setHours(close_hour)
+                    close_time.setMinutes(close_min)
+
+                    const new_close_time = new Date(close_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+
+                    while(addMinutes(ticket_time, duration) <= new_close_time)
                     {
-                        if (count_tickets < board.auto_open.ahead)
-                        {
-                            ticket.enabled = true
-                            
-                            count_tickets++
-                        }
-                    }
-                    else if (board.auto_open.day != "none")
-                    {
-                        if (i < board.auto_open.ahead)
-                        {
-                            ticket.enabled = true
-                        }
-                    }
+                        ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
 
-                    ticket.save()
-                    board.tickets[i][day].push(ticket._id)
+                        if (board.auto_open.day == "every")
+                        {
+                            if (count_tickets < board.auto_open.ahead)
+                            {
+                                ticket.enabled = true
+                                
+                                count_tickets++
+                            }
+                        }
+                        else if (board.auto_open.day != "none")
+                        {
+                            if (i < board.auto_open.ahead)
+                            {
+                                ticket.enabled = true
+                            }
+                        }
 
-                    ticket_time = addMinutes(ticket_time, duration)
-                } 
+                        ticket.save()
+                        board.tickets[i][day].push(ticket._id)
+
+                        ticket_time = addMinutes(ticket_time, duration)
+                    } 
+                }
             }
         }
         board.save((error) => {
