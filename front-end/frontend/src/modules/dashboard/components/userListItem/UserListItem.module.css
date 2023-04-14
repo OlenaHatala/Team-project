@@ -1,0 +1,9 @@
+.user-list-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #b8b5b5;
+    background-color: white;
+  }

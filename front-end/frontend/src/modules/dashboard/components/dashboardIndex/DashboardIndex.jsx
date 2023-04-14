@@ -8,6 +8,12 @@ import {
   toggleShowConfigureBoardAction,
 } from "../../store";
 import ConfigureBoardModal from "../../../newBoard/ConfigureBoardModal/ConfigureBoardModal";
+import classes from './DashboardIndex.module.css';
+
+import AddIcon from '@mui/icons-material/Add';
+import SettingsIcon from '@mui/icons-material/Settings';
+
+import UserList from '../userList/index';
 
 const DashboardIndex = ({ id }) => {
   const dispatch = useDispatch();
@@ -38,16 +44,25 @@ const DashboardIndex = ({ id }) => {
   return (
     <>
       {boardContent}
-      <button
-        onClick={() => {
-          dispatch(toggleShowNewTicketAction(true));
-        }}
-      >
-        newTicket
-      </button>
-      <button onClick={openConfigureHandler}>Configure Board</button>
+      <div className={classes["general-block"]}>
+      <div className={classes["topbar-buttons"]}>
+      <div className={classes["topbar-left"]}>
+        <button className={classes["topbar-button"]}
+          onClick={() => {
+            dispatch(toggleShowNewTicketAction(true));
+          }}
+        >
+          <AddIcon/> New Ticket
+        </button>
+          </div>
+          <div className={classes["topbar-left"]}>
+            <button className={classes["topbar-button"]} onClick={openConfigureHandler}><SettingsIcon/> Configure Board</button>
+        </div>
+      </div>
+      <div className={classes["board-block"]}><BoardWeekIndex mode="owner" id={id} /></div>
+      </div>
+
       {dashboard?.showConfigureBoard ? <ConfigureBoardModal /> : null}
-      <BoardWeekIndex mode="owner" id={id} />
     </>
   );
 };

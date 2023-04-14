@@ -1,0 +1,18 @@
+.user-list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 20%;
+    border: 1px solid #ccc;
+    background-color: white;
+    padding: 1rem;
+    margin-right: 1rem;
+    box-sizing: border-box;
+  }
+  
+  @media (max-width: 768px) {
+    .user-list {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 1rem;
+    }
+  }
