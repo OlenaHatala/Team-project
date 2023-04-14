@@ -1,7 +1,7 @@
 import React from "react";
 
 import Card from "../modules/common/UI/Card";
-import { NewBoardIndex } from "../modules/newBoard";
+import { NewBoardIndex } from "../modules/newBoard/NewBoardImportFile";
 
 const NewBoard = () => {
   return (
