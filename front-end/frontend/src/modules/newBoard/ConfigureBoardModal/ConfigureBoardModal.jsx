@@ -18,6 +18,7 @@ const ConfigureBoardModal = ({ boardInfo }) => {
     try {
       boardData.id = boardInfo._id;
       const updatedBoardData = await update(boardData).unwrap();
+      window.location.reload();
       //todo: invalidate cached board data instaad of reloading
     } catch (err) {
       //todo: implement ui feedback
