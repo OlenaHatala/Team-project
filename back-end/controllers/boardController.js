@@ -541,7 +541,7 @@ const update = asyncHandler(async (req, res) => {
                 auto_open
             }
         )
-        if ((!(compareMarkup(markup, board.markup))) && (apply_new_markup === "true")) {
+        if ((!(compareMarkup(markup, board.markup))) && (apply_new_markup === true)) {
             
             
 
