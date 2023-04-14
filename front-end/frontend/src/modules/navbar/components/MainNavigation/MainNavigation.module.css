@@ -4,6 +4,7 @@
   padding: 2rem;
   display: flex;
   justify-content: space-between;
+  background-color: rgb(247, 244, 246);
 }
 
 .list {
@@ -19,4 +20,10 @@
 .list a:hover,
 .list a.active {
   color: var(--color-primary-800);
+}
+
+.logout {
+  background-color: transparent; 
+  font-size: 13px;
+  color:black;
 }

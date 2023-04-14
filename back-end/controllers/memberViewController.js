@@ -29,9 +29,8 @@ const getBoard = asyncHandler(async (req, res) => {
 
           for (j in day_tickets) {
             const found_ticket = await Ticket.findById(day_tickets[j]).exec();
-
             if (
-              found_ticket.enabled == true &&
+              found_ticket.enabled === true &&
               !found_ticket.user_id &&
               found_ticket.is_outdated === false
             ) {
