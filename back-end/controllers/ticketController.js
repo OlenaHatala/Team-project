@@ -489,7 +489,7 @@ const deleteTicket = async (req, res) => {
       ticket.user_id, {taken_tickets : tak_tickets}
       );
 
-}
+ }
 
   for (i = 0; i < 6; i++)
      {  
