@@ -3,7 +3,7 @@ import { RequireAuth, usePersistAuth } from "./modules/auth";
 
 import ErrorPage from "./pages/Error";
 import SuccessPage from "./pages/Success";
-import HomePage from "./pages/Home";
+import { HomeIndexPage } from "./modules/home/index";
 import RootLayout from "./pages/Root";
 
 import EditAccountPage from "./pages/Account";
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     id: "root",
     children: [
-      { index: true, element: <HomePage /> },
+      { index: true, element: <HomeIndexPage /> },
       { path: "success", element: <SuccessPage /> },
       {
         element: <RequireAuth />,
