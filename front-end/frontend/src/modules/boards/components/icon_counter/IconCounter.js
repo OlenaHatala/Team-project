@@ -1,6 +1,6 @@
 import React from "react";
 import { Icon } from "react-icons-kit";
-import classes from './IconCounter.module.css';
+import classes from "./IconCounter.module.css";
 
 const IconCounter = ({ icon, counter }) => {
   return (

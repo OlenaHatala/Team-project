@@ -17,19 +17,26 @@ export const BoardList = () => {
 
   let boards = [];
   let content;
-  const noBoardsParagraph = showBoardType === "member"
-  ?  <p className={classes["noboards-p"]}>You haven't joined any board yet. You can join board with the link given by the board owner.</p>
-  : <p className={classes["noboards-p"]}>You haven't created any board yet.</p>;
-  
+  const noBoardsParagraph =
+    showBoardType === "member" ? (
+      <p className={classes["noboards-p"]}>
+        You haven't joined any board yet. You can join board with the link given
+        by the board owner.
+      </p>
+    ) : (
+      <p className={classes["noboards-p"]}>
+        You haven't created any board yet.
+      </p>
+    );
+
   if (isLoading) {
     content = <p>"Loading..."</p>;
   } else if (isSuccess) {
-
     boards = allBoards.filter((board) => {
       return board.userStatus === showBoardType;
     });
 
-    boards.sort((a, b)=>{
+    boards.sort((a, b) => {
       return Object.keys(b.counters).length - Object.keys(a.counters).length;
     });
 
@@ -64,26 +71,32 @@ export const BoardList = () => {
           </button>
         </nav>
         <ul>
+          {showBoardType === "owner" &&
+            boards.map((board) => {
+              return (
+                <div key={board.id} className={classes["table-list-item"]}>
+                  <TableInfo
+                    boardName={board.label}
+                    servName={board.servname}
+                    address={board.address}
+                    counters={board.counters}
+                  />
+                </div>
+              );
+            })}
 
-{showBoardType === "owner" && boards.map((board) => {
-            return (<div key={board.id} className={classes["table-list-item"]}>
-            <TableInfo boardName={board.label} 
-            servName={board.servname} 
-            address={board.address} 
-            counters={board.counters}/>
-           </div>);
-          })}
-
-{showBoardType === "member" && boards.map((board) => {
-            return (  <div key={board.id} className={classes["table-list-item"]}>
-            <MemberTable boardName={board.label}/>
-           </div>);
-          })}
-          
+          {showBoardType === "member" &&
+            boards.map((board) => {
+              return (
+                <div key={board.id} className={classes["table-list-item"]}>
+                  <MemberTable boardName={board.label} />
+                </div>
+              );
+            })}
         </ul>
 
-         {boards?.length === 0 ? noBoardsParagraph : null} 
-        {showBoardType === "owner" && <AddTable/>}
+        {boards?.length === 0 ? noBoardsParagraph : null}
+        {showBoardType === "owner" && <AddTable />}
       </>
     );
   } else if (isError) {

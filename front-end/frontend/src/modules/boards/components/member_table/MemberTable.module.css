@@ -1,90 +1,87 @@
 .table {
-    width: 100%;
-    height: 100%;
-    background-color: #f3f3f3;
-    border-radius: 12px;
-  }
-  
-  .table-details {
-    height: 100%;
-    width: 100%;
-    display: flex;
-  }
-  
-  .table-title {
-    font-size: 14px;
-    display: flex;
-    color: black;
-    flex-direction: column;
-    padding-top: 25px;
-    text-transform: uppercase;
-    word-wrap: break-word;
-    width: 75%;
-  }
-  
-  .table-info-block {
-    display: flex;
-    padding-top: 16px;
-    gap: 15px;
-  }
-  
-  .table-info {
-    background-color: #feaec9;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    width: 25%;
-    height: 100%;
-    padding-left: 5px;
-  }
-  
-  .count-window {
-    height: 80%;
-    width: 50%;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-    background-color: #ffffff;
-    margin-right: 3px;
-  }
-  
+  width: 100%;
+  height: 100%;
+  background-color: #f3f3f3;
+  border-radius: 12px;
+}
+
+.table-details {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+.table-title {
+  font-size: 14px;
+  display: flex;
+  color: black;
+  flex-direction: column;
+  padding-top: 25px;
+  text-transform: uppercase;
+  word-wrap: break-word;
+  width: 75%;
+}
+
+.table-info-block {
+  display: flex;
+  padding-top: 16px;
+  gap: 15px;
+}
+
+.table-info {
+  background-color: #feaec9;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  width: 25%;
+  height: 100%;
+  padding-left: 5px;
+}
+
+.count-window {
+  height: 80%;
+  width: 50%;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  background-color: #ffffff;
+  margin-right: 3px;
+}
+
+.calendar-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+}
+
+.circleRight-icon {
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 768px) {
   .calendar-icon {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 25%;
+    width: 10%;
   }
-  
-  .circleRight-icon {
-    display: flex;
-    align-items: center;
-    padding-right: 10px;
-    cursor: pointer;
+
+  .table-title {
+    width: 85%;
   }
-  
-  
-  
-  @media only screen and (min-width: 768px) {
-      .calendar-icon {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 10%;
-        }
-  
-        .table-title {
-          width: 85%;
-        }
-  
-        .table-info {
-          width: 6%;
-        }
-  
-        .count-window {
-          height: 80%;
-          width: 50%;
-        }
-  
-    }
+
+  .table-info {
+    width: 6%;
+  }
+
+  .count-window {
+    height: 80%;
+    width: 50%;
+  }
+}
