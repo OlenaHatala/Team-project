@@ -307,6 +307,26 @@ const takeTicket = asyncHandler(async (req, res) => {
         message:"Ticket is outdated",
       })
     }
+    let num_of_booked = 0
+    const taken_tickets = user.taken_tickets
+    for(tick in taken_tickets)
+    {
+      console.log(taken_tickets)
+      const found_ticket = await Ticket.findById(taken_tickets[tick]) 
+      console.log(num_of_booked)
+      console.log(found_ticket)
+      if(found_ticket.table_id.toString() == board._id.toString())
+      {
+        console.log("inside if")
+        num_of_booked++;
+      }
+    } 
+    if(num_of_booked >= board.book_num){
+      return res.status(200).json({
+        message:"You cannot take another ticket. The owner of the board has set a limit on the number of taken tickets."
+      })
+    }
+
     if(board.members.includes(user_id))
     {
       await Ticket.findByIdAndUpdate(
