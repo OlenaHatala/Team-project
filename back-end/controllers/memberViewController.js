@@ -1,5 +1,6 @@
 const Board = require("../models/Board");
 const Ticket = require("../models/Ticket");
+const { ObjectId } = require('mongodb');
 
 const asyncHandler = require("express-async-handler");
 
@@ -28,9 +29,8 @@ const getBoard = asyncHandler(async (req, res) => {
 
           for (j in day_tickets) {
             const found_ticket = await Ticket.findById(day_tickets[j]).exec();
-
             if (
-              found_ticket.enabled == true &&
+              found_ticket.enabled === true &&
               !found_ticket.user_id &&
               found_ticket.is_outdated === false
             ) {
@@ -67,8 +67,10 @@ const joinBoard = asyncHandler(async (req, res) => {
     const board = await Board.findById(board_id);
     const { label, description } = board;
 
+    const user_obj_id = new ObjectId(user_id)
+
     if (!board.requests.includes(user_id)) {
-      board.requests.push(user_id);
+      board.requests.push(user_obj_id);
       board.save();
     }
 

@@ -1,0 +1,10 @@
+.super-div{
+    padding: 1rem 1rem;
+    background-color: #1c1333;
+    border-radius: 14px;
+    width: 900px;
+    position: relative;
+    display: inline-block; 
+    left: 50%;
+    transform: translateX(-50%);
+}

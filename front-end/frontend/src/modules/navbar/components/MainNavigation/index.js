@@ -83,7 +83,7 @@ export function MainNavigation() {
           )}
           {userEmail && (
             <li>
-              <button onClick={logout}>
+              <button className={classes.logout} onClick={logout}>
                 {loggingOut ? "logging out..." : "Log out"}
               </button>
             </li>
