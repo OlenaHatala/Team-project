@@ -311,13 +311,9 @@ const takeTicket = asyncHandler(async (req, res) => {
     const taken_tickets = user.taken_tickets
     for(tick in taken_tickets)
     {
-      console.log(taken_tickets)
       const found_ticket = await Ticket.findById(taken_tickets[tick]) 
-      console.log(num_of_booked)
-      console.log(found_ticket)
       if(found_ticket.table_id.toString() == board._id.toString())
       {
-        console.log("inside if")
         num_of_booked++;
       }
     } 
@@ -456,6 +452,9 @@ const ticketConfirmation = asyncHandler(async (req, res) => {
 
 const deleteTicket = async (req, res) => {
   const { id } = req.body;
+  const {created_tables} = req;
+
+ 
 
   if (!id) {
       return res.status(400).json({ message: 'Ticket ID required' })
@@ -467,11 +466,30 @@ const deleteTicket = async (req, res) => {
       return res.status(400).json({ message: 'Ticket not found' })
   }
 
+  if(!created_tables.includes(ticket.table_id.toString())){
+     return res.status(403).json({ message: "Forbiden" })
+  }
+
   const board = await Board.findById(ticket.table_id).exec()
 
   if (!board) {
     return res.status(400).json({ message: 'Board not found' })
   }
+
+  if(ticket.user_id){
+
+    const user = await User.findById(ticket.user_id).exec();
+
+    let tak_tickets = user.taken_tickets.filter(requested_id => {
+        return requested_id.toString() !== ticket._id.toString() 
+    })
+
+    
+    await User.findByIdAndUpdate(
+      ticket.user_id, {taken_tickets : tak_tickets}
+      );
+
+}
 
   for (i = 0; i < 6; i++)
      {  
