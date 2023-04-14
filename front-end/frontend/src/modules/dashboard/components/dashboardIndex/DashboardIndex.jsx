@@ -46,7 +46,7 @@ const DashboardIndex = ({ id }) => {
         newTicket
       </button>
       <button onClick={openConfigureHandler}>Configure Board</button>
-      {dashboard?.showConfigureBoard ? <ConfigureBoardModal /> : null}
+      {dashboard?.showConfigureBoard ? <ConfigureBoardModal boardInfo={board} /> : null}
       <BoardWeekIndex mode="owner" id={id} />
     </>
   );

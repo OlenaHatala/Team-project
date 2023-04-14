@@ -4,6 +4,7 @@ const NewBoardContext = createContext({
   canSubmit: false,
   step: "details",
   duration: 60,
+  apply_new_markup: false,
   details: {
     boardname: "",
     desc: "",
@@ -117,6 +118,7 @@ export const NewBoardProvider = ({ children }) => {
   });
 
   const [duration, setDuration] = useState(60);
+  const [apply_new_markup, setApplyNewMarkup] = useState(false);
   // const [schedule, setSchedule] = useState({
   //   duration: 60,
   //   mon: {
@@ -204,6 +206,7 @@ export const NewBoardProvider = ({ children }) => {
         settings,
         canSubmit,
         duration,
+        apply_new_markup,
         mon,
         tue,
         wed,
@@ -224,6 +227,7 @@ export const NewBoardProvider = ({ children }) => {
         setDetails,
         setSettings,
         setDuration,
+        setApplyNewMarkup,
       }}
     >
       {children}

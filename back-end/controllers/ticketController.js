@@ -311,13 +311,9 @@ const takeTicket = asyncHandler(async (req, res) => {
     const taken_tickets = user.taken_tickets
     for(tick in taken_tickets)
     {
-      console.log(taken_tickets)
       const found_ticket = await Ticket.findById(taken_tickets[tick]) 
-      console.log(num_of_booked)
-      console.log(found_ticket)
       if(found_ticket.table_id.toString() == board._id.toString())
       {
-        console.log("inside if")
         num_of_booked++;
       }
     } 

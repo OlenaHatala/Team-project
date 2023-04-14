@@ -516,7 +516,7 @@ const update = asyncHandler(async (req, res) => {
     const {id, label, description, service_name, req_confirm, book_num, markup, address, auto_open, apply_new_markup} = req.body
     const { created_tables } = req;
 
-    const required_fields_present = (id && label && service_name && req_confirm && book_num && markup && auto_open && apply_new_markup)
+    const required_fields_present = (id && label && service_name && book_num && markup && auto_open)
     if ( !required_fields_present){
         return res.status(400).json({
             message: "Not all required fields are present",
@@ -541,7 +541,7 @@ const update = asyncHandler(async (req, res) => {
                 auto_open
             }
         )
-        if ((!(compareMarkup(markup, board.markup))) && (apply_new_markup === "true")) {
+        if ((!(compareMarkup(markup, board.markup))) && (apply_new_markup === true)) {
             
             
 
