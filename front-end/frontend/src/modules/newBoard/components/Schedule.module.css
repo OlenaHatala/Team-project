@@ -14,11 +14,15 @@ body {
   padding-top: 10px;
 }
 
-fieldset legend {
-  padding-top: 5%;
-  padding-bottom: 5%;
-  font-size: 25px;
+.form-fieldset legend {
   text-align: center;
+  padding: 10px;
+  font-size: 25px;
+  margin-bottom: 50px;
+}
+
+.fieldset-header {
+  margin-bottom: -3rem;
 }
 
 .fieldset-nav {
@@ -95,7 +99,7 @@ button:hover {
   gap: 10px;
   padding-bottom: 5%;
   font-size: 18px;
-  padding-top: 30px;
+  padding-top: 40px;
 }
 
 .number-input label {
@@ -136,4 +140,31 @@ button:hover {
 input[type="time"]::-webkit-calendar-picker-indicator {
   filter: invert(99%) sepia(0%) saturate(23%) hue-rotate(75deg) brightness(113%)
     contrast(91%);
+}
+
+.inputcheck {
+  padding: 0px 20px 0px 0px;
+  margin: 0px;
+}
+
+.inputcheck input {
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  margin-top: 4px;
+}
+
+.inline-input-label {
+  display: flex;
+  float: right;
+}
+
+.inline-input-label label {
+  margin-right: 15px;
+  width: 70%;
+}
+
+.inline-input-label-right label {
+  margin-right: 15px;
+  width: 90%;
 }

@@ -143,6 +143,10 @@ const BoardSchema = new Mongoose.Schema({
         requests: {
             type: Array,
             default: []
+        },
+        unconfirmed_tickets: {
+            type: Array,
+            default: []
         }
     },
     {versionKey: false}
