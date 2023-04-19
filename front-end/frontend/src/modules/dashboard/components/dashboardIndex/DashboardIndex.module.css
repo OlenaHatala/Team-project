@@ -1,5 +1,20 @@
+.page-content {
+  display: flex;
+  height: 110vh;
+}
+
 .general-block {
   float: right;
+}
+
+.users-container {
+  width: 15%;
+  height: 100%;
+  min-width: 250px;
+}
+
+.week-container {
+  height: 85%;
 }
 
 .topbar-buttons {
@@ -38,6 +53,44 @@
 
 .topbar-button:hover {
   background-color: rgb(241, 241, 241);
+}
+
+.button {
+  font-size: 18px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: white;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  border-radius: 7px;
+  border: none;
+  overflow: hidden;
+  color: black;
+  font-weight: bold;
+}
+
+.noboards-p {
+  font-size: 22px;
+}
+
+.list-toggle-container {
+  display: flex;
+  gap: 10px;
+}
+
+.button:hover {
+  background-color: #21478109;
+  cursor: pointer;
+}
+
+.noactive-button {
+  background-color: #cccccc;
+  border: 1px solid #afafaf;
+  color: rgb(122, 122, 122);
+}
+
+.noactive-button:hover {
+  background-color: #d4d4d4;
 }
 
 @media only screen and (max-width: 768px) {

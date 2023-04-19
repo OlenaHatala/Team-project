@@ -10,7 +10,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #ffff;
+  background-color: #e9e9e9;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -31,12 +31,12 @@
   --color-primary-100: #f7e1fc;
   --color-primary-200: #edcdfc;
   --color-primary-300: #d8affa;
-  --color-primary-400: rgb(214, 151, 251);
-  --color-primary-500: #d57cff;
-  --color-primary-600: #f962ec;
-  --color-primary-700: #ad4dfb;
-  --color-primary-800: #b133fa;
-  --color-primary-900: #b11bf6;
+  --color-primary-400: rgb(151, 169, 251);
+  --color-primary-500: #7c7eff;
+  --color-primary-600: #6297f9;
+  --color-primary-700: #4d5efb;
+  --color-primary-800: #3368fa;
+  --color-primary-900: #1b2af6;
 }
 
 body {

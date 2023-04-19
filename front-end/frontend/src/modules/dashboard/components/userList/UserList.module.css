@@ -1,13 +1,20 @@
+.user-div {
+  height: 90%;
+  overflow-y: scroll;
+}
+
 .user-list {
     display: flex;
     flex-wrap: wrap;
-    width: 20%;
-    border: 1px solid #ccc;
-    background-color: white;
+    width: 100%;
     padding: 1rem;
     margin-right: 1rem;
     box-sizing: border-box;
   }
+
+.nousers-p{
+  color:black;
+}
   
   @media (max-width: 768px) {
     .user-list {

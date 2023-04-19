@@ -3,27 +3,55 @@ import {
   ListItem,
   ListItemAvatar,
   Avatar,
-  ListItemText
+  ListItemText,
+  Typography,
 } from "@material-ui/core";
 import randomColor from "randomcolor";
 import classes from "./UserListItem.module.css";
 import Buttons from "../buttons/index";
 
-const UserListItem = (props) => {
+const UserListItem = ({
+  id,
+  name,
+  surname,
+  mobile_number,
+  acceptClick,
+  denyClick,
+  confirmed,
+}) => {
   return (
-    <ListItem key={props.id} className={classes["user-list-item"]}>
+    <ListItem key={id} className={classes["user-list-item"]}>
       <ListItemAvatar>
         <Avatar
-          className={classes["user-list-avatar"]} style={{backgroundColor: randomColor({seed: props.name + props.surname,}),}}> 
-          {props.name[0]}
-          {props.lastName[0]}
+          className={classes["user-list-avatar"]}
+          style={{ backgroundColor: randomColor({ seed: name + surname }) }}
+        >
+          {name[0]}
+          {surname[0]}
         </Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary={props.name + " " + props.surname}
-        secondary={props.mobile_number}
+        primary={
+          <Typography className={classes["body-text"]}>
+            {name + " " + surname}
+          </Typography>
+        }
+        secondary={
+          <Typography className={classes["body-text"]}>
+            {mobile_number}
+          </Typography>
+        }
       />
-      {!props.confirmed && <Buttons acceptClick={props.acceptClick} denyClick={props.denyClick}/>}
+      {!confirmed && (
+        <Buttons
+          acceptClick={() => {
+            acceptClick(id);
+          }}
+          denyClick={() => {
+            denyClick(id);
+          }}
+        />
+      )}
     </ListItem>
   );
 };

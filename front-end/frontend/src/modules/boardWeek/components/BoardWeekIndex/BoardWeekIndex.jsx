@@ -26,10 +26,10 @@ export const BoardWeekIndex = ({ mode, id }) => {
     content = <p>Loading week</p>;
   }
   return (
-    <div className="testweek">
+    <>
       {content}
       {showNewTicket && <NewTicketModalForm />}
       {showEditTicket && <EditTicketModalForm />}
-    </div>
+    </>
   );
 };
