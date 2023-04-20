@@ -1,0 +1,91 @@
+.table {
+  width: 100%;
+  height: 100%;
+  background-color: #f3f3f3;
+  border-radius: 12px;
+}
+
+.table-details {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+.table-title {
+  font-size: 14px;
+  display: flex;
+  color: black;
+  flex-direction: column;
+  padding-top: 21px;
+  text-transform: uppercase;
+  word-wrap: break-word;
+  width: 75%;
+}
+
+.table-info-block {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  width: 60%;
+  padding-right: 5px;
+}
+
+.board-name-block {
+  display: flex;
+  font-size: 13px;
+  flex-direction: row;
+  width: 100%;
+}
+
+.board-name-info {
+  width: 55%;
+}
+
+.service-info {
+  font-size: 12px;
+  padding-top: 4px;
+}
+
+.address-info {
+  font-size: 12px;
+  padding-top: 4px;
+}
+
+.calendar-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+  color: #1c1333;
+}
+
+.circleRight-icon {
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+  cursor: pointer;
+  color: #717171;
+}
+
+@media only screen and (min-width: 768px) {
+  .table-info-block {
+    justify-content: left;
+    gap: 15px;
+    padding-left: 20px;
+  }
+
+  .board-name-info {
+    width: auto;
+  }
+
+  .calendar-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10%;
+  }
+
+  .table-title {
+    width: 85%;
+  }
+}
