@@ -6,7 +6,7 @@ import { NewBoardIndex } from "../modules/newBoard/NewBoardImportFile";
 const NewBoard = () => {
   return (
     <div className="new-board-page">
-      <Card style={{"background-color":"#e3e3e3"}}> 
+      <Card> 
         <NewBoardIndex />
       </Card>
     </div>

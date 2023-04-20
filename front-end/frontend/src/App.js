@@ -4,7 +4,7 @@ import { RequireAuth, usePersistAuth } from "./modules/auth";
 import ErrorPage from "./pages/Error";
 import SuccessPage from "./pages/Success";
 import { HomeIndexPage } from "./modules/home/index";
-import RootLayout from "./pages/Root";
+import { MainLayout } from "./modules/common";
 
 import EditAccountPage from "./pages/Account";
 import NewBoard from "./pages/NewBoard";
@@ -17,20 +17,20 @@ import BoardsPage from "./pages/Boards";
 
 const router = createBrowserRouter([
   {
-    path: "register",
-    element: <Register />,
-  },
-  {
-    path: "login",
-    element: <Login />,
-  },
-  {
     path: "/",
-    element: <RootLayout />,
+    element: <MainLayout />,
     errorElement: <ErrorPage />,
     id: "root",
     children: [
       { index: true, element: <HomeIndexPage /> },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
       { path: "success", element: <SuccessPage /> },
       {
         element: <RequireAuth />,

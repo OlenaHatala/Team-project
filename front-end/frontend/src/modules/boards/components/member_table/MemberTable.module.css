@@ -16,6 +16,7 @@
   display: flex;
   color: black;
   flex-direction: column;
+
   padding-top: 25px;
   text-transform: uppercase;
   word-wrap: break-word;

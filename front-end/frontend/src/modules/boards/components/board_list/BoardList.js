@@ -41,7 +41,7 @@ export const BoardList = () => {
     });
 
     content = (
-      <>
+      <div className={classes.inner} >
         <nav className={classes.listnav}>
           <button
             className={
@@ -94,10 +94,9 @@ export const BoardList = () => {
               );
             })}
         </ul>
-
         {boards?.length === 0 ? noBoardsParagraph : null}
         {showBoardType === "owner" && <AddTable />}
-      </>
+      </div>
     );
   } else if (isError) {
     content = <p>{JSON.stringify(error)}</p>;

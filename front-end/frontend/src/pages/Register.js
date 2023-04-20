@@ -5,7 +5,7 @@ import { RegisterForm } from "../modules/register";
 function Register() {
   return (
     <>
-      <AuthHeader />
+      {/*<AuthHeader />*/}
       <div className="auth-page">
         <Card>
           <RegisterForm />
