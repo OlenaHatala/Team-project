@@ -15,7 +15,7 @@ select {
   border: 0;
   outline: 0;
   background: transparent;
-  border-bottom: 2px solid #8c5bff;
+  border-bottom: 2px solid #e4edea;
   padding: 15px;
   color: #a0a0a0;
   font-size: 18px;
@@ -39,7 +39,7 @@ fieldset {
 }
 
 .form-fieldset input:focus {
-  border-color: #f3f3f3;
+  border-color: #e2c18b;
   color: #f3f3f3;
   caret-color: #f3f3f3;
 }
@@ -47,14 +47,14 @@ fieldset {
 .form-fieldset label {
   white-space: pre-wrap;
   font-size: 14px;
-  color: #c98cff;
+  color: #d1a504;
   text-decoration: none solid rgb(173, 122, 218);
   letter-spacing: 2px;
   line-break: auto;
 }
 
 .form-fieldset label span {
-  color: #72518f;
+  color: #8e8259;
   font-size: 12px;
 }
 
@@ -97,8 +97,8 @@ fieldset {
 .instructions {
   font-size: 0.75rem;
   border-radius: 0.5rem;
-  background: rgba(255, 0, 0, 0.041);
-  color: rgb(255, 0, 0);
+  background: rgba(191, 198, 191, 0.479);
+  color: rgb(117, 18, 18);
   padding: 0.25rem;
   margin: 0;
   position: relative;

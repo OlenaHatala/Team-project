@@ -63,14 +63,14 @@ body {
 }
 
 .day input {
-  border-bottom: 1px dotted #8c5bff;
+  border-bottom: 1px dotted #8da46c;
   padding: 9px 0;
   color: #f3f3f3;
 }
 
 .week button,
 button {
-  background-color: #a977d6;
+  background-color: #d1a504;
   width: 100%;
   height: 40px;
   text-align: center;
@@ -82,7 +82,7 @@ button {
 }
 
 button:hover {
-  background-color: #bb93dd;
+  background-color: #bfa545;
   cursor: pointer;
 }
 
@@ -112,7 +112,7 @@ button:hover {
   outline: 0;
   background: transparent;
   text-align: center;
-  border-bottom: 2px solid #8c5bff;
+  border-bottom: 2px solid #8da46c;
   color: #f3f3f3;
   right: 30px;
   font-size: 16px;
