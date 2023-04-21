@@ -12,7 +12,6 @@ import ConfigureBoardModal from "../../../newBoard/ConfigureBoardModal/Configure
 const DashboardIndex = ({ id }) => {
   const dispatch = useDispatch();
   const dashboard = useSelector(selectDashboardAll);
-
   const {
     data: board,
     isLoading: boardIsLoading,
