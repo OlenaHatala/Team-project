@@ -15,6 +15,30 @@ const week_day = {
   6: 'sunday',
 }
 
+
+async function check_if_outdated(id){
+  try {
+    const ticket = await Ticket.findById(id).exec()
+    if(!ticket){
+      console.log("Ticket not found");
+    }
+
+    let currentDate = new Date(); // today
+    const timezoneOffset = currentDate.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
+    var new_current_time = new Date(currentDate.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+    let diffTime = ticket.datetime.getTime() - new_current_time.getTime();
+    if(diffTime < 0)
+    {
+      await Ticket.findByIdAndUpdate(
+        ticket._id, {is_outdated: true}
+      );
+    }
+  }
+  catch (error) {
+      console.log("error")
+  }
+}
+
 function findFreeSpace(recordedDates, targetDate, targetDateDuration) {
   const targetDataDurationInMs = targetDateDuration * 60000;
   const targetDateStart = targetDate.getTime();
@@ -534,5 +558,6 @@ module.exports = {
     update,
     takeTicket,
     ticketConfirmation,
-    deleteTicket
+    deleteTicket,
+    check_if_outdated
 }
