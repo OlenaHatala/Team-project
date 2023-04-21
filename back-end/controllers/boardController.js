@@ -529,7 +529,8 @@ const update = asyncHandler(async (req, res) => {
     const {id, label, description, service_name, req_confirm, book_num, markup, address, auto_open, apply_new_markup} = req.body
     const { created_tables } = req;
 
-    const required_fields_present = (id && label && service_name && book_num && markup && auto_open)
+    const required_fields_present = (id && label && service_name && book_num && markup && auto_open && req.body.hasOwnProperty('apply_new_markup'))
+
     if ( !required_fields_present){
         return res.status(400).json({
             message: "Not all required fields are present",
@@ -554,8 +555,7 @@ const update = asyncHandler(async (req, res) => {
                 auto_open
             }
         )
-        if ((!(compareMarkup(markup, board.markup))) && (apply_new_markup === "true")) {
-                        
+        if ((!(compareMarkup(markup, board.markup))) && (apply_new_markup === true)) {
             for (i = 0; i < 6; i++) {
 
                 const week_tickets = {monday: board.tickets[i].monday, tuesday: board.tickets[i].tuesday,
@@ -640,11 +640,28 @@ const update = asyncHandler(async (req, res) => {
     
                             while(addMinutes(ticket_time, duration) <= new_close_time)
                             {
-                                
-                                const ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
-                                
+                                ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
+
+                                if (board.auto_open.day == "every")
+                                {
+                                    if (count_tickets < board.auto_open.ahead)
+                                    {
+                                        ticket.enabled = true
+                                        
+                                        count_tickets++
+                                    }
+                                }
+                                else if (board.auto_open.day != "none")
+                                {
+                                    if (i < board.auto_open.ahead)
+                                    {
+                                        ticket.enabled = true
+                                    }
+                                }
+        
+                                ticket.save()
                                 board.tickets[i][day].push(ticket._id)
-    
+        
                                 ticket_time = addMinutes(ticket_time, duration)
                             } 
                         }
