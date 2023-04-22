@@ -1,6 +1,6 @@
 import React from 'react';
-import { CheckCircleOutline, HighlightOff } from "@material-ui/icons";
-import { Button } from '@material-ui/core';
+import { CheckCircleOutline, HighlightOff } from "@mui/icons-material";
+import { Button } from '@mui/material';
 import classes from './Buttons.module.css';
 
 const Buttons = (props) => {

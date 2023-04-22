@@ -1,53 +1,74 @@
 .board-header {
-    color: black;
-    background-color: rgba(232, 255, 127, 0.226);
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  color: black;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-align: left;
 }
 
 .titles {
-    background-color: rgba(255, 127, 127, 0.226);
+  text-align: center;
 }
 
-.label {
-    color: black;
-    line-height: 28px;
-    font-size: 26px;
+.titles-padding {
+    text-align: center;
+    padding: 15px 0;
 }
 
-.servname {
-    line-height: 20px;
-    font-size: 18px;
+.board-header h1 {
+  margin: 0;
+  color: black;
+  line-height: 26px;
+  font-size: 24px;
 }
 
-.description {
-    line-height: 18px;
-    font-size: 12px;
+.board-header h3 {
+  margin: 0;
+  font-weight: normal;
+
+  color: rgb(119, 119, 119);
+  line-height: 17px;
+  font-size: 15px;
 }
 
-.header-right-block{
-    background-color: rgba(146, 127, 255, 0.226);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+.board-header p {
+  margin: 5px;
+  line-height: 16px;
+  font-size: 14px;
 }
 
-.address {
-    line-height: 18px;
-    font-size: 12px;
+.header-right-block {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 100px;
+}
+
+.address-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .link-btn-container {
-    width: 200px;
-    background-color: rgba(127, 255, 212, 0.226);
+  width: 200px;
+  display: flex;
+  align-items: center;
 }
 
 .link-btn {
-    width: 100%;
-    padding: 0 18px;
-    line-height: 23px;
-    font-size: 18px;
-    background-color: gray;
-    color: black;
+  width: 100%;
+  padding: 0 18px;
+  line-height: 23px;
+  font-size: 18px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  color: black;
+}
+
+.copylink-text {
+  line-height: 18px;
+  font-size: 13px;
+  text-transform: none;
+  margin-left: 5px;
 }

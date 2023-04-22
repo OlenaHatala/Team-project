@@ -5,7 +5,7 @@ import {
   Avatar,
   ListItemText,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import randomColor from "randomcolor";
 import classes from "./UserListItem.module.css";
 import Buttons from "../buttons/index";

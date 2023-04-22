@@ -17,6 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SettingsIcon from "@mui/icons-material/Settings";
 
 import UserList from "../userList/index";
+import { boardLinkCreator } from "../../../common/constants";
 
 const users = [
   {
@@ -137,11 +138,15 @@ const DashboardIndex = ({ id }) => {
 
   return (
     <>
-            <Card
-          color="white"
-          style={{ padding: "20px", width: "100%"}}>
-<BoardHeader />
-        </Card>
+      <Card color="white" style={{ padding: "5px 30px" }}>
+        <BoardHeader
+          label={board.label}
+          servname={board.service_name}
+          description={board.description}
+          address={board.address}
+          link={boardLinkCreator(board._id)}
+        />
+      </Card>
       {boardContent}
       <div className={classes["page-content"]}>
         <Card
@@ -188,8 +193,8 @@ const DashboardIndex = ({ id }) => {
             denyClick={(id) => {
               console.log(id + "deny");
             }}
-          users={userlistType === "users" ? users : requests}
-          userlistType={userlistType}
+            users={userlistType === "users" ? users : requests}
+            userlistType={userlistType}
           />
         </Card>
         <Card

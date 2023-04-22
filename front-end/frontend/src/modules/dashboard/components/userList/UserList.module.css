@@ -1,6 +1,7 @@
 .user-div {
   height: 90%;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .user-list {
