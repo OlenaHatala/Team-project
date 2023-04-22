@@ -4,12 +4,14 @@ const router = express.Router()
 
 const {create, read, deleteBoard, readOneWeek, update, addMember, createWeek} = require('../controllers/boardController')
 const {getBoard, joinBoard} = require('../controllers/memberViewController')
+const { boardlist } = require('../controllers/boardListController');
 
 const verifyJWT = require('../middleware/verifyJWT')
 const { getOwnerBoard } = require('../controllers/ownerViewController')
 
 router.use(verifyJWT)
 
+router.route("/boardlist").get(boardlist);
 router.route("/create").post(create);
 router.route("/createWeek").post(createWeek);
 router.route("/read").get(read); 

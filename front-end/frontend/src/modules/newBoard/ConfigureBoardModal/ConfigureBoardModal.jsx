@@ -16,9 +16,10 @@ const ConfigureBoardModal = ({ boardInfo }) => {
 
   const submitHandler = async (boardData) => {
     try {
+      boardData.id = boardInfo._id;
       const updatedBoardData = await update(boardData).unwrap();
-      //todo: invalidate cached board data instaad of reloading
       window.location.reload();
+      //todo: invalidate cached board data instaad of reloading
     } catch (err) {
       //todo: implement ui feedback
       const errMessage = err?.message || "An error ocured";
