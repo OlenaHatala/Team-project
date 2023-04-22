@@ -11,7 +11,7 @@
 
 .button {
   font-size: 18px;
-  background-color: #e4edea;
+  background-color: #d1a504;
   width: 100%;
   height: 40px;
   text-align: center;
@@ -27,7 +27,7 @@
 }
 
 .button:hover {
-  background-color: #e4edea;
+  background-color: #bfa545;
   cursor: pointer;
 }
 

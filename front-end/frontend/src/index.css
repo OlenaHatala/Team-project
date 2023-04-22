@@ -39,24 +39,6 @@
   --color-primary-900: #b11bf6;
 }
 
-/* body {
-  margin: 0;
-  position: relative;
-}
-
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url("background.png") no-repeat center center fixed;
-  background-size: cover;
-  opacity: 0.5;
-  mix-blend-mode: multiply;
-} */
-
 body {
   margin: 0;
   position: relative;
@@ -71,22 +53,6 @@ body {
   background-blend-mode: multiply;
 }
 
-/* .body-bg {
-  background-color: #3be9af;
-  background: url("opacity_background.png") no-repeat center center fixed;
-  background-size: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  mix-blend-mode: multiply;
-} */
-/* 
-header {
-  z-index: 1;
-} */
-
 ul {
   list-style: none;
   margin: 0;
@@ -99,7 +65,7 @@ ul {
 }
 
 .account-details {
-  max-width: 70rem;
+  max-width: 60rem;
   margin: auto;
 }
 
@@ -109,18 +75,9 @@ ul {
 }
 
 .new-board-page {
-  max-width: 70rem;
+  max-width: 60rem;
   margin: auto;
 }
-
-/* .form-header {
-  z-index: 1;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ffffff;
-} */
 
 .testweek {
   background-color: #c2c2c2;
