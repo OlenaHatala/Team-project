@@ -5,6 +5,7 @@ const { ObjectId } = require('mongodb');
 const User = require('../models/User');
 const Mongoose = require("mongoose")
 
+
 const week_day = {
   0: 'monday',
   1: 'tuesday',
@@ -32,10 +33,13 @@ async function check_if_outdated(id){
       await Ticket.findByIdAndUpdate(
         ticket._id, {is_outdated: true}
       );
+      ticket.is_outdated = true
     }
+    return ticket
   }
   catch (error) {
       console.log("error")
+      return null;
   }
 }
 
@@ -151,7 +155,7 @@ const create = asyncHandler(async (req, res) => {
 const read = asyncHandler(async (req, res) => {
   const { id } = req.body
   try {
-    const ticket = await Ticket.findById(id) 
+    const ticket = await check_if_outdated(id) 
     if(!ticket)
     {
       return res.status(400).json({
@@ -216,7 +220,7 @@ const update = async (req, res) => {
 
     for(i in day_tickets)
     {
-      const findId = await Ticket.findById(day_tickets[i]);
+      const findId = await check_if_outdated(day_tickets[i]);
       if(findId)
       {
         arrTickets.push(findId);
@@ -294,7 +298,7 @@ const takeTicket = asyncHandler(async (req, res) => {
   const {ticket_id} = req.body
 
   try {
-    const ticket = await Ticket.findById(ticket_id) 
+    const ticket = await check_if_outdated(ticket_id) 
     if(!ticket)
     { return res.status(200).json({
         message:"Ticket not found",
@@ -400,7 +404,7 @@ const ticketConfirmation = asyncHandler(async (req, res) => {
   }
 
   try {
-    const ticket = await Ticket.findById(ticket_id);
+    const ticket = await check_if_outdated(ticket_id);
     
     if(!ticket){
         return res.status(404).json({
