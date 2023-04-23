@@ -1,10 +1,17 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetWeekQuery } from "../../api";
-import { setModeAction, weekFetched } from "../../store/weekSlice";
+import {
+  setModeAction,
+  weekFetched,
+  setLoadingAction,
+} from "../../store/weekSlice";
 import WeekBody from "../WeekBody/WeekBody";
 import { selectModalsState } from "../../store/weekSlice";
 import { NewTicketModalForm } from "../NewTicketModalForm";
 import { EditTicketModalForm } from "../EditTicketModalForm";
+import { skeletonTickets } from "../../utils/skeletonTickets";
+import { Loader } from "../../../common/components";
 
 export const BoardWeekIndex = ({ mode, id }) => {
   const dispatch = useDispatch();
@@ -15,15 +22,19 @@ export const BoardWeekIndex = ({ mode, id }) => {
     isLoading,
     isSuccess,
   } = useGetWeekQuery({ boardId: id, weekIndex: 2 });
+  
+  let content = <WeekBody />;
 
+  useEffect(() => {
+    dispatch(setLoadingAction(true));
+    dispatch(weekFetched(skeletonTickets));
+    content = <WeekBody />;
+  }, []);
 
-  let content = <p>Loading week</p>;
   if (isSuccess) {
     dispatch(weekFetched(tickets));
+    dispatch(setLoadingAction(false));
     content = <WeekBody />;
-  }
-  if (isLoading) {
-    content = <p>Loading week</p>;
   }
   return (
     <>

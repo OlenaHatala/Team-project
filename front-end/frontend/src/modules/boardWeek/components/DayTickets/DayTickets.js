@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useMemo } from "react";
 import { v4 as uuid } from "uuid";
 import classes from "./DayTickets.module.css";
 
@@ -114,7 +114,6 @@ const DayTickets = ({ day }) => {
             ></div>
           );
         } else {
-          console.log(frame)
           frameContent = (
             <>
               <Ticket

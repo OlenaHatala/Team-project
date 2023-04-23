@@ -1,18 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { findTimeBorders } from "../utils/time";
 import { WeekDayByIndex } from "../utils/weekDay";
+import { skeletonTickets } from "../utils/skeletonTickets";
 
 const initialState = {
+  isLoading: true,
   mode: '',
-  tickets: {
-    monday: [],
-    tuesday: [],
-    wednesday: [],
-    tuesday: [],
-    friday: [],
-    saturday: [],
-    sunday: [],
-  },
+  tickets: skeletonTickets,
   timeBorders: {
     timePoints: {
       upper: "August 19, 1975 10:00:00",
@@ -138,10 +132,15 @@ export const weekSlice = createSlice({
     setModeAction(state, action) {
       state.mode = action.payload;
     },
+
+    setLoadingAction(state, action) {
+      state.isLoading = action.payload;
+    },
   },
 });
 
 export const selectWeek = (state) => state.week;
+export const selectIsLoading = (state) => state.week.isLoading;
 export const selectWeekMode = (state) => state.week.mode;
 export const selectModalsState = (state) => state.week.modals;
 export const selectTimeBorders = (state) => state.week.timeBorders;
@@ -154,6 +153,7 @@ export const {
   showEditTicketAction,
   hideEditTicketAction,
   setModeAction,
+  setLoadingAction,
 } = weekSlice.actions;
 
 export default weekSlice.reducer;

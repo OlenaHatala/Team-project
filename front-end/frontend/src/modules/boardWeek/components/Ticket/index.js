@@ -5,16 +5,22 @@ import { RequestedTicketInner } from "../RequestedTicketInner";
 import { TakenTicketInner } from "../TakenTicketInner";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
 import classes from "./Ticket.module.css";
+import { TicketSkeleton } from "./Skeleton";
 import { useDispatch, useSelector } from "react-redux";
-import { selectWeekMode, showEditTicketAction } from "../../store/weekSlice";
+import {
+  selectWeekMode,
+  selectIsLoading,
+  showEditTicketAction,
+} from "../../store/weekSlice";
 
 export const Ticket = (props) => {
   const mode = useSelector(selectWeekMode);
+  const isLoading = useSelector(selectIsLoading);
   const dispatch = useDispatch();
   const [hover, setHover] = useState(false);
 
@@ -90,43 +96,52 @@ export const Ticket = (props) => {
   }
 
   return (
-    <div
-      className={`${classes.ticket} ${statusClass}`}
-      style={{
-        height: `${props.height}%`,
-      }}
-      onMouseEnter={() => {
-        setHover(true);
-      }}
-      onMouseLeave={() => {
-        setHover(false);
-      }}
-    >
-      <div className={classes["action-section"]}>
-        {hover ? (
-          <div className={classes["quick-actions"]}>
-            {actions.map((action) => (
-              <div className={classes["action-container"]}>
-                <Tooltip title={action.type}>
-                  <IconButton onClick={action.action} sx={{ height: "20px" }}>
-                    {action.type === "delete" ? (
-                      <DeleteIcon sx={iconSxStyles} />
-                    ) : null}
-                    {action.type === "configure" ? (
-                      <EditIcon sx={iconSxStyles} />
-                    ) : null}
-                    {action.type === "take" ? (
-                      <RocketLaunchIcon sx={iconSxStyles} />
-                    ) : null}
-                  </IconButton>
-                </Tooltip>
+    <>
+      {isLoading ? (
+        <TicketSkeleton ticket={props.ticket} height={props.height} />
+      ) : (
+        <div
+          className={`${classes.ticket} ${statusClass}`}
+          style={{
+            height: `${props.height}%`,
+          }}
+          onMouseEnter={() => {
+            setHover(true);
+          }}
+          onMouseLeave={() => {
+            setHover(false);
+          }}
+        >
+          <div className={classes["action-section"]}>
+            {hover ? (
+              <div className={classes["quick-actions"]}>
+                {actions.map((action) => (
+                  <div className={classes["action-container"]}>
+                    <Tooltip title={action.type}>
+                      <IconButton
+                        onClick={action.action}
+                        sx={{ height: "20px" }}
+                      >
+                        {action.type === "delete" ? (
+                          <DeleteIcon sx={iconSxStyles} />
+                        ) : null}
+                        {action.type === "configure" ? (
+                          <EditIcon sx={iconSxStyles} />
+                        ) : null}
+                        {action.type === "take" ? (
+                          <RocketLaunchIcon sx={iconSxStyles} />
+                        ) : null}
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                ))}
               </div>
-            ))}
+            ) : null}
           </div>
-        ) : null}
-      </div>
-      {inner}
-    </div>
+          {inner}
+        </div>
+      )}
+    </>
   );
 };
 
