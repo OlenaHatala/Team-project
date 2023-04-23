@@ -1,1 +1,1 @@
-export { default as NewBoardIndex } from "./NewBoardIndex";
+export { default as ConfigureBoardModal } from "./ConfigureBoardModal";

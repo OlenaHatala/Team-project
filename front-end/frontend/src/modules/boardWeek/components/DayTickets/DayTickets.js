@@ -114,6 +114,7 @@ const DayTickets = ({ day }) => {
             ></div>
           );
         } else {
+          console.log(frame)
           frameContent = (
             <>
               <Ticket

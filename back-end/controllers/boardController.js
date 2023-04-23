@@ -816,7 +816,7 @@ const addMember = asyncHandler(async (req, res) => {
     const {board_id, user_id, is_approved } = req.body;
     const {created_tables} = req;
 
-    const required_fields_present = (board_id && user_id && is_approved)
+    const required_fields_present = (board_id && user_id)
     const user_obj_id = new ObjectId(user_id)
     const board_obj_id = new ObjectId(board_id)
 
@@ -847,10 +847,10 @@ const addMember = asyncHandler(async (req, res) => {
 
         if(is_approved === "false"){
             board.requests = board.requests.filter((requested_id)=>{ 
-                return requested_id != user_obj_id;
+                return requested_id != user_id;
             })
             board.save();
-            return res.status(404).json({
+            return res.status(200).json({
                 message:"Owner denied request. User deleted from requests.",
                 members: board.members
               }) 

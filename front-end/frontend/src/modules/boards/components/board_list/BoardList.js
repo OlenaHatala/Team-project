@@ -4,8 +4,10 @@ import classes from "./BoardList.module.css";
 import MemberTable from "../member_table/MemberTable";
 import TableInfo from "../table_info/TableInfo";
 import AddTable from "../add_table/AddTable";
+import { useNavigate } from "react-router-dom";
 
 export const BoardList = () => {
+  const navigate = useNavigate();
   const [showBoardType, setShowBoardType] = useState("owner");
   const {
     data: allBoards,
@@ -14,6 +16,10 @@ export const BoardList = () => {
     isError,
     error,
   } = useGetBoardsQuery();
+
+  const itemClickHandler = (id) => {
+    navigate(`/dashboard/${id}`);
+  };
 
   let boards = [];
   let content;
@@ -74,7 +80,13 @@ export const BoardList = () => {
           {showBoardType === "owner" &&
             boards.map((board) => {
               return (
-                <div key={board.id} className={classes["table-list-item"]}>
+                <div
+                  key={board.id}
+                  onClick={() => {
+                    itemClickHandler(board.id);
+                  }}
+                  className={classes["table-list-item"]}
+                >
                   <TableInfo
                     boardName={board.label}
                     servName={board.servname}
@@ -88,7 +100,13 @@ export const BoardList = () => {
           {showBoardType === "member" &&
             boards.map((board) => {
               return (
-                <div key={board.id} className={classes["table-list-item"]}>
+                <div
+                  key={board.id}
+                  onClick={() => {
+                    itemClickHandler(board.id);
+                  }}
+                  className={classes["table-list-item"]}
+                >
                   <MemberTable boardName={board.label} />
                 </div>
               );

@@ -1,0 +1,13 @@
+.container {
+    padding: 20px;
+}
+
+.info {
+    margin-bottom: 100px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}

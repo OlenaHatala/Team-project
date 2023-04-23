@@ -18,6 +18,7 @@ const getOwnerBoard = asyncHandler(async (req, res) => {
     const membersArray = await Promise.all(members.map(async (member_id) => {
         const found_member = await User.findById(member_id);
         return {
+            id: found_member._id,
             name: found_member.name,
             surname: found_member.surname,
             mobile_number: found_member.mobile_number
@@ -26,6 +27,7 @@ const getOwnerBoard = asyncHandler(async (req, res) => {
     const requestArray = await Promise.all(requests.map(async (req_id) => {
         const found_requsted_user = await User.findById(req_id);
         return {
+            id: found_requsted_user._id,
             name: found_requsted_user.name,
             surname: found_requsted_user.surname,
             mobile_number: found_requsted_user.mobile_number

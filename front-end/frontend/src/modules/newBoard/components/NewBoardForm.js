@@ -7,7 +7,6 @@ export const NewBoardForm = ({
   onSubmit,
   disableSubmit,
   isUpdateForm,
-  defaultValues,
 }) => {
   const {
     page,

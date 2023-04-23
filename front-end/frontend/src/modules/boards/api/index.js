@@ -21,7 +21,7 @@ export const boardsApiSlice = apiSlice.injectEndpoints({
                 });
             }
             let createdBoards = [];
-            if (responseData?.membered_boards_arr?.length > 0) {
+            if (responseData?.created_boards_arr?.length > 0) {
                 createdBoards = responseData.created_boards_arr.map(boardData => {
                     let board = {
                         userStatus: "owner",
