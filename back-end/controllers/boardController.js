@@ -5,6 +5,7 @@ const { ObjectId } = require('mongodb');
 const Board = require('../models/Board')
 const User = require('../models/User')
 const Ticket = require('../models/Ticket')
+const { check_if_outdated } = require('./ticketController');
 
 const asyncHandler = require('express-async-handler')
 
@@ -58,7 +59,7 @@ cron.schedule('05 00 * * *', async () => {
                         
                         for (let t in day_tickets)
                         {
-                            const found_ticket = await Ticket.findById(day_tickets[t]).exec()
+                            const found_ticket = await check_if_outdated(day_tickets[t])
                             if (found_ticket.enabled == true) { break }
                             else
                             {
@@ -755,7 +756,7 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
 
         for(const ticket_id in day_tickets)
         {
-            const findTicket = await Ticket.findById(day_tickets[ticket_id])
+            const findTicket = await check_if_outdated(day_tickets[ticket_id])
             let ticketData = null;
             if (showEnabledOnly) {
                 if (findTicket.enabled==true && !findTicket.user_id && findTicket.is_outdated === false) {
