@@ -6,6 +6,7 @@ import { TakenTicketInner } from "../TakenTicketInner";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -119,7 +120,7 @@ export const Ticket = (props) => {
             {hover ? (
               <div className={classes["quick-actions"]}>
                 {actions.map((action) => (
-                  <div className={classes["action-container"]}>
+                  <div key={action.type} className={classes["action-container"]}>
                     <Tooltip title={action.type}>
                       <IconButton
                         onClick={() => {

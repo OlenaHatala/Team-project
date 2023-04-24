@@ -1,6 +1,7 @@
 const Board = require("../models/Board");
 const Ticket = require("../models/Ticket");
 const { ObjectId } = require('mongodb');
+const { check_if_outdated } = require('./ticketController');
 
 const asyncHandler = require("express-async-handler");
 
@@ -28,7 +29,9 @@ const getBoard = asyncHandler(async (req, res) => {
       //     let day_tickets = week_tickets[day];
 
       //     for (j in day_tickets) {
-      //       const found_ticket = await Ticket.findById(day_tickets[j]).exec();
+
+      //       const found_ticket = await check_if_outdated(day_tickets[j])
+
       //       if (
       //         found_ticket.enabled === true &&
       //         !found_ticket.user_id &&

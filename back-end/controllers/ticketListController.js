@@ -3,6 +3,7 @@ const Ticket = require("../models/Ticket");
 const Board = require('../models/Board')
 const { ObjectId } = require('mongodb');
 const asyncHandler = require("express-async-handler");
+const { check_if_outdated } = require("./ticketController");
 
 const getListTiketData = async (ticket) => {
   const board = await Board.findById(ticket?.table_id).exec();
@@ -33,7 +34,7 @@ const ticketlist = asyncHandler(async (req, res) => {
   try {
     let taken_tickets_arr = [];
     for (id in taken_tickets) {
-      const found_ticket = await Ticket.findById(taken_tickets[id]).exec();
+      const found_ticket = await check_if_outdated(taken_tickets[id]);
       const ticketData = await getListTiketData(found_ticket);
       taken_tickets_arr.push(ticketData);
     }

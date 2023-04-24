@@ -25,14 +25,17 @@ export const NewBoardForm = ({
 
   const SubmitForm = () => {
     let days = {
-      monday: { open: mon.open, close: mon.close },
-      tuesday: { open: tue.open, close: tue.close },
-      wednesday: { open: wed.open, close: wed.close },
-      thursday: { open: thu.open, close: thu.close },
-      friday: { open: fri.open, close: fri.close },
-      saturday: { open: sat.open, close: sat.close },
-      sunday: { open: sun.open, close: sun.close },
+      monday: { open: mon.open, close: mon.close, workday: !mon.disabled },
+      tuesday: { open: tue.open, close: tue.close, workday: !tue.disabled  },
+      wednesday: { open: wed.open, close: wed.close, workday: !wed.disabled  },
+      thursday: { open: thu.open, close: thu.close, workday: !thu.disabled  },
+      friday: { open: fri.open, close: fri.close, workday: !fri.disabled  },
+      saturday: { open: sat.open, close: sat.close, workday: !sat.disabled  },
+      sunday: { open: sun.open, close: sun.close, workday: !sun.disabled  },
     };
+
+    console.log(!mon.disabled)
+    console.log(typeof mon.disabled)
 
     days.monday.hours = [];
     days.tuesday.hours = [];

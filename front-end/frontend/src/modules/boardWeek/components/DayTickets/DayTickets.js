@@ -53,7 +53,12 @@ const DayTickets = ({ day }) => {
   const dayTickets = tickets[day] || [];
 
   const dayArray = useMemo(() => {
-    const sortedTickets = sortTickets([...dayTickets]);
+    let sortedTickets;
+    if (dayTickets?.length) {
+      sortedTickets = sortTickets([...dayTickets]);
+    } else {
+      sortedTickets = [];
+    }
 
     let calculatedArray = [];
 
@@ -105,31 +110,30 @@ const DayTickets = ({ day }) => {
 
   return (
     <div className={classes["ticket-list"]}>
-      {dayArray.map((frame) => {
+      {dayArray.map((frame, index) => {
         let frameContent;
         if (frame?.type === "emptytime") {
           frameContent = (
             <div
-              key={frame.id}
+              key={index}
               className={classes["empty-time"]}
               style={{ height: `${minutePercentage * frame.duration}%` }}
             ></div>
           );
         } else {
           frameContent = (
-            <>
+            <React.Fragment key={index}>
               <Ticket
                 height={(minutePercentage * frame.duration * 95) / 100}
                 ticket={frame}
               />
               <div
-                key={`spacer-${frame.id}`}
                 className={classes.spacer}
                 style={{
                   height: `${(minutePercentage * frame.duration * 5) / 100}%`,
                 }}
               ></div>
-            </>
+            </React.Fragment>
           );
         }
         return frameContent;
