@@ -431,7 +431,12 @@ const createWeek  = asyncHandler(async (req, res) =>{
     try {
         const board = await Board.findById(board_id);
         const weekObjectId = mongoose.Types.ObjectId(week_id);
-        if(board.owner_id != user_id)
+        if(!board){
+            return res.status(404).json({
+                message: "Board with that id doesn`t exist",
+            })
+        }
+        if(board.owner_id.toString() != user_id.toString())
         {
             return res.status(400).json({ 
                 message: "User does not own that board",
@@ -465,16 +470,15 @@ const createWeek  = asyncHandler(async (req, res) =>{
                     {
                         break;
                     }
-
-                    if (week_tickets[day].workday)
+                    if (board.markup.days[day].workday)
                     {
-                        const open_hour = markup.days[day].open.split(':')[0];
-                        const open_min = markup.days[day].open.split(':')[1];
+                        const open_hour = board.markup.days[day].open.split(':')[0];
+                        const open_min = board.markup.days[day].open.split(':')[1];
 
-                        const close_hour = markup.days[day].close.split(':')[0];
-                        const close_min = markup.days[day].close.split(':')[1];
+                        const close_hour = board.markup.days[day].close.split(':')[0];
+                        const close_min = board.markup.days[day].close.split(':')[1];
 
-                        const duration = markup.duration
+                        const duration = board.markup.duration
 
                         let currentDate = new Date(); // today
                         const timezoneOffset_ = currentDate.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
@@ -568,6 +572,7 @@ const update = asyncHandler(async (req, res) => {
                 auto_open
             }
         )
+
         if ((!(compareMarkup(markup, board.markup))) && (apply_new_markup === true)) {
             for (i = 0; i < 6; i++) {
 
@@ -604,11 +609,9 @@ const update = asyncHandler(async (req, res) => {
                     }
                     
                 } 
-
                 if (found_enabled_ticket) {
                     continue
                 }
-                
                 else {
                     for (const day in week_tickets) 
                     {
@@ -680,6 +683,7 @@ const update = asyncHandler(async (req, res) => {
         
                                 ticket.save()
                                 board.tickets[i][day].push(ticket._id)
+
         
                                 ticket_time = addMinutes(ticket_time, duration)
                             } 
