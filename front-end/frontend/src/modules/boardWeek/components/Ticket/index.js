@@ -17,12 +17,15 @@ import {
   selectIsLoading,
   showEditTicketAction,
 } from "../../store/weekSlice";
+import { useTakeTicketMutation } from "../../api";
 
 export const Ticket = (props) => {
   const mode = useSelector(selectWeekMode);
   const isLoading = useSelector(selectIsLoading);
   const dispatch = useDispatch();
   const [hover, setHover] = useState(false);
+
+  const [takeTicket, { isLoading: takingInProgress }] = useTakeTicketMutation();
 
   let status = "nouser";
   let statusClass;
@@ -74,8 +77,8 @@ export const Ticket = (props) => {
   } else if (mode === "member") {
     actions.push({
       type: "take",
-      action: () => {
-        console.log("take ticket action");
+      action: async (ticket) => {
+        await takeTicket({ ...ticket }).unwrap();
       },
     });
   }
@@ -119,7 +122,9 @@ export const Ticket = (props) => {
                   <div className={classes["action-container"]}>
                     <Tooltip title={action.type}>
                       <IconButton
-                        onClick={action.action}
+                        onClick={() => {
+                          action.action(props.ticket);
+                        }}
                         sx={{ height: "20px" }}
                       >
                         {action.type === "delete" ? (

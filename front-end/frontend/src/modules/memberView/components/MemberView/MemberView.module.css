@@ -1,0 +1,22 @@
+.member-view-container{
+    width: 80%;
+    min-width: 1200px;
+    margin-inline: auto;
+}
+
+.topbar-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid rgb(156, 156, 156);
+  border-radius: 10px;
+  background-color: rgb(230, 224, 224);
+  width: 100%;
+  margin-left: auto;
+  margin-bottom: 10px;
+}
+
+.slider-container {
+  width: 30%;
+  height: 85px;
+}

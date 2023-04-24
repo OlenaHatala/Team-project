@@ -5,14 +5,15 @@ const { ObjectId } = require('mongodb');
 const asyncHandler = require("express-async-handler");
 
 const getListTiketData = async (ticket) => {
-  const board = await Board.findById(ticket.table_id).exec();
+  const board = await Board.findById(ticket?.table_id).exec();
     const ticketData = {
-        _id: ticket._id,
-        datetime: ticket.datetime,
-        duration: ticket.duration,
-        is_outdated: ticket.is_outdated,
-        is_confirmed: ticket.confirmed,
-        boardlabel: board.label
+        _id: ticket?._id,
+        datetime: ticket?.datetime,
+        duration: ticket?.duration,
+        is_outdated: ticket?.is_outdated,
+        is_confirmed: ticket?.confirmed,
+        boardlabel: board?.label || "",
+        boardId: board?._id,
     }
     return ticketData;
 }

@@ -3,10 +3,13 @@ import DayTickets from "../DayTickets/DayTickets";
 import classes from "./Day.module.css";
 
 import { useSelector } from "react-redux";
-import { selectTimeBorders } from "../../store/weekSlice";
+import { selectTimeBorders, selectDates } from "../../store/weekSlice";
+import { monthByIndex } from "../../utils/weekDay";
 
 const Day = ({ day }) => {
   const { timePoints, minutePercentage } = useSelector(selectTimeBorders);
+  const dates = useSelector(selectDates);
+  const dayNumbers = dates[day];
   const borderDates = {
     upper: new Date(timePoints.upper),
     bottom: new Date(timePoints.bottom),
@@ -41,7 +44,14 @@ const Day = ({ day }) => {
       <div className={classes.day}>
         <div className={classes["week-header"]}>{`${day
           .slice(0, 1)
-          .toUpperCase()}${day.slice(1, 9)}`}</div>
+          .toUpperCase()}${day.slice(1, 9)}${
+          dayNumbers?.day
+            ? ", " +
+              dayNumbers?.day +
+              " " +
+              monthByIndex[dayNumbers?.month].slice(0, 3)
+            : ""
+        }`}</div>
         <div className={classes["time-markup"]}>{hourElements}</div>
         <DayTickets day={day} />
       </div>

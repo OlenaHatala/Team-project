@@ -44,13 +44,13 @@ const sortTickets = (tickets) => {
 
 const DayTickets = ({ day }) => {
   const week = useSelector(selectWeek);
-  const { tickets, timeBorders } = week;
+  const { tickets, timeBorders, weekIndex } = week;
   const { timePoints, minutePercentage } = timeBorders;
   const borderDates = {
     upper: new Date(timePoints.upper),
     bottom: new Date(timePoints.bottom),
   };
-  const dayTickets = tickets[day];
+  const dayTickets = tickets[day] || [];
 
   const dayArray = useMemo(() => {
     const sortedTickets = sortTickets([...dayTickets]);
@@ -63,6 +63,8 @@ const DayTickets = ({ day }) => {
       const currentTicket = {
         ...sortedTickets[i],
         datetime: new Date(sortedTickets[i].datetime),
+        weekIndex: weekIndex,
+        weekDay: day,
       };
       const currentStart =
         currentTicket.datetime.getHours() * 60 +
@@ -78,7 +80,7 @@ const DayTickets = ({ day }) => {
           duration: currentStart - prevEnd,
         });
       }
-      calculatedArray.push({ ...currentTicket, id: currentTicket.id });
+      calculatedArray.push({ ...currentTicket, id: currentTicket.id,  });
       prevEndDate = new Date(
         currentTicket.datetime.getTime() + currentTicket.duration * 1000 * 60
       );

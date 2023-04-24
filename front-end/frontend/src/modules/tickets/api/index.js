@@ -36,6 +36,7 @@ export const ticketsApiSlice = apiSlice.injectEndpoints({
                     return {
                         id: ticketData._id,
                         boardName: ticketData.boardlabel,
+                        boardId: ticketData.boardId,
                         date: date,
                         time: getStartTime(date),
                         status,

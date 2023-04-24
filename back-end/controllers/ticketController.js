@@ -290,7 +290,7 @@ const takeTicket = asyncHandler(async (req, res) => {
       })
     }
     const ticket_obj_id = new ObjectId(ticket_id)
-    const table_obj_id = new ObjectId(user_id.table_id)
+    const table_obj_id = new ObjectId(board._id)
 
     if(!ticket.enabled){
       return res.status(200).json({
@@ -312,7 +312,7 @@ const takeTicket = asyncHandler(async (req, res) => {
     for(tick in taken_tickets)
     {
       const found_ticket = await Ticket.findById(taken_tickets[tick]) 
-      if(found_ticket.table_id.toString() == board._id.toString())
+      if(found_ticket?.table_id?.toString() == board._id.toString())
       {
         num_of_booked++;
       }

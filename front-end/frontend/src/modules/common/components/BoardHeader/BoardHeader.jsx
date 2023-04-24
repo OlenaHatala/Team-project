@@ -9,7 +9,9 @@ import classes from "./BoardHeader.module.css";
 const BoardHeader = ({ label, servname, description, address, link }) => {
   return (
     <div className={classes["board-header"]}>
-      <div className={description ? classes["titles"] : classes["titles-padding"]}>
+      <div
+        className={description ? classes["titles"] : classes["titles-padding"]}
+      >
         <h1 align="left">{label}</h1>
         <h3>{servname}</h3>
         {description && <p>{description}</p>}
@@ -21,9 +23,11 @@ const BoardHeader = ({ label, servname, description, address, link }) => {
             <p>{address}</p>
           </div>
         )}
-        <div className={classes["link-btn-container"]}>
-          <CopyToClipboardButton link={link} />
-        </div>
+        {link && (
+          <div className={classes["link-btn-container"]}>
+            <CopyToClipboardButton link={link} />
+          </div>
+        )}
       </div>
     </div>
   );

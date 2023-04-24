@@ -696,7 +696,7 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
     const isOwner = board.owner_id == user_id
     const showEnabledOnly = !isOwner;
 
-    if (!board.members.find(memberId => memberId === user_id ) && !isOwner) {
+    if (!board.members.find(memberId => memberId.toString() === user_id ) && !isOwner) {
         return res.status(403).json({ message: 'Forbidden' })
     }
         
@@ -710,14 +710,31 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
         friday: board.tickets[numberOfWeek].friday, saturday: board.tickets[numberOfWeek].saturday, sunday: board.tickets[numberOfWeek].sunday}
 
     const tickets = {}
+    const dates = {}
 
+    let todayWeekDay = new Date().getDay();
+    if (todayWeekDay === 0) {
+        todayWeekDay = 7;
+    }
+    //fallback for no tickets in day case
+    //sunday of prev week
+    let fallbackDate = new Date(
+        Date.now()
+        + (numberOfWeek * 7 * 24 * 3600 * 1000) 
+        - ((todayWeekDay) * 24 * 3600 * 1000)
+        )
+    
     for(const day in week_tickets) {
         let day_tickets = week_tickets[day]
-
+        //increment fallbackDate from prev iteration (or monday of current week if first iteration)
+        fallbackDate = new Date(fallbackDate.getTime() + (24 * 3600 * 1000));
+        dates[day] = {day: fallbackDate.getDate(), month: fallbackDate.getMonth()};
         for(const ticket_id in day_tickets)
         {
             const findTicket = await Ticket.findById(day_tickets[ticket_id])
             let ticketData = null;
+            dates[day] = {day: findTicket.datetime.getDate(), month: findTicket.datetime.getMonth()};
+            fallbackDate = findTicket.datetime;
             if (showEnabledOnly) {
                 if (findTicket.enabled==true && !findTicket.user_id && findTicket.is_outdated === false) {
                     ticketData = getBoardTicketMember(findTicket)
@@ -736,6 +753,7 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
     }
   res.status(200).json({
     message:"Get week tickets",
+    dates,
     tickets
   })
   } catch(error) {

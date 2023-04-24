@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useGetBoardQuery, useJoinMutation } from "../api";
-import { MemberView } from "./MemberView";
+import { MemberView } from "./MemberView/MemberView";
 import { RequestSentCard } from "./RequestSentCard";
 
 export const VerifiedMembership = ({ boardId }) => {
@@ -29,11 +29,11 @@ export const VerifiedMembership = ({ boardId }) => {
     }
   }, [isSuccess]);
 
-  let content = <p>"Loading..."</p>;
+  let content = <p>Loading...</p>;
   if (boardIsLoading) {
-    content = <p>"Loading..."</p>;
+    content = <p>Loading...</p>;
   } else if (isSuccess && board?.label) {
-    content = <MemberView board={board} boardId={boardId}/>;
+    content = <MemberView board={board} id={boardId}/>;
   } else if (isAdded) {
     content = <RequestSentCard />;
   }

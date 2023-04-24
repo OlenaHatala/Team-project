@@ -5,8 +5,10 @@ import { skeletonTickets } from "../utils/skeletonTickets";
 
 const initialState = {
   isLoading: true,
-  mode: '',
+  mode: "",
+  weekIndex: 0,
   tickets: skeletonTickets,
+  dates: {},
   timeBorders: {
     timePoints: {
       upper: "August 19, 1975 10:00:00",
@@ -17,7 +19,7 @@ const initialState = {
   modals: {
     showNewTicket: false,
     showEditTicket: false,
-    editedTicket: null
+    editedTicket: null,
   },
 };
 
@@ -84,14 +86,12 @@ export const weekSlice = createSlice({
         );
       }
 
-     
-    
-      let dayarray = state.tickets[
-        WeekDayByIndex[ticket.datetime.getDay()]
-      ];
+      let dayarray = state.tickets[WeekDayByIndex[ticket.datetime.getDay()]];
       const index = state.tickets[
         WeekDayByIndex[ticket.datetime.getDay()]
-      ].findIndex((oldTicket) => { return (oldTicket._id === ticket._id) });
+      ].findIndex((oldTicket) => {
+        return oldTicket._id === ticket._id;
+      });
       //console.log(dayarray);
       //console.log(index)
       //console.log(state.tickets[WeekDayByIndex[ticket.datetime.getDay()]][index])
@@ -101,8 +101,9 @@ export const weekSlice = createSlice({
     },
 
     weekFetched(state, action) {
-      state.tickets = action.payload;
-      state.timeBorders.timePoints = findTimeBorders(action.payload);
+      state.dates = action.payload.dates;
+      state.tickets = action.payload.tickets;
+      state.timeBorders.timePoints = findTimeBorders(action.payload.tickets);
       let upperDate = new Date(state.timeBorders.timePoints.upper);
       let bottomDate = new Date(state.timeBorders.timePoints.bottom);
       state.timeBorders.minutePercentage =
@@ -136,10 +137,16 @@ export const weekSlice = createSlice({
     setLoadingAction(state, action) {
       state.isLoading = action.payload;
     },
+
+    setWeekIndexAction(state, action) {
+      state.weekIndex = action.payload;
+    },
   },
 });
 
 export const selectWeek = (state) => state.week;
+export const selectDates = (state) => state.week.dates;
+export const selectWeekIndex = (state) => state.week.weekIndex;
 export const selectIsLoading = (state) => state.week.isLoading;
 export const selectWeekMode = (state) => state.week.mode;
 export const selectModalsState = (state) => state.week.modals;
@@ -154,6 +161,7 @@ export const {
   hideEditTicketAction,
   setModeAction,
   setLoadingAction,
+  setWeekIndexAction,
 } = weekSlice.actions;
 
 export default weekSlice.reducer;

@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleShowNewTicketAction } from "../../../boardWeek";
 import { useGetOwnerBoardQuery } from "../../api";
-import { BoardWeekIndex } from "../../../boardWeek";
-import { NewBoardProvider } from "../../../newBoard/context/NewBoardContext";
+import { BoardWeekIndex, BoardWeekSlider} from "../../../boardWeek";
+import {selectWeekIndex} from '../../../boardWeek/store/weekSlice';
 import {
   boardFetched,
   selectDashboardAll,
@@ -13,7 +13,7 @@ import ConfigureBoardModal from "../../../newBoard/ConfigureBoardModal/Configure
 import classes from "./DashboardIndex.module.css";
 
 import { Card } from "../../../common/UI";
-import { BoardHeader, Modal } from "../../../common/components";
+import { BoardHeader } from "../../../common/components";
 import AddIcon from "@mui/icons-material/Add";
 import SettingsIcon from "@mui/icons-material/Settings";
 
@@ -23,6 +23,7 @@ import { boardLinkCreator } from "../../../common/constants";
 const DashboardIndex = ({ id }) => {
   const dispatch = useDispatch();
   const dashboard = useSelector(selectDashboardAll);
+  const weekIndex = useSelector(selectWeekIndex);
   const [userlistType, setUserlistType] = useState("users");
 
   const {
@@ -35,14 +36,14 @@ const DashboardIndex = ({ id }) => {
     dispatch(toggleShowConfigureBoardAction(true));
   };
 
-  let boardContent = <p>"Loading..."</p>;
+  let boardContent = <p>Loading...</p>;
   if (boardIsLoading) {
-    boardContent = <p>"Loading..."</p>;
+    boardContent = <p>Loading...</p>;
   } else if (isSuccess && board?.label) {
     dispatch(boardFetched(board));
     boardContent = (
       <>
-        <Card color="white" style={{ padding: "5px 30px" }}>
+        <Card color="white" style={{ padding: "5px 30px", marginBottom: '0' }}>
           <BoardHeader
             label={board.label}
             servname={board.service_name}
@@ -109,6 +110,9 @@ const DashboardIndex = ({ id }) => {
                   <AddIcon /> New Ticket
                 </button>
               </div>
+              <div className={classes["slider-container"]}>
+                <BoardWeekSlider />
+              </div>
               <div className={classes["topbar-left"]}>
                 <button
                   className={classes["topbar-button"]}
@@ -119,7 +123,7 @@ const DashboardIndex = ({ id }) => {
               </div>
             </div>
             <div className={classes["week-container"]}>
-              <BoardWeekIndex mode="owner" id={id} />
+              <BoardWeekIndex mode="owner" id={id} weekIndex={weekIndex}/>
             </div>
           </Card>
 

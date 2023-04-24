@@ -1,2 +1,2 @@
 export { toggleShowNewTicketAction } from "./store/weekSlice";
-export { BoardWeekIndex } from "./components";
+export { BoardWeekIndex, BoardWeekSlider } from "./components";

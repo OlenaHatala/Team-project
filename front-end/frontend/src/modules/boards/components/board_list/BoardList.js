@@ -36,7 +36,7 @@ export const BoardList = () => {
     );
 
   if (isLoading) {
-    content = <p>"Loading..."</p>;
+    content = <p>Loading...</p>;
   } else if (isSuccess) {
     boards = allBoards.filter((board) => {
       return board.userStatus === showBoardType;
