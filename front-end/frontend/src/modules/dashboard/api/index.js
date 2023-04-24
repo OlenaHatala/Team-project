@@ -4,6 +4,11 @@ export const dashboardApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getOwnerBoard: builder.query({
       query: (boardId) => `/board/getOwnerBoard/${boardId}`,
+      transformResponse: (data) => {
+        const members = data.members?.map(member => ({...member, confirmed: true}));
+        const requests = data.requests?.map(request => ({...request, confirmed: false}));
+        return {...data, members, requests};
+      },
       keepUnusedDataFor: 120,
       providesTags: ['dashboard']
     }),

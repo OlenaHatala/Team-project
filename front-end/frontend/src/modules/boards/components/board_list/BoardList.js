@@ -17,8 +17,12 @@ export const BoardList = () => {
     error,
   } = useGetBoardsQuery();
 
-  const itemClickHandler = (id) => {
-    navigate(`/dashboard/${id}`);
+  const itemClickHandler = ({ id, mode }) => {
+    if (mode === "owner") {
+      navigate(`/dashboard/${id}`);
+    } else {
+      navigate(`/board/${id}`);
+    }
   };
 
   let boards = [];
@@ -83,7 +87,7 @@ export const BoardList = () => {
                 <div
                   key={board.id}
                   onClick={() => {
-                    itemClickHandler(board.id);
+                    itemClickHandler({ id: board.id, mode: "owner" });
                   }}
                   className={classes["table-list-item"]}
                 >
@@ -103,7 +107,7 @@ export const BoardList = () => {
                 <div
                   key={board.id}
                   onClick={() => {
-                    itemClickHandler(board.id);
+                    itemClickHandler({ id: board.id, mode: 'member' });
                   }}
                   className={classes["table-list-item"]}
                 >
