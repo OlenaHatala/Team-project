@@ -59,7 +59,7 @@
 }
 
 .actions button:hover {
-  background-color: #f5c71a;
+  background-color: #d1a504;
 }
 
 .mode-suggestion {
@@ -93,7 +93,6 @@
 
 h1 {
   font: inherit;
-  /*font-weight: bold;*/
   display: flex;
   justify-content: center;
   color: #EBE8F3;
