@@ -49,11 +49,6 @@ ul {
   padding: 0;
 }
 
-.auth-page {
-  max-width: 30rem;
-  margin-inline: auto;
-}
-
 .account-details {
   max-width: 70rem;
   margin: auto;

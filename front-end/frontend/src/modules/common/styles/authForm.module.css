@@ -27,10 +27,6 @@
   outline:1px solid #ad50ff;
 }
 
-.controls {
-  margin: 1rem;
-}
-
 .actions {
   display: flex;
   gap: 1rem;
