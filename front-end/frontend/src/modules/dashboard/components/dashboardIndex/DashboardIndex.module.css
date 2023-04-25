@@ -33,7 +33,7 @@
 .topbar-right {
   display: flex;
   align-items: center;
-  width: 10%;
+  width: 13%;
   justify-content: center;
   padding: 10px;
 }
@@ -49,16 +49,17 @@
   text-align: center;
   align-items: center;
   padding: 30px 10px;
-  width: 80%;
+  width: 100%;
   font-size: 16px;
   cursor: pointer;
   border-radius: 10px;
-  background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: #2e5250;
+  box-shadow: rgba(255, 255, 255, 0.24) 0px 3px 8px;
+  color:#f3f3f3
 }
 
 .topbar-button:hover {
-  background-color: rgb(241, 241, 241);
+  background-color: #2e5250;
 }
 
 .button {

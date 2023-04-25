@@ -41,6 +41,7 @@ export function MainNavigation() {
               </div>
             </NavLink>
           </li>
+          {username && (
           <li>
             <NavLink
               to="/newboard"
@@ -61,7 +62,7 @@ export function MainNavigation() {
                 New Board
               </div>
             </NavLink>
-          </li>
+          </li>)}
           {username && (
             <li>
               <NavLink
