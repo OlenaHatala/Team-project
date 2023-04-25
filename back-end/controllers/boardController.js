@@ -261,7 +261,8 @@ const create  = asyncHandler(async (req, res) =>{
                     const duration = markup.duration
 
                     let currentDate = new Date(); // today
-                    const timezoneOffset_ = currentDate.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
+                    const timezoneOffset_ = 0;
+                    //const timezoneOffset_ = currentDate.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
                     var new_current_time = new Date(currentDate.getTime() - (timezoneOffset_ * 60 * 1000)); // Adjust the time by the offset
                     
                     const current_day = new_current_time.getDay()
@@ -481,7 +482,8 @@ const createWeek  = asyncHandler(async (req, res) =>{
                         const duration = board.markup.duration
 
                         let currentDate = new Date(); // today
-                        const timezoneOffset_ = currentDate.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
+                        const timezoneOffset_ = 0
+                        //const timezoneOffset_ = currentDate.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
                         var new_current_time = new Date(currentDate.getTime() - (timezoneOffset_ * 60 * 1000)); // Adjust the time by the offset
                         
                         const current_day = new_current_time.getDay()
@@ -637,7 +639,8 @@ const update = asyncHandler(async (req, res) => {
                             const duration = markup.duration
 
                             let currentDate = new Date(); // today
-                            const timezoneOffset_ = currentDate.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
+                            const timezoneOffset_ = 0
+                            //const timezoneOffset_ = currentDate.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
                             var new_current_time = new Date(currentDate.getTime() - (timezoneOffset_ * 60 * 1000)); // Adjust the time by the offset
                             
                             const current_day = new_current_time.getDay()
