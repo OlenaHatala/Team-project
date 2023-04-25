@@ -5,8 +5,8 @@ import classes from "./UserList.module.css";
 const UserList = ({ users, userlistType }) => {
   const noUserText =
     userlistType === "users"
-      ? "You have no any users on your board!"
-      : "You have no any requests!";
+      ? "No one has joined your board yet!"
+      : "You have no requests!";
   return (
     <>
       {users?.length === 0 ? (

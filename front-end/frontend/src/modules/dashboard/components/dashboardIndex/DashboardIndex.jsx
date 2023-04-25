@@ -54,7 +54,6 @@ const DashboardIndex = ({ id }) => {
         </Card>
         <div className={classes["page-content"]}>
           <Card
-            color="white"
             style={{
               padding: "20px",
               width: "18%",

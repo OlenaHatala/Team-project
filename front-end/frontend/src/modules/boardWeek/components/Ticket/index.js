@@ -42,13 +42,13 @@ export const Ticket = (props) => {
     statusClass = classes["outdated-ticket"];
   }
   if (props.ticket?.enabled && !props.ticket?.is_outdated) {
-    statusClass = classes["ebabled-ticket"];
+    statusClass = classes["enabled-ticket"];
   }
   if (!props.ticket?.enabled && !props.ticket?.is_outdated) {
-    statusClass = classes["disbabled-ticket"];
+    statusClass = classes["disabled-ticket"];
   }
   if (mode === "member") {
-    statusClass = classes["ebabled-ticket"];
+    statusClass = classes["enabled-ticket"];
   }
 
   const denyHandler = async (ticket) => {

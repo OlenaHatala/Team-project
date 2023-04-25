@@ -6,7 +6,7 @@ import classes from "./Loader.module.css";
 const Loader = () => {
   return (
     <Box className={classes.overlay}>
-      <CircularProgress />
+      <CircularProgress sx={{ color: "#2e5250" }} />
     </Box>
   );
 };

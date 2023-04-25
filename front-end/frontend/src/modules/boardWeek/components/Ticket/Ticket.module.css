@@ -5,7 +5,7 @@
     z-index: 12;
     position: relative;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.301);
-    color: rgb(112, 112, 112);
+    color: rgb(216, 230, 221);
 }
 
 .confirmed-ticket {
@@ -20,12 +20,12 @@
     background-color:rgb(172, 172, 172);
 }
 
-.ebabled-ticket {
-    background-color:rgb(151, 207, 143);
+.enabled-ticket {
+    background-color: #367A6E;
 }
 
-.disbabled-ticket {
-    background-color:rgb(176, 212, 211);
+.disabled-ticket {
+    background-color:#004963ad;
 }
 
 .confirmed-ticket:hover {
@@ -36,16 +36,16 @@
     background-color:rgb(207, 167, 143);
 }
 
-.outdated-ticket:hover {
+/* .outdated-ticket:hover {
     background-color:rgb(189, 189, 189);
+} */
+
+.enabled-ticket:hover {
+    background-color: #367a6dec;
 }
 
-.ebabled-ticket:hover {
-    background-color:rgb(159, 209, 152);
-}
-
-.disbabled-ticket:hover {
-    background-color:rgb(187, 221, 219);
+.disabled-ticket:hover {
+    background-color:#0049639d;
 }
 
 .quick-actions {
@@ -64,6 +64,7 @@
     display: flex;
     justify-content: flex-end;
     height: 20px;
+
 }
 
 .flex-inner{

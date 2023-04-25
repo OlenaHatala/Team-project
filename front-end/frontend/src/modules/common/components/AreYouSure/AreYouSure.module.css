@@ -1,5 +1,8 @@
 .container {
     padding: 20px;
+    color:black;
+    background-color: #e4edea;
+    border-radius: 10px;
 }
 
 .info {
@@ -9,5 +12,11 @@
 .actions {
     display: flex;
     flex-direction: row;
-    gap: 30px;
+    gap: 200px;
+    font: bold;
+    cursor: pointer;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    color: rgb(28, 0, 51);
+    border: none;
 }

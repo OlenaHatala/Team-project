@@ -16,12 +16,22 @@
     margin-top:3px;
 }
 
-.button-choice{
-    color: white;
-    width: 35%;
-    height: 80%;
+.button-choice-accept{
+    color: #2e5250;
+    width: 20%;
+    height: 100%;
     padding: 0;
-    background-color: rgb(9, 50, 139);
+    background-color: #d1e0db;
+    /* border : 1px solid #e2c18b; */
+}
+
+.button-choice-reject{
+    color: rgb(184, 29, 29);
+    width: 20%;
+    height: 100%;
+    padding: 0;
+    background-color: #d1e0db;
+    /* border : 1px solid #b99f2a; */
 }
 
 .button-choice:hover{

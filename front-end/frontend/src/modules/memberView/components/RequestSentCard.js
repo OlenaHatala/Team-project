@@ -7,9 +7,9 @@ export const RequestSentCard = () => {
     <div className={classes["reqsent-container"]}>
       <Card>
         <div className={classes["reqsent-inner"]}>
-          <h2>Request sent!</h2>
+          <h2>Your request has been sent!</h2>
           <p>
-            Your request for joining to this board was sent successfully.
+            Your request for joining this board was sent successfully.
             <br />
             Board owner will let you in soon.
           </p>

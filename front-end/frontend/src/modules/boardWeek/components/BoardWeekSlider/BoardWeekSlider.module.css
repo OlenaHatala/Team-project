@@ -5,9 +5,10 @@
   
   .swiper-slide {
     text-align: center;
-    font-size: 18px;
+    font-size: 150%;
     background: #fff;
     height: 100%;
+    color: #2e5250;
   
     display: flex;
     justify-content: center;

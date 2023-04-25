@@ -17,7 +17,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-
+  
+  --swiper-theme-color: #a58203;
   --color-gray-100: #f4f3f1;
   --color-gray-200: #dddbd8;
   --color-gray-300: #ccc9c6;

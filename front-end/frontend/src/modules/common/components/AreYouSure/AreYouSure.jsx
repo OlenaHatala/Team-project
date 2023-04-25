@@ -13,14 +13,14 @@ const AreYouSure = ({ title, question, onClose, onContinue }) => {
           <p>{question}</p>
         </div>
         <div className={classes.actions}>
-          <button onClick={onClose}>cancel</button>
+          <button onClick={onClose}>NO</button>
           <button
             onClick={() => {
               onContinue();
               onClose();
             }}
           >
-            continue
+            YES
           </button>
         </div>
       </div>

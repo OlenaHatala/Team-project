@@ -41,7 +41,7 @@
 .start-button{
   margin-top: 70px;
   padding: 15px 15px 30px;
-  max-width: 200px;
+  max-width: 220px;
   text-align: center;
   text-transform: uppercase;
   transition: 0.5s;
@@ -97,4 +97,8 @@
   content: "•";
   color: #65A09D;
   margin-right: 5px;
+}
+
+.main-info{
+  color: black;
 }

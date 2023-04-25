@@ -1,5 +1,5 @@
 .user-div {
-  height: 90%;
+  height: 85%;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -14,7 +14,7 @@
   }
 
 .nousers-p{
-  color:black;
+  color:#d1e0db;
 }
   
   @media (max-width: 768px) {

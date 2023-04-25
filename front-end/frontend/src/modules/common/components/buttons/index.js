@@ -10,10 +10,10 @@ const Buttons = ({ acceptClick, denyClick, slim }) => {
         !slim ? classes["user-list-buttons"] : classes["user-list-buttons-slim"]
       }
     >
-      <button onClick={acceptClick} className={classes["button-choice"]}>
+      <button onClick={acceptClick} className={classes["button-choice-accept"]}>
         <CheckCircleOutline sx={{"font-size":"20px"}}/>
       </button>
-      <button onClick={denyClick} className={classes["button-choice"]}>
+      <button onClick={denyClick} className={classes["button-choice-reject"]}>
         <HighlightOff sx={{"font-size":"20px"}}/>
       </button>
     </div>
