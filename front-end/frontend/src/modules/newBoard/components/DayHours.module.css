@@ -16,7 +16,7 @@
   border: 0;
   outline: 0;
   background: transparent;
-  border-bottom: 2px dotted #8c5bff;
+  border-bottom: 2px dotted #8da46c;
   font-size: 16px;
   text-decoration: none solid rgb(243, 243, 243);
   caret-color: transparent;
@@ -40,7 +40,7 @@
   border: 0;
   outline: 0;
   background: transparent;
-  border-bottom: 2px solid #8c5bff;
+  border-bottom: 2px solid #8da46ca8;
   font-size: 16px;
   text-decoration: none solid rgb(243, 243, 243);
   caret-color: transparent;
@@ -51,13 +51,13 @@
 }
 
 .disabled-day .day-hours-button {
-  background-color: #1c1333;
-  color: #f3f3f3;
-  border: 1px solid #f3f3f3;
+  background-color: #1e2505;
+  color: #d1e0dbab;
+  border: 1px solid #000000;
 }
 
 .disabled-day .day-hours-button:hover {
-  background-color: #1f1638;
+  background-color: #1d3332; 
 }
 
 

@@ -44,7 +44,7 @@
   cursor: pointer;
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
-  background-color: #ad7ada;
+  background-color: #2e5250;
   color: #1c1333;
   border: 1px solid #8c8c8c;
 }
@@ -70,7 +70,7 @@
 }
 
 .mode-suggestion a {
-  color: #ad7ada;
+  color: #2e5250;
   text-decoration: none;
 }
 
@@ -86,7 +86,7 @@
   font: inherit;
   display: flex;
   justify-content: center;
-  color: #ad7ada;
+  color: #2e5250;
   font-size: 25px;
 }
 
@@ -94,7 +94,7 @@ h1 {
   font: inherit;
   display: flex;
   justify-content: center;
-  color: #ad7ada;
+  color: #2e5250;
   font-size: 25px;
 }
 
