@@ -19,28 +19,30 @@ export function MainNavigation() {
     <header className={classes.header}>
       <nav className={classes.navbar}>
         <ul className={classes.list}>
-          <li>
-            <NavLink
-              to="/"
-              className={({ isActive }) => {
-                if (isActive) {
-                  setActiveItem("/");
-                }
-                return isActive ? classes.active : undefined;
-              }}
-              end
-            >
-              <div
-                className={
-                  activeItem === "/"
-                    ? classes["active-item"]
-                    : classes["header-item"]
-                }
+          {!username && (
+            <li>
+              <NavLink
+                to="/"
+                className={({ isActive }) => {
+                  if (isActive) {
+                    setActiveItem("/");
+                  }
+                  return isActive ? classes.active : undefined;
+                }}
+                end
               >
-                Home
-              </div>
-            </NavLink>
-          </li>
+                <div
+                  className={
+                    activeItem === "/"
+                      ? classes["active-item"]
+                      : classes["header-item"]
+                  }
+                >
+                  Home
+                </div>
+              </NavLink>
+            </li>
+          )}
           {username && (
           <li>
             <NavLink

@@ -1,9 +1,12 @@
 import { TicketHead } from "../TicketHead";
+import { useSelector } from "react-redux";
+import { selectWeekMode } from "../../store/weekSlice";
 
 export const NoUserTicketInner = ({ ticket }) => {
+  const mode = useSelector(selectWeekMode);
   const status = ticket.is_outdated
     ? "outdated"
-    : ticket.enabled
+    : ticket.enabled || mode === "member"
     ? "available"
     : "disabled";
 

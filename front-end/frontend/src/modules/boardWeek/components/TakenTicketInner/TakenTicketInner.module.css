@@ -1,0 +1,35 @@
+.avarar-wrapper{
+    display: flex;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+}
+
+.content {
+    padding: 0 10px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    gap: 5px;
+}
+
+.card-content {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.name {
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    .ticket {
+      width: 25%;
+    }
+  }

@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import Buttons from "../buttons/index";
+import Buttons from "../../../common/components/buttons/index";
 import { useApproveRequestMutation, useDenyRequestMutation } from "../../api";
 import { selectBoardId } from "../../store";
 

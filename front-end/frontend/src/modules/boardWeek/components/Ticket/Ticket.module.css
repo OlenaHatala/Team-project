@@ -5,6 +5,7 @@
     z-index: 12;
     position: relative;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.301);
+    color: rgb(112, 112, 112);
 }
 
 .confirmed-ticket {
@@ -63,4 +64,11 @@
     display: flex;
     justify-content: flex-end;
     height: 20px;
+}
+
+.flex-inner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }

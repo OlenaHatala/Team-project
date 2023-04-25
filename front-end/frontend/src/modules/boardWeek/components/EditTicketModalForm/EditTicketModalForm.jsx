@@ -31,10 +31,21 @@ const EditTicketModalForm = () => {
 
   const sumbitHandler = async (e) => {
     e.preventDefault();
+    let hours = time.slice(0, 2);
+    let mins = time.slice(2, 4);
+    console.log(hours)
+    console.log(mins)
+    console.log(editedTicket.datetime)
+    let newDateTime = new Date(editedTicket.datetime);
+    newDateTime.setHours(hours);
+    newDateTime.setMinutes(mins);
+    let availablePayload = available ? 'true' : 'false';
     try {
       const newTicketData = await configureTicket({
         ...editedTicket,
-        available,
+        datetime: newDateTime,
+        duration: duration,
+        availablePayload: availablePayload,
       }).unwrap();
 
       const ticket = newTicketData.ticket;

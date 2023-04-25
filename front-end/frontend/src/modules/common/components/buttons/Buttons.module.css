@@ -1,0 +1,29 @@
+.user-list-buttons {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 1rem;
+    margin-top:3px;
+}
+
+.user-list-buttons-slim 
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    gap: 1rem;
+    margin-top:3px;
+}
+
+.button-choice{
+    color: white;
+    width: 35%;
+    height: 80%;
+    padding: 0;
+    background-color: rgb(9, 50, 139);
+}
+
+.button-choice:hover{
+    background-color: rgb(44, 107, 158);
+}

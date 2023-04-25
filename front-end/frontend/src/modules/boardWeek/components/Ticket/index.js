@@ -47,13 +47,16 @@ export const Ticket = (props) => {
   if (!props.ticket?.enabled && !props.ticket?.is_outdated) {
     statusClass = classes["disbabled-ticket"];
   }
+  if (mode === "member") {
+    statusClass = classes["ebabled-ticket"];
+  }
 
-  const denyHandler = async () => {
-    console.log("deny ticket taking action");
+  const denyHandler = async (ticket) => {
+    props?.onTicketDeny(ticket)
   };
 
-  const approveHandler = async () => {
-    console.log("approve ticket taking action");
+  const approveHandler = async (ticket) => {
+    props?.onTicketApprove(ticket)
   };
 
   let actions = [];
@@ -90,8 +93,12 @@ export const Ticket = (props) => {
     inner = (
       <RequestedTicketInner
         ticket={props.ticket}
-        onDeny={denyHandler}
-        onApprove={approveHandler}
+        onDeny={() => {
+          denyHandler(props.ticket);
+        }}
+        onApprove={() => {
+          approveHandler(props.ticket);
+        }}
       />
     );
   } else {
@@ -119,7 +126,10 @@ export const Ticket = (props) => {
             {hover ? (
               <div className={classes["quick-actions"]}>
                 {actions.map((action) => (
-                  <div key={action.type} className={classes["action-container"]}>
+                  <div
+                    key={action.type}
+                    className={classes["action-container"]}
+                  >
                     <Tooltip title={action.type}>
                       <IconButton
                         onClick={() => {
@@ -143,7 +153,9 @@ export const Ticket = (props) => {
               </div>
             ) : null}
           </div>
-          {inner}
+          <div className={classes["flex-inner"]}>
+            {inner}
+          </div>
         </div>
       )}
     </>
