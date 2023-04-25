@@ -12,7 +12,7 @@ export const TakenTicketList = () => {
   } = useGetTicketsQuery();
 
   let content;
-  const noTicketsParagraph = <p>You haven't taken any tickets yet.</p>;
+  const noTicketsParagraph = <div className={classes["without-tickets"]}>You haven't taken any tickets yet.</div>;
 
   if (isLoading) {
     content = <p>Loading...</p>;

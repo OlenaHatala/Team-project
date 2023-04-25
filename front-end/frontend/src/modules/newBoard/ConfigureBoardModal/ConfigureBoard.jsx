@@ -7,6 +7,7 @@ import { NewBoardProvider } from "../context/NewBoardContext";
 import useNewBoardContext from "../hooks/useNewBoardContext";
 import classes from "./ConfigureBoardModal.module.css";
 import { Loader } from "../../common/components";
+import { CircularProgress } from "@mui/material";
 
 const ConfigureBoard = ({ boardInfo }) => {
   const {
@@ -96,10 +97,13 @@ const ConfigureBoard = ({ boardInfo }) => {
   if (formIsReady) {
     content = (
       <>
-        {isLoading ? (
-          <p>Updating tickets... Usually it takes around 20 second.</p>
-        ) : null}
         <div className={classes["super-div"]}>
+        {isLoading ? (
+          <div style={{ display: "flex", flexDirection: "row" , gap: "20px"}}>
+          <CircularProgress />
+           <p>Updating tickets... Usually it takes around 20 second.</p>
+        </div>
+        ) : null}
           <NewBoardForm
             onSubmit={submitHandler}
             disableSubmit={isLoading}

@@ -5,7 +5,7 @@ import classes from "./WeekBody.module.css";
 import { useSelector } from "react-redux";
 import { selectTimeBorders } from "../../store/weekSlice";
 
-const WeekBody = () => {
+const WeekBody = ({ onTicketApprove, onTicketDeny }) => {
   const { minutePercentage, timePoints } = useSelector(selectTimeBorders);
 
   return (
@@ -14,13 +14,13 @@ const WeekBody = () => {
         timeBorders={timePoints}
         minutePercentage={minutePercentage}
       />
-      <Day day="monday" />
-      <Day day="tuesday" />
-      <Day day="wednesday" />
-      <Day day="thursday" />
-      <Day day="friday" />
-      <Day day="saturday" />
-      <Day day="sunday" />
+      <Day day="monday" onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny}/>
+      <Day day="tuesday" onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny}/>
+      <Day day="wednesday" onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny}/>
+      <Day day="thursday" onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny}/>
+      <Day day="friday" onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny}/>
+      <Day day="saturday" onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny}/>
+      <Day day="sunday" onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny}/>
     </div>
   );
 };
