@@ -44,7 +44,7 @@
   cursor: pointer;
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
-  background-color: #2e5250;
+  background-color: #D1A504;
   color: #1c1333;
   border: 1px solid #8c8c8c;
 }
@@ -52,14 +52,14 @@
 .actions button:disabled,
 .actions button:disabled:hover,
 .actions button:disabled:active {
-  background-color: #39323f;
-  color: #594f63;
+  background-color: #011f09;
+  color: #ffffff;
   border: 1px solid #4d4d4d;
   cursor: not-allowed;
 }
 
 .actions button:hover {
-  background-color: rgb(219, 201, 255);
+  background-color: #d1a504;
 }
 
 .mode-suggestion {
@@ -70,7 +70,8 @@
 }
 
 .mode-suggestion a {
-  color: #2e5250;
+  color: #D1A504;
+  font-weight: bold;
   text-decoration: none;
 }
 
@@ -94,7 +95,7 @@ h1 {
   font: inherit;
   display: flex;
   justify-content: center;
-  color: #2e5250;
+  color: #EBE8F3;
   font-size: 25px;
 }
 
