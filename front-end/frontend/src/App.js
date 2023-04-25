@@ -9,7 +9,8 @@ import { RequireAuth, usePersistAuth } from "./modules/auth";
 import ErrorPage from "./pages/Error";
 import SuccessPage from "./pages/Success";
 import { HomeIndexPage } from "./modules/home/index";
-import { MainLayout } from "./modules/common";
+// import { MainLayout } from "./modules/common";
+import RootLayout from "./pages/Root";
 
 import EditAccountPage from "./pages/Account";
 import NewBoard from "./pages/NewBoard";
