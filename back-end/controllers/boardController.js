@@ -771,8 +771,18 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
         wednesday: board.tickets[numberOfWeek].wednesday, thursday : board.tickets[numberOfWeek].thursday, 
         friday: board.tickets[numberOfWeek].friday, saturday: board.tickets[numberOfWeek].saturday, sunday: board.tickets[numberOfWeek].sunday}
 
+
     const tickets = {}
     const dates = {}
+
+    let show_button = true;
+
+    for (const day in week_tickets) {
+        if( week_tickets[day].length != 0){
+            show_button = false;
+            break;
+        }
+    } 
 
     let todayWeekDay = new Date().getDay();
     if (todayWeekDay === 0) {
@@ -816,7 +826,8 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
   res.status(200).json({
     message:"Get week tickets",
     dates,
-    tickets
+    tickets,
+    show_button
   })
   } catch(error) {
     res.status(500).json({
@@ -899,6 +910,7 @@ const addMember = asyncHandler(async (req, res) => {
     const required_fields_present = (board_id && user_id)
     const user_obj_id = new ObjectId(user_id)
     const board_obj_id = new ObjectId(board_id)
+
 
 
     if (created_tables.length === 0 || !created_tables.find(boardId => boardId === board_id)) {
