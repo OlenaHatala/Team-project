@@ -27,7 +27,7 @@ export const ticketsApiSlice = apiSlice.injectEndpoints({
                     }
                     else
                     {
-                        status = "wait";
+                        status = "in-waitlist";
                     }
                     if(ticketData.is_outdated)
                     {

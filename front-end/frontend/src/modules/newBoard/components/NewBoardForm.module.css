@@ -48,7 +48,7 @@ fieldset {
   white-space: pre-wrap;
   font-size: 14px;
   color: #d1a504;
-  text-decoration: none solid rgb(173, 122, 218);
+  text-decoration: none solid rgb(21, 59, 43);
   letter-spacing: 2px;
   line-break: auto;
 }
@@ -98,7 +98,7 @@ fieldset {
   font-size: 0.75rem;
   border-radius: 0.5rem;
   background: rgba(191, 198, 191, 0.479);
-  color: rgb(91, 7, 81);
+  color: rgb(17, 61, 43);
   padding: 0.25rem;
   margin: 0;
   position: relative;
@@ -177,7 +177,7 @@ fieldset {
 }
 
 .autoopen-config select option {
-  background: #4c3e6d;
+  background: #235037;
 }
 
 .autoopen-config p {

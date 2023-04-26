@@ -4,7 +4,7 @@ export const weekApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getWeek: builder.query({
       query: (cfg) => `/board/readOneWeek/${cfg.boardId}/${cfg.weekIndex}`,
-      keepUnusedDataFor: 60,
+      keepUnusedDataFor: 5,
       providesTags: (arg) => [{ type: "week", id: arg.weekIndex }],
       transformResponse: (responseData) => {
         console.log({

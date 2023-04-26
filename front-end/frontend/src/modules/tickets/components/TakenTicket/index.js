@@ -5,6 +5,7 @@ import { clock } from "react-icons-kit/icomoon/clock";
 import { useNavigate } from "react-router-dom";
 
 const TakenTicket = (props) => {
+  const statusText = props.status === "in-waitlist"? "in waitlist": props.status;
   const navigate = useNavigate();
   const clickHandler = () => {
     navigate(`/board/${props?.boardId}`)
@@ -14,7 +15,7 @@ const TakenTicket = (props) => {
       <div
         className={`${classes["ticket-header"]} ${classes[`${props.status}`]}`}
       >
-        {props.status}
+        {statusText}
       </div>
       <div className={classes["ticket-title"]}>
         {props.boardName.slice(0, 40)}

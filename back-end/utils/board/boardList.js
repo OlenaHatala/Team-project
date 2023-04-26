@@ -14,7 +14,8 @@ const getListOwnerData = (board) => {
         label: board.label,
         service_name: board.service_name,
         address: board.address,
-        join_requests_num: board.requests.length
+        join_requests_num: board.requests.length,
+        ticket_requests_num: board.unconfirmed_tickets.length
     }
     return boardData;
 }

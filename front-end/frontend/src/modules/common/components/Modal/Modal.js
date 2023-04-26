@@ -22,7 +22,6 @@ const Modal = (props) => {
 
         <Backdrop onClose={props.onClose} />,
 
-
         <ModalOverlay>{props.children}</ModalOverlay>,
 
     </>

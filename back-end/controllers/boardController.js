@@ -126,7 +126,19 @@ const getBoardTicketOwner = async (ticket) => {
     };
 } 
 
-const getBoardTicketMember = (ticket, user_id) => {
+const getBoardTicketMember = (ticket, obj_user_id) => {
+    if(ticket.user_id){
+        is_yours = obj_user_id.equals(ticket.user_id) && ticket.confirmed && !ticket.is_outdated,
+        in_waitlist = !ticket.confirmed && obj_user_id.equals(ticket.user_id) && !ticket.is_outdated
+        // is_rejected = !is_yours && !in_waitlist
+        is_rejected = !ticket.user_id.equals(obj_user_id)
+    }
+    else{
+        is_yours = false
+        in_waitlist = false
+        is_rejected = true
+    }
+
     return {
         _id: ticket._id,
         table_id: ticket.table_id,
@@ -134,8 +146,10 @@ const getBoardTicketMember = (ticket, user_id) => {
         is_outdated: ticket.is_outdated,
         confirmed: ticket.confirmed,
         duration: ticket.duration,
-        is_rejected: ticket.user_id != user_id ,
-        is_yours: ticket.user_id = user_id,
+        enabled: !is_rejected && !is_yours && !in_waitlist && !ticket.is_outdated,
+        is_rejected,
+        is_yours,
+        in_waitlist,
     };
 } 
 
@@ -404,7 +418,7 @@ async function delete_outdated_week(id){
     }
 }
 
-cron.schedule('32 00 * * 4', async () => {
+cron.schedule('59 23 * * 0', async () => {
     try {
         const boards = await Board.find().exec();
         
@@ -756,6 +770,8 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
     const { user_id } = req;
 
     try {
+    const user_obj_id = new ObjectId(user_id)
+
     const board = await Board.findById(id).exec()
     const isOwner = board.owner_id == user_id
     const showEnabledOnly = !isOwner;
@@ -810,14 +826,16 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
             dates[day] = {day: findTicket.datetime.getDate(), month: findTicket.datetime.getMonth()};
             fallbackDate = findTicket.datetime;
             if (showEnabledOnly) {
-                const user = await User.findById(user_id)
+                const user = await User.findById(user_id).exec()
                 if (findTicket.enabled==true && !findTicket.user_id && findTicket.is_outdated === false && !user.taken_tickets.includes(findTicket._id.toString())) {
-                    ticketData = getBoardTicketMember(findTicket)
+                    ticketData = getBoardTicketMember(findTicket, user_obj_id)
                     ticketData.is_rejected = false
                     ticketData.is_yours = false
+                    ticketData.in_waitlist = false
+                    ticketData.enabled = true
                 }
                 else if (user.taken_tickets.includes(findTicket._id.toString())){
-                    ticketData = getBoardTicketMember(findTicket)
+                    ticketData = getBoardTicketMember(findTicket, user_obj_id)
                 }
             } else {
                 ticketData = await getBoardTicketOwner(findTicket)

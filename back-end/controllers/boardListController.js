@@ -32,6 +32,7 @@ const boardlist = asyncHandler(async (req, res) => {
     return res.status(200).json({
       created_boards_arr,
       membered_boards_arr,
+      
     });
   } catch (error) {
     return res.status(400).json({

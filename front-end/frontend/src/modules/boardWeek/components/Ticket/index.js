@@ -26,38 +26,53 @@ export const Ticket = (props) => {
   const [hover, setHover] = useState(false);
 
   const [takeTicket, { isLoading: takingInProgress }] = useTakeTicketMutation();
-  const [deleteTicket, { isLoading: deletingInProgress }] = useDeleteTicketMutation();
+  const [deleteTicket, { isLoading: deletingInProgress }] =
+    useDeleteTicketMutation();
 
   let status = "nouser";
-  let statusClass;
-  if (props.ticket?.user && props.ticket?.confirmed) {
-    status = "confirmed";
-    statusClass = classes["confirmed-ticket"];
-  }
-  if (props.ticket?.user && !props.ticket?.confirmed) {
-    status = "requested";
-    statusClass = classes["requested-ticket"];
-  }
+  let statusClass = classes["enabled-ticket"];
+
   if (props.ticket?.is_outdated) {
-    status = "outdated";
+    if (mode === "owner") {
+      status = "outdated";
+    }
     statusClass = classes["outdated-ticket"];
+  }else  if (props.ticket?.user && props.ticket?.confirmed) {
+    if (mode === "owner") {
+      status = "confirmed";
+    }
+    statusClass = classes["confirmed-ticket"];
+  } else if (props.ticket?.user && !props.ticket?.confirmed) {
+    if (mode === "owner") {
+      status = "requested";
+    }
+    statusClass = classes["requested-ticket"];
+  } else if (props.ticket?.is_yours){
+    statusClass = classes["taken-ticket"];
   }
-  if (props.ticket?.enabled && !props.ticket?.is_outdated) {
-    statusClass = classes["enabled-ticket"];
+  else if (props.ticket?.is_rejected){
+    statusClass = classes["rejected-ticket"];
   }
-  if (!props.ticket?.enabled && !props.ticket?.is_outdated) {
-    statusClass = classes["disabled-ticket"];
-  }
-  if (mode === "member") {
-    statusClass = classes["enabled-ticket"];
-  }
+  else if (props.ticket?.in_waitlist){
+    statusClass = classes["waitlist-ticket"];
+  } else if (!props.ticket?.enabled && !props.ticket?.is_outdated) {
+      statusClass = classes["disabled-ticket"];
+    }
+
+  // if (mode === "owner") {
+  //   if (props.ticket?.enabled && !props.ticket?.is_outdated) {
+  //     statusClass = classes["enabled-ticket"];
+  //   } else if (!props.ticket?.enabled && !props.ticket?.is_outdated) {
+  //     statusClass = classes["disabled-ticket"];
+  //   }
+  // }
 
   const denyHandler = async (ticket) => {
-    props?.onTicketDeny(ticket)
+    props?.onTicketDeny(ticket);
   };
 
   const approveHandler = async (ticket) => {
-    props?.onTicketApprove(ticket)
+    props?.onTicketApprove(ticket);
   };
 
   let actions = [];
@@ -74,12 +89,12 @@ export const Ticket = (props) => {
       actions.push({
         type: "delete",
         action: async (ticket) => {
-          console.log({...ticket});
+          console.log({ ...ticket });
           await deleteTicket({ ...ticket }).unwrap();
         },
       });
     }
-  } else if (mode === "member") {
+  } else if (mode === "member" && props.ticket.enabled) {
     actions.push({
       type: "take",
       action: async (ticket) => {
@@ -89,9 +104,9 @@ export const Ticket = (props) => {
   }
 
   let inner;
-  if (status === "confirmed") {
+  if (status === "confirmed" && mode === "owner") {
     inner = <TakenTicketInner ticket={props.ticket} />;
-  } else if (status === "requested") {
+  } else if (status === "requested" && mode === "owner") {
     inner = (
       <RequestedTicketInner
         ticket={props.ticket}
@@ -124,7 +139,13 @@ export const Ticket = (props) => {
             setHover(false);
           }}
         >
-          <div className={(props.ticket.duration > 50 || hover) ? classes["action-section"] : classes["action-section-hidden"]}>
+          <div
+            className={
+              props.ticket.duration > 50 || hover
+                ? classes["action-section"]
+                : classes["action-section-hidden"]
+            }
+          >
             {hover ? (
               <div className={classes["quick-actions"]}>
                 {actions.map((action) => (
@@ -155,9 +176,7 @@ export const Ticket = (props) => {
               </div>
             ) : null}
           </div>
-          <div className={classes["flex-inner"]}>
-            {inner}
-          </div>
+          <div className={classes["flex-inner"]}>{inner}</div>
         </div>
       )}
     </>
