@@ -32,10 +32,7 @@ const EditTicketModalForm = () => {
   const sumbitHandler = async (e) => {
     e.preventDefault();
     let hours = time.slice(0, 2);
-    let mins = time.slice(2, 4);
-    console.log(hours)
-    console.log(mins)
-    console.log(editedTicket.datetime)
+    let mins = time.slice(3, 5);
     let newDateTime = new Date(editedTicket.datetime);
     newDateTime.setHours(hours);
     newDateTime.setMinutes(mins);

@@ -25,8 +25,8 @@ export const weekApiSlice = apiSlice.injectEndpoints({
         body: {
           ticketData: {
             enabled: ticket.availablePayload,
-            //duration: ticket.duration,
-            //datetime: ticket.datetime,
+            duration: ticket.duration,
+            datetime: ticket.datetime,
           },
           id: ticket._id,
         },
