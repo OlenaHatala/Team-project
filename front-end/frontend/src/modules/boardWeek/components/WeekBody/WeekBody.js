@@ -10,6 +10,7 @@ const WeekBody = ({ onTicketApprove, onTicketDeny }) => {
 
   return (
     <div className={classes.scroll}>
+      <div className={classes.days}>
       <TimeColumn
         timeBorders={timePoints}
         minutePercentage={minutePercentage}
@@ -21,6 +22,7 @@ const WeekBody = ({ onTicketApprove, onTicketDeny }) => {
       <Day day="friday" onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny}/>
       <Day day="saturday" onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny}/>
       <Day day="sunday" onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny}/>
+    </div>
     </div>
   );
 };

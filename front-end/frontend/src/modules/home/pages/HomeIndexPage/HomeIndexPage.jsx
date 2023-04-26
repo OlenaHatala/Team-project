@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 import  classes  from "./HomeIndexPage.module.css";
 import BoardImage from '../../pictures/BoardImage.png';
+import homepage from '../../pictures/home-p.png';
 import photo1 from '../../pictures/photo1.jpg';
 import photo2 from '../../pictures/photo2.jpg';
 
@@ -22,7 +23,7 @@ export function HomeIndexPage() {
                 <button className={classes["start-button"]}>Get Started Now</button>
               </Link>
             </div>
-            <div className={classes.content}><img src={BoardImage} alt="BoardImage"/></div>
+            <div><img src={homepage} alt="homepage"/></div>
           </div>
         </div>
         <div className={classes["main-info"]}>

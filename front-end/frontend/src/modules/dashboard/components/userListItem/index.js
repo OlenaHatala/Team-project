@@ -82,9 +82,8 @@ const UserListItem = ({ id, name, surname, mobile_number, confirmed }) => {
       <div className={classes.container}>
         {approveLoading || denyLoading ? <Loader /> : null}
         <ListItem key={id} className={classes["user-list-item"]}>
-          <ListItemAvatar>
+          <ListItemAvatar className={classes["user-list-avatar"]}>
             <Avatar
-              className={classes["user-list-avatar"]}
               style={{ backgroundColor: randomColor({ seed: name + surname }) }}
             >
               {name[0]}
