@@ -60,6 +60,18 @@ export const weekApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (arg) => [{ type: "week", id: arg.weekIndex }],
     }),
+
+    deleteTicket: builder.mutation({
+      query: (ticket) => ({
+        url: "/ticket/deleteTicket",
+        method: "DELETE",
+        body: {
+          id: ticket._id,
+        },
+      }),
+      invalidatesTags: (arg) => [{ type: "week", id: arg.weekIndex }],
+    }),
+
   }),
 });
 
@@ -69,4 +81,5 @@ export const {
   useTakeTicketMutation,
   useApproveTicketMutation,
   useDenyTicketMutation,
+  useDeleteTicketMutation,
 } = weekApiSlice;

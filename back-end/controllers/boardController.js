@@ -402,20 +402,20 @@ async function delete_outdated_week(id){
     }
 }
 
-cron.schedule('32 00 * * 4', async () => {
-    try {
-        const boards = await Board.find().exec();
+// cron.schedule('32 00 * * 4', async () => {
+//     try {
+//         const boards = await Board.find().exec();
         
-        for (const board of boards) {
-            await delete_outdated_week(board._id);
-        }
+//         for (const board of boards) {
+//             await delete_outdated_week(board._id);
+//         }
 
-        console.log('Week deleted successfully for all boards');
-    }
-    catch (error) {
-        console.error('An error occurred while deleting weeks for all boards:', error.message);
-    }
-});
+//         console.log('Week deleted successfully for all boards');
+//     }
+//     catch (error) {
+//         console.error('An error occurred while deleting weeks for all boards:', error.message);
+//     }
+// });
 
 const createWeek  = asyncHandler(async (req, res) =>{
     const { board_id, week_id} = req.body
@@ -823,18 +823,19 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
             }
         }
     }
-  res.status(200).json({
-    message:"Get week tickets",
-    dates,
-    tickets,
-    show_button
-  })
-  } catch(error) {
-    res.status(500).json({
-      message: "An error occurred",
-      error: error.message,
+    
+    res.status(200).json({
+        message:"Get week tickets",
+        dates,
+        tickets,
+        show_button
     })
-  }
+    } catch(error) {
+        res.status(500).json({
+        message: "An error occurred",
+        error: error.message,
+        })
+    }
 })
 
 const getBoard = asyncHandler(async (req, res) => {
