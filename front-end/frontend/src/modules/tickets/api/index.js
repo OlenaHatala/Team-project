@@ -33,6 +33,10 @@ export const ticketsApiSlice = apiSlice.injectEndpoints({
                     {
                         status = "outdated";
                     }
+                    if (ticketData.is_rejected)
+                    {
+                        status = "rejected";
+                    }
                     return {
                         id: ticketData._id,
                         boardName: ticketData.boardlabel,

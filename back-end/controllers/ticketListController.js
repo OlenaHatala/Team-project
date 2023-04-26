@@ -5,7 +5,7 @@ const { ObjectId } = require('mongodb');
 const asyncHandler = require("express-async-handler");
 const { check_if_outdated } = require("./ticketController");
 
-const getListTiketData = async (ticket) => {
+const getListTiketData = async (ticket, user_id) => {
   const board = await Board.findById(ticket?.table_id).exec();
     const ticketData = {
         _id: ticket?._id,
@@ -15,6 +15,7 @@ const getListTiketData = async (ticket) => {
         is_confirmed: ticket?.confirmed,
         boardlabel: board?.label || "",
         boardId: board?._id,
+        is_rejected: ticket.user_id != user_id,
     }
     return ticketData;
 }
@@ -35,7 +36,7 @@ const ticketlist = asyncHandler(async (req, res) => {
     let taken_tickets_arr = [];
     for (id in taken_tickets) {
       const found_ticket = await check_if_outdated(taken_tickets[id]);
-      const ticketData = await getListTiketData(found_ticket);
+      const ticketData = await getListTiketData(found_ticket, user_id);
       taken_tickets_arr.push(ticketData);
     }
     return res.status(200).json({
@@ -43,7 +44,7 @@ const ticketlist = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     return res.status(400).json({
-      message: "And error occurred",
+      message: "An error occurred",
       error: error?.message || "Unknown error",
     });
   }

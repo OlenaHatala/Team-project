@@ -372,11 +372,19 @@ const takeTicket = asyncHandler(async (req, res) => {
       }
 
       var tak_tickets = user.taken_tickets;
-      tak_tickets.push(ticket_obj_id);
+      if(!tak_tickets.includes(ticket_obj_id.toString())){
+        console.log(tak_tickets.includes(ticket_obj_id))
+        console.log(ticket_obj_id)
+        console.log("------------")
+        console.log(tak_tickets)
+        tak_tickets.push(ticket_obj_id);
+        
+        await User.findByIdAndUpdate(
+          user_id, {taken_tickets: tak_tickets}
+        );
+      }
 
-      await User.findByIdAndUpdate(
-        user_id, {taken_tickets: tak_tickets}
-      );
+
       return res.status(201).json({ message: "Success" });
     }
 
@@ -449,12 +457,13 @@ const ticketConfirmation = asyncHandler(async (req, res) => {
       await Ticket.findByIdAndUpdate(
         ticket_id, {confirmed: false, user_id: null}
       );
-      await User.findByIdAndUpdate(
-        user._id, {taken_tickets: user.taken_tickets.filter((requested_id)=>{ 
-          return requested_id != ticket_id;
-        })}
-      );
+      // await User.findByIdAndUpdate(
+      //   user._id, {taken_tickets: user.taken_tickets.filter((requested_id)=>{ 
+      //     return requested_id != ticket_id;
+      //   })}
+      // );
       
+
     }
     else {
       return res.status(404).json({
@@ -503,6 +512,18 @@ const deleteTicket = async (req, res) => {
 
   if (!board) {
     return res.status(400).json({ message: 'Board not found' })
+  }
+
+  const members = board.members
+
+  for(var member_id in members){
+    const member = await User.findById(members[member_id]);
+
+      await User.findByIdAndUpdate(
+      member._id, {taken_tickets: member.taken_tickets.filter((requested_id)=>{ 
+        return requested_id != ticket.id;
+      })}
+    );
   }
 
   if(ticket.user_id){
