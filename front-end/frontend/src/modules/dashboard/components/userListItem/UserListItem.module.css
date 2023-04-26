@@ -20,3 +20,25 @@
 .body-text {
   color: rgb(240, 236, 236);
 }
+
+
+@media (max-width: 1000px) { 
+  .user-list-item{
+    padding: 0 !important;
+    margin: 0 !important;
+    padding-bottom: 5px !important;
+  }
+
+  .user-list-avatar{
+   display: flex;
+   justify-content: flex-start;
+  }
+
+  .body-text {
+    display: flex;
+    justify-content: flex-start;
+    font-size: 14px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}

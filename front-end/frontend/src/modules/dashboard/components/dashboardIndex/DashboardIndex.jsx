@@ -58,7 +58,7 @@ const DashboardIndex = ({ id }) => {
               padding: "20px",
               width: "18%",
               height: "100%",
-              "min-width": "250px",
+              "margin-right":"0",
             }}
           >
             <div className={classes["list-toggle-container"]}>

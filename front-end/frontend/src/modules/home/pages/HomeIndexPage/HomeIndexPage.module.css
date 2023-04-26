@@ -2,6 +2,7 @@
   height: 850px;
   display: flex;
   justify-content:space-around;
+  animation: new-item-animation .4s linear forwards;
 }
 
 .design {
@@ -30,6 +31,7 @@
   font-size: 20px;
   margin-top: 8%;
   padding: 0;
+  color: #1C1333;
   z-index: 10;
 }
 
@@ -68,10 +70,14 @@
   transform: scale(0.95);
 }
 
+.main-info{
+  padding-bottom: 390px;
+}
 
 .info{
   display: flex;
   justify-content: space-around;
+  animation: new-item-animation .4s linear forwards;
 }
 
 .text-block{
@@ -100,5 +106,19 @@
 }
 
 .main-info{
-  color: black;
+  color: #1C1333;
+  background-color: white;
+  z-index: 10;
+}
+
+@keyframes new-item-animation {
+  from {
+      opacity: 0;
+      transform: translateY(-20px);
+}
+
+  to {
+      opacity: 1;
+      transform : translateY(0);
+  }
 }

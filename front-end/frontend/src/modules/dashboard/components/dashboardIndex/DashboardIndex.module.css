@@ -119,3 +119,10 @@
     font-size: 12px;
   }
 }
+
+@media (max-width: 1000px) {
+  
+.list-toggle-container {
+  flex-direction: column;
+}
+}

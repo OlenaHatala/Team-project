@@ -6,6 +6,12 @@ import { useNavigate } from "react-router-dom";
 
 const TakenTicket = (props) => {
   const statusText = props.status === "in-waitlist"? "in waitlist": props.status;
+  const [hours, minutes] = props.time.split(':').map(Number);
+  const totalMinutes = hours * 60 + minutes + props.duration;
+  const newHours = Math.floor(totalMinutes / 60);
+  const newMinutes = totalMinutes % 60;
+  const end_time = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
+
   const navigate = useNavigate();
   const clickHandler = () => {
     navigate(`/board/${props?.boardId}`)
@@ -33,7 +39,7 @@ const TakenTicket = (props) => {
           <span>
             <Icon icon={clock} size={14} />
           </span>
-          {props.time}
+          {props.time}-{end_time}
         </div>
       </div>
     </div>
