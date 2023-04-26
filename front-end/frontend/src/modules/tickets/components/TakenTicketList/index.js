@@ -27,6 +27,7 @@ export const TakenTicketList = () => {
                 boardName={ticket.boardName}
                 date={ticket.date}
                 time={ticket.time}
+                duration={ticket.duration}
                 boardId={ticket.boardId}
               />
             </div>

@@ -162,4 +162,4 @@ export const Ticket = (props) => {
   );
 };
 
-const iconSxStyles = { fontSize: "17px", color: "rgb(149, 149, 149)" };
+const iconSxStyles = { fontSize: "17px", color: "#F5F5DC" };

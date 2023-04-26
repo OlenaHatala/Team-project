@@ -6,7 +6,7 @@ import classes from "./AreYouSure.module.css";
 
 const AreYouSure = ({ title, question, onClose, onContinue }) => {
   return (
-    <Modal>
+    <Modal onClose={onClose}>
       <div className={classes.container}>
         <div className={classes.info}>
           <h2>{title}</h2>

@@ -6,7 +6,15 @@
 }
 
 .info {
-    margin-bottom: 100px;
+    margin-bottom: 50px;
+}
+
+.info h2{
+    font-size: 24px;
+}
+
+.info p{
+    font-size: 18px;
 }
 
 .actions {
