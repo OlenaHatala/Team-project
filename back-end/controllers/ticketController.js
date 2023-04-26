@@ -373,10 +373,7 @@ const takeTicket = asyncHandler(async (req, res) => {
 
       var tak_tickets = user.taken_tickets;
       if(!tak_tickets.includes(ticket_obj_id.toString())){
-        console.log(tak_tickets.includes(ticket_obj_id))
-        console.log(ticket_obj_id)
-        console.log("------------")
-        console.log(tak_tickets)
+      
         tak_tickets.push(ticket_obj_id);
         
         await User.findByIdAndUpdate(
