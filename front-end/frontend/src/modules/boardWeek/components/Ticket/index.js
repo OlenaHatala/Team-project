@@ -17,7 +17,7 @@ import {
   selectIsLoading,
   showEditTicketAction,
 } from "../../store/weekSlice";
-import { useTakeTicketMutation } from "../../api";
+import { useTakeTicketMutation, useDeleteTicketMutation } from "../../api";
 
 export const Ticket = (props) => {
   const mode = useSelector(selectWeekMode);
@@ -26,6 +26,7 @@ export const Ticket = (props) => {
   const [hover, setHover] = useState(false);
 
   const [takeTicket, { isLoading: takingInProgress }] = useTakeTicketMutation();
+  const [deleteTicket, { isLoading: deletingInProgress }] = useDeleteTicketMutation();
 
   let status = "nouser";
   let statusClass;
@@ -72,8 +73,9 @@ export const Ticket = (props) => {
     if (status === "nouser" || status === "outdated") {
       actions.push({
         type: "delete",
-        action: () => {
-          console.log("delete ticket action");
+        action: async (ticket) => {
+          console.log({...ticket});
+          await deleteTicket({ ...ticket }).unwrap();
         },
       });
     }

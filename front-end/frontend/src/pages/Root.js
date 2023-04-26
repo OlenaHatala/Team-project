@@ -7,20 +7,13 @@ import { useEffect, useState } from "react";
 function RootLayout() {
   const location = useLocation();
   return (
-    <div
-      styles={{
-        height: "100%",
-        background: location.pathname === "/" ? "black" : "red",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <>
       <MainNavigation />
       <main>
         <Outlet />
       </main>
       <Footer />
-    </div>
+    </>
   );
 }
 
