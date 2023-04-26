@@ -22,7 +22,7 @@ export const RequestedTicketInner = ({ ticket, onDeny, onApprove }) => {
         </div>
           <Typography className={classes.name}>{ticket.user.name} {ticket.user.surname}</Typography>
       </div>
-      <Typography>Require confirmation</Typography>
+      {/* <Typography>Require confirmation</Typography> */}
       <Buttons slim={true} denyClick={onDeny} acceptClick={onApprove}/>
       </>
   );

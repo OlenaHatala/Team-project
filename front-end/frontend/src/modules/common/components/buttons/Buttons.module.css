@@ -22,7 +22,6 @@
     height: 100%;
     padding: 0;
     background-color: #d1e0db;
-    /* border : 1px solid #e2c18b; */
 }
 
 .button-choice-reject{
@@ -31,9 +30,14 @@
     height: 100%;
     padding: 0;
     background-color: #d1e0db;
-    /* border : 1px solid #b99f2a; */
 }
 
-.button-choice:hover{
-    background-color: rgb(44, 107, 158);
+
+.button-choice-accept:hover{
+    background-color: #d1e0dba2;
 }
+
+.button-choice-reject:hover{
+    background-color: #d1e0dba2;
+}
+

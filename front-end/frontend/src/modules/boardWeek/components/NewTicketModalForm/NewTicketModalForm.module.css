@@ -36,7 +36,7 @@
   border: 0;
   outline: 0;
   background: transparent;
-  border-bottom: 2px solid #8c5bff;
+  border-bottom: 2px solid #2e5250;
   color: black;
   font-size: 18px;
   text-decoration: none solid rgb(243, 243, 243);
@@ -87,14 +87,14 @@
   cursor: pointer;
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
-  background-color: rgb(150, 120, 209);
+  background-color: #d1a504;
   color: rgb(28, 0, 51);
   border: none;
 }
 
 .button-inner .close-btn:hover,
 .add-btn:hover {
-  background-color: rgb(170, 145, 219);
+  background-color: #bfa545;
 }
 
 .time-picker input[type="time"]::-webkit-calendar-picker-indicator {
