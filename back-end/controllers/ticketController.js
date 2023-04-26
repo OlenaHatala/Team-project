@@ -132,7 +132,7 @@ const create = asyncHandler(async (req, res) => {
       enabled, 
       confirmed
     });
-    board.tickets[weekIndex][week_day[weekIndex]].push(ticket._id)
+    board.tickets[weekIndex][week_day[dayIndex]].push(ticket._id)
     board.save((error) => {
       if (error) {
           return res
@@ -141,7 +141,7 @@ const create = asyncHandler(async (req, res) => {
       }
   });
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Ticket created successfully",
       ticket,
     });
@@ -188,7 +188,7 @@ const update = async (req, res) => {
   }
 
   if (!ticketData || !id){
-    res.status(404).json({ message: "Data or ID is not present" });
+    return res.status(404).json({ message: "Data or ID is not present" });
   }
 
   try{
@@ -222,7 +222,7 @@ const update = async (req, res) => {
     for(i in day_tickets)
     {
       const findId = await check_if_outdated(day_tickets[i]);
-      if(findId)
+      if(findId && findId._id != id)
       {
         arrTickets.push(findId);
       }
@@ -243,7 +243,7 @@ const update = async (req, res) => {
 
     if(findFreeSpace(arrTickets, newTicketDate, ticketData.duration) != true)
     {
-      res.status(400).json({ message: 'Ticket already exists at this time' });
+      return res.status(400).json({ message: 'Ticket already exists at this time' });
     }
     else
     {
@@ -270,7 +270,7 @@ const update = async (req, res) => {
       await Ticket.findByIdAndUpdate(
         id, newData
       );
-      
+
       const ticket = await Ticket.findById(id)
       const board = await Board.findById(ticket.table_id)
       
@@ -280,8 +280,8 @@ const update = async (req, res) => {
       }
 
       board.save()
-  
-      res.status(201).json({ message: "Update successful", ticket });
+
+      return res.status(201).json({ message: "Update successful", ticket });
       }
       catch(error){
         res
@@ -290,7 +290,7 @@ const update = async (req, res) => {
       };
   }  
   else if (id && ticketData && !(Object.keys(newData).length)) {
-    res.status(204).json({ message: "Data is not present" });
+    return res.status(204).json({ message: "Data is not present" });
   }
 };
 
