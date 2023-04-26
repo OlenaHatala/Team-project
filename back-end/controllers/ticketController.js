@@ -75,12 +75,20 @@ const create = asyncHandler(async (req, res) => {
   if (!table_id || !datetime || !duration || !is_outdated || !enabled || !confirmed) {
     return res.status(400).json({ message: 'All fields are required' });
   }
+  
+
   const new_table_id = new ObjectId(table_id);
   const new_user_id = user_id === "" ? null : new ObjectId(user_id); // convert empty string to null
 
   try { 
     const newTicketDate = new Date(new Date(datetime).toISOString());  
     let currentDate = new Date(); // today
+    
+    if (datetime < currentDate)
+    {
+      return res.status(400).json({ message: 'You can not create ticket in the past time' });
+    }
+
     let diffTime = newTicketDate.getTime() - currentDate.getTime(); // difference in milliseconds
     let diffDays = diffTime / (1000 * 60 * 60 * 24); // difference in days
     let weekIndex = Math.floor(diffDays / 7); // add 1 to start counting from week 1

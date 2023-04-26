@@ -19,4 +19,5 @@
 .slider-container {
   width: 30%;
   height: 85px;
+  min-width: 290px;
 }

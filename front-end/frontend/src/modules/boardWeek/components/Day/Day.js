@@ -4,7 +4,7 @@ import classes from "./Day.module.css";
 
 import { useSelector } from "react-redux";
 import { selectTimeBorders, selectDates } from "../../store/weekSlice";
-import { monthByIndex } from "../../utils/weekDay";
+import { monthByIndex, weekDayToUpperCase } from "../../utils/weekDay";
 
 const Day = ({ day, onTicketApprove, onTicketDeny }) => {
   const { timePoints, minutePercentage } = useSelector(selectTimeBorders);
@@ -42,9 +42,7 @@ const Day = ({ day, onTicketApprove, onTicketDeny }) => {
   return (
     <>
       <div className={classes.day}>
-        <div className={classes["week-header"]}>{`${day
-          .slice(0, 1)
-          .toUpperCase()}${day.slice(1, 9)}${
+        <div className={classes["week-header"]}>{`${weekDayToUpperCase[day]}${
           dayNumbers?.day
             ? ", " +
               dayNumbers?.day +

@@ -124,7 +124,7 @@ export const Ticket = (props) => {
             setHover(false);
           }}
         >
-          <div className={classes["action-section"]}>
+          <div className={(props.ticket.duration > 50 || hover) ? classes["action-section"] : classes["action-section-hidden"]}>
             {hover ? (
               <div className={classes["quick-actions"]}>
                 {actions.map((action) => (
