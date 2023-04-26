@@ -126,7 +126,7 @@ const getBoardTicketOwner = async (ticket) => {
     };
 } 
 
-const getBoardTicketMember = (ticket) => {
+const getBoardTicketMember = (ticket, user_id) => {
     return {
         _id: ticket._id,
         table_id: ticket.table_id,
@@ -134,6 +134,8 @@ const getBoardTicketMember = (ticket) => {
         is_outdated: ticket.is_outdated,
         confirmed: ticket.confirmed,
         duration: ticket.duration,
+        is_rejected: ticket.user_id != user_id ,
+        is_yours: ticket.user_id = user_id,
     };
 } 
 
@@ -402,20 +404,20 @@ async function delete_outdated_week(id){
     }
 }
 
-// cron.schedule('32 00 * * 4', async () => {
-//     try {
-//         const boards = await Board.find().exec();
+cron.schedule('32 00 * * 4', async () => {
+    try {
+        const boards = await Board.find().exec();
         
-//         for (const board of boards) {
-//             await delete_outdated_week(board._id);
-//         }
+        for (const board of boards) {
+            await delete_outdated_week(board._id);
+        }
 
-//         console.log('Week deleted successfully for all boards');
-//     }
-//     catch (error) {
-//         console.error('An error occurred while deleting weeks for all boards:', error.message);
-//     }
-// });
+        console.log('Week deleted successfully for all boards');
+    }
+    catch (error) {
+        console.error('An error occurred while deleting weeks for all boards:', error.message);
+    }
+});
 
 const createWeek  = asyncHandler(async (req, res) =>{
     const { board_id, week_id} = req.body
@@ -808,7 +810,13 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
             dates[day] = {day: findTicket.datetime.getDate(), month: findTicket.datetime.getMonth()};
             fallbackDate = findTicket.datetime;
             if (showEnabledOnly) {
-                if (findTicket.enabled==true && !findTicket.user_id && findTicket.is_outdated === false) {
+                const user = await User.findById(user_id)
+                if (findTicket.enabled==true && !findTicket.user_id && findTicket.is_outdated === false && !user.taken_tickets.includes(findTicket._id.toString())) {
+                    ticketData = getBoardTicketMember(findTicket)
+                    ticketData.is_rejected = false
+                    ticketData.is_yours = false
+                }
+                else if (user.taken_tickets.includes(findTicket._id.toString())){
                     ticketData = getBoardTicketMember(findTicket)
                 }
             } else {

@@ -3,32 +3,32 @@ export const WeekDayByIndex = {
   1: "monday",
   2: "tuesday",
   3: "wednesday",
-  4: "tuesday",
+  4: "thursday",
   5: "friday",
   6: "saturday",
 };
 
 export const monthByIndex = {
-    0: "January",
-    1: "February",
-    2: "March",
-    3: "April",
+    0: "Jan",
+    1: "Feb",
+    2: "Mar",
+    3: "Apr",
     4: "May",
-    5: "June",
-    6: "July",
-    7: "August",
-    8: "September",
-    9: "October",
-    10: "November",
-    11: "December"
+    5: "Jun",
+    6: "Jul",
+    7: "Aug",
+    8: "Sep",
+    9: "Oct",
+    10: "Nov",
+    11: "Dec"
   };
 
 export const weekDayToUpperCase = {
-  sunday: "Sunday",
-  monday: "Monday",
-  tuesday: "Tuesday",
-  wednesday: "Wednesday",
-  tuesday: "Tuesday",
-  friday: "Friday",
-  saturday: "Saturday",
+  sunday: "Sun",
+  monday: "Mon",
+  tuesday: "Tue",
+  wednesday: "Wed",
+  thursday: "Thu",
+  friday: "Fri",
+  saturday: "Sat",
 };

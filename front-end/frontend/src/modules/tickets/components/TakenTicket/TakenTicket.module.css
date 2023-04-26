@@ -56,6 +56,10 @@
   background-color: #718df5;
 }
 
+.ticket-header.rejected {
+  background-color: #f57171;
+}
+
 .ticket-header.confirmed {
   background-color: #7ac48f;
 }

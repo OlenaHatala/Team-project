@@ -1,6 +1,6 @@
 .user-div {
   height: 85%;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 

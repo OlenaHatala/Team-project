@@ -75,12 +75,20 @@ const create = asyncHandler(async (req, res) => {
   if (!table_id || !datetime || !duration || !is_outdated || !enabled || !confirmed) {
     return res.status(400).json({ message: 'All fields are required' });
   }
+  
+
   const new_table_id = new ObjectId(table_id);
   const new_user_id = user_id === "" ? null : new ObjectId(user_id); // convert empty string to null
 
   try { 
     const newTicketDate = new Date(new Date(datetime).toISOString());  
     let currentDate = new Date(); // today
+    
+    if (datetime < currentDate)
+    {
+      return res.status(400).json({ message: 'You can not create ticket in the past time' });
+    }
+
     let diffTime = newTicketDate.getTime() - currentDate.getTime(); // difference in milliseconds
     let diffDays = diffTime / (1000 * 60 * 60 * 24); // difference in days
     let weekIndex = Math.floor(diffDays / 7); // add 1 to start counting from week 1
@@ -132,7 +140,7 @@ const create = asyncHandler(async (req, res) => {
       enabled, 
       confirmed
     });
-    board.tickets[weekIndex][week_day[weekIndex]].push(ticket._id)
+    board.tickets[weekIndex][week_day[dayIndex]].push(ticket._id)
     board.save((error) => {
       if (error) {
           return res
@@ -141,7 +149,7 @@ const create = asyncHandler(async (req, res) => {
       }
   });
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Ticket created successfully",
       ticket,
     });
@@ -188,7 +196,7 @@ const update = async (req, res) => {
   }
 
   if (!ticketData || !id){
-    res.status(404).json({ message: "Data or ID is not present" });
+    return res.status(404).json({ message: "Data or ID is not present" });
   }
 
   try{
@@ -222,7 +230,7 @@ const update = async (req, res) => {
     for(i in day_tickets)
     {
       const findId = await check_if_outdated(day_tickets[i]);
-      if(findId)
+      if(findId && findId._id != id)
       {
         arrTickets.push(findId);
       }
@@ -243,7 +251,7 @@ const update = async (req, res) => {
 
     if(findFreeSpace(arrTickets, newTicketDate, ticketData.duration) != true)
     {
-      res.status(400).json({ message: 'Ticket already exists at this time' });
+      return res.status(400).json({ message: 'Ticket already exists at this time' });
     }
     else
     {
@@ -270,7 +278,7 @@ const update = async (req, res) => {
       await Ticket.findByIdAndUpdate(
         id, newData
       );
-      
+
       const ticket = await Ticket.findById(id)
       const board = await Board.findById(ticket.table_id)
       
@@ -280,8 +288,8 @@ const update = async (req, res) => {
       }
 
       board.save()
-  
-      res.status(201).json({ message: "Update successful", ticket });
+
+      return res.status(201).json({ message: "Update successful", ticket });
       }
       catch(error){
         res
@@ -290,7 +298,7 @@ const update = async (req, res) => {
       };
   }  
   else if (id && ticketData && !(Object.keys(newData).length)) {
-    res.status(204).json({ message: "Data is not present" });
+    return res.status(204).json({ message: "Data is not present" });
   }
 };
 
@@ -372,11 +380,16 @@ const takeTicket = asyncHandler(async (req, res) => {
       }
 
       var tak_tickets = user.taken_tickets;
-      tak_tickets.push(ticket_obj_id);
+      if(!tak_tickets.includes(ticket_obj_id.toString())){
+      
+        tak_tickets.push(ticket_obj_id);
+        
+        await User.findByIdAndUpdate(
+          user_id, {taken_tickets: tak_tickets}
+        );
+      }
 
-      await User.findByIdAndUpdate(
-        user_id, {taken_tickets: tak_tickets}
-      );
+
       return res.status(201).json({ message: "Success" });
     }
 
@@ -449,12 +462,13 @@ const ticketConfirmation = asyncHandler(async (req, res) => {
       await Ticket.findByIdAndUpdate(
         ticket_id, {confirmed: false, user_id: null}
       );
-      await User.findByIdAndUpdate(
-        user._id, {taken_tickets: user.taken_tickets.filter((requested_id)=>{ 
-          return requested_id != ticket_id;
-        })}
-      );
+      // await User.findByIdAndUpdate(
+      //   user._id, {taken_tickets: user.taken_tickets.filter((requested_id)=>{ 
+      //     return requested_id != ticket_id;
+      //   })}
+      // );
       
+
     }
     else {
       return res.status(404).json({
@@ -503,6 +517,18 @@ const deleteTicket = async (req, res) => {
 
   if (!board) {
     return res.status(400).json({ message: 'Board not found' })
+  }
+
+  const members = board.members
+
+  for(var member_id in members){
+    const member = await User.findById(members[member_id]);
+
+      await User.findByIdAndUpdate(
+      member._id, {taken_tickets: member.taken_tickets.filter((requested_id)=>{ 
+        return requested_id != ticket.id;
+      })}
+    );
   }
 
   if(ticket.user_id){
