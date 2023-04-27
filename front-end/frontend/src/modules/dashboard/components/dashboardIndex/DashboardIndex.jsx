@@ -17,6 +17,8 @@ import { BoardHeader } from "../../../common/components";
 import AddIcon from "@mui/icons-material/Add";
 import SettingsIcon from "@mui/icons-material/Settings";
 
+import CircularProgress from "@mui/material/CircularProgress";
+
 import UserList from "../userList/index";
 import { boardLinkCreator } from "../../../common/constants";
 
@@ -36,9 +38,39 @@ const DashboardIndex = ({ id }) => {
     dispatch(toggleShowConfigureBoardAction(true));
   };
 
-  let boardContent = <p>Loading...</p>;
+  let boardContent = (
+    <div
+      styles={{
+        minHeight: "700px",
+        height: "700px",
+        width: "100%",
+        display: "flex",
+        "justify-content": "center",
+        "align-items": "center",
+        "background-color": "black",
+      }}
+    >
+      <CircularProgress sx={{ marginBottom: "450px", marginInline: "auto" }} />
+    </div>
+  );
   if (boardIsLoading) {
-    boardContent = <p>Loading...</p>;
+    boardContent = (
+      <div
+        styles={{
+          minHeight: "700px",
+          height: "700px",
+          width: "100%",
+          display: "flex",
+          "justify-content": "center",
+          "align-items": "center",
+          "background-color": "black",
+        }}
+      >
+        <CircularProgress
+          sx={{ marginBottom: "440px", marginInline: "auto" }}
+        />
+      </div>
+    );
   } else if (isSuccess && board?.label) {
     dispatch(boardFetched(board));
     boardContent = (

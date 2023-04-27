@@ -5,6 +5,7 @@ import MemberTable from "../member_table/MemberTable";
 import TableInfo from "../table_info/TableInfo";
 import AddTable from "../add_table/AddTable";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const BoardList = () => {
   const navigate = useNavigate();
@@ -30,21 +31,27 @@ export const BoardList = () => {
   const noBoardsParagraph =
     showBoardType === "member" ? (
       <div className={classes["text-wrapper"]}>
-      <p className={classes["noboards-p"]}>
-        You haven't joined any board yet. You can join board with the link given
-        by the board owner.
-      </p>
+        <p className={classes["noboards-p"]}>
+          You haven't joined any board yet. You can join board with the link
+          given by the board owner.
+        </p>
       </div>
     ) : (
       <div className={classes["text-wrapper"]}>
-      <p className={classes["noboards-p"]}>
-        You haven't created any board yet.
-      </p>
+        <p className={classes["noboards-p"]}>
+          You haven't created any board yet.
+        </p>
       </div>
     );
 
   if (isLoading) {
-    content = <div className={classes["text-wrapper"]}><p>Loading...</p></div>;
+    content = (
+      <div className={classes["text-wrapper"]}>
+        <CircularProgress
+          sx={{ marginBottom: "440px", marginInline: "auto" }}
+        />
+      </div>
+    );
   } else if (isSuccess) {
     boards = allBoards.filter((board) => {
       return board.userStatus === showBoardType;
@@ -55,7 +62,7 @@ export const BoardList = () => {
     });
 
     content = (
-      <div className={classes.inner} >
+      <div className={classes.inner}>
         <nav className={classes.listnav}>
           <button
             className={
@@ -111,7 +118,7 @@ export const BoardList = () => {
                 <div
                   key={board.id}
                   onClick={() => {
-                    itemClickHandler({ id: board.id, mode: 'member' });
+                    itemClickHandler({ id: board.id, mode: "member" });
                   }}
                   className={classes["table-list-item"]}
                 >

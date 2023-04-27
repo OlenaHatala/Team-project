@@ -2,6 +2,8 @@ import { useGetTicketsQuery } from "../../api";
 import TakenTicket from "../TakenTicket/index.js";
 import classes from "./TakenTicketList.module.css";
 
+import CircularProgress from "@mui/material/CircularProgress";
+
 export const TakenTicketList = () => {
   const {
     data: tickets,
@@ -12,10 +14,30 @@ export const TakenTicketList = () => {
   } = useGetTicketsQuery();
 
   let content;
-  const noTicketsParagraph = <div className={classes["without-tickets"]}>You haven't taken any tickets yet.</div>;
+  const noTicketsParagraph = (
+    <div className={classes["without-tickets"]}>
+      You haven't taken any tickets yet.
+    </div>
+  );
 
   if (isLoading) {
-    content = <p>Loading...</p>;
+    content = (
+      <div
+        styles={{
+          minHeight: "700px",
+          height: "700px",
+          width: "100%",
+          display: "flex",
+          "justify-content": "center",
+          "align-items": "center",
+          "background-color": "black",
+        }}
+      >
+        <CircularProgress
+          sx={{ marginBottom: "440px", marginInline: "auto" }}
+        />
+      </div>
+    );
   } else if (isSuccess) {
     content = (
       <>
