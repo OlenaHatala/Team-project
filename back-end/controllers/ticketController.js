@@ -72,7 +72,7 @@ function findFreeSpace(recordedDates, targetDate, targetDateDuration) {
 
 const create = asyncHandler(async (req, res) => {
   const { table_id, user_id, datetime, duration, is_outdated, enabled, confirmed } = req.body; 
-  if (!table_id || !datetime || !duration || !is_outdated || !enabled || !confirmed) {
+  if (!table_id || !datetime || !duration || !is_outdated || !confirmed) {
     return res.status(400).json({ message: 'All fields are required' });
   }
   
@@ -81,11 +81,12 @@ const create = asyncHandler(async (req, res) => {
   const new_user_id = user_id === "" ? null : new ObjectId(user_id); // convert empty string to null
 
   try { 
-    const newTicketDate = new Date(new Date(datetime).toISOString());  
+    const newTicketDate = new Date(new Date(datetime));  
     let currentDate = new Date(); // today
-    
-    if (datetime < currentDate)
+
+    if (newTicketDate.getTime() - currentDate.getTime() < 0)
     {
+
       return res.status(200).json({ message: 'You can not create ticket in the past time' });
     }
 
@@ -103,7 +104,6 @@ const create = asyncHandler(async (req, res) => {
        weekIndex = 0
      }
     //weekIndex = weekIndex + 1;
-    console.log(weekIndex)
     
     const week_tickets = [board.tickets[weekIndex].monday, board.tickets[weekIndex].tuesday,
       board.tickets[weekIndex].wednesday, board.tickets[weekIndex].thursday, 
