@@ -5,6 +5,7 @@ import { skeletonTickets } from "../utils/skeletonTickets";
 
 const initialState = {
   isLoading: true,
+  loadingTicketId: '',
   mode: "",
   weekIndex: 0,
   tickets: skeletonTickets,
@@ -141,6 +142,10 @@ export const weekSlice = createSlice({
     setWeekIndexAction(state, action) {
       state.weekIndex = action.payload;
     },
+
+    setLoadingTicketIdAction(state, action) {
+      state.loadingTicketId = action.payload;
+    },
   },
 });
 
@@ -148,6 +153,7 @@ export const selectWeek = (state) => state.week;
 export const selectDates = (state) => state.week.dates;
 export const selectWeekIndex = (state) => state.week.weekIndex;
 export const selectIsLoading = (state) => state.week.isLoading;
+export const selectLoadingTicketId = (state) => state.week.loadingTicketId;
 export const selectWeekMode = (state) => state.week.mode;
 export const selectModalsState = (state) => state.week.modals;
 export const selectTimeBorders = (state) => state.week.timeBorders;
@@ -162,6 +168,7 @@ export const {
   setModeAction,
   setLoadingAction,
   setWeekIndexAction,
+  setLoadingTicketIdAction,
 } = weekSlice.actions;
 
 export default weekSlice.reducer;

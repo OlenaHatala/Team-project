@@ -4,8 +4,11 @@ import { Modal } from "../../../common/components/Modal";
 import classes from "./NewTicketModalForm.module.css";
 import { useDispatch } from "react-redux";
 import { toggleShowNewTicketAction } from "../../store/weekSlice";
+import { WeekDayByIndexInverse } from "../../utils/weekDay";
+import { useAddTicketMutation } from "../../api/index";
+import { setNotificationAction } from "../../../../modules/notifications/store/notificationsSlice";
 
-const NewTicketModalForm = () => {
+const NewTicketModalForm = ({ boardId, weekIndex }) => {
   const dispatch = useDispatch();
 
   const [weekday, setWeekday] = useState("monday");
@@ -13,14 +16,49 @@ const NewTicketModalForm = () => {
   const [duration, setDuration] = useState(60);
   const [available, setAvailable] = useState(false);
 
+  const [addTicket, { isLoading }] = useAddTicketMutation();
+
   const onClose = () => {
     dispatch(toggleShowNewTicketAction(false));
   };
 
-  const sumbitHandler = (e) => {
+  const sumbitHandler = async (e) => {
     e.preventDefault();
+    const hours = time.slice(0, 2);
+    const mins = time.slice(3, 5);
 
-    //dispatch(ticketAdded(weekday, time, duration, available));
+    const todayWeekDay = new Date().getDay();
+    let datetime = new Date(
+      Date.now() +
+        ((WeekDayByIndexInverse[weekday] - todayWeekDay) * 24 * 3600 * 1000) +
+        weekIndex * 7 * 24 * 3600 * 1000
+    );
+
+    datetime.setHours(hours);
+    datetime.setMinutes(mins);
+
+    console.log(WeekDayByIndexInverse[weekday] - todayWeekDay);
+    console.log(weekIndex * 7 * 24 * 3600 * 1000);
+    console.log(datetime)
+
+    const response = await addTicket({
+      user_id: "",
+      table_id: boardId,
+      duration: duration,
+      datetime: datetime,
+      is_outdated: "false",
+      confirmed: "false",
+      enabled: available,
+      weekIndex: weekIndex,
+    }).unwrap();
+
+    dispatch(
+      setNotificationAction({
+        message: response?.message,
+        messageType: "error",
+      })
+    );
+
     onClose();
   };
 

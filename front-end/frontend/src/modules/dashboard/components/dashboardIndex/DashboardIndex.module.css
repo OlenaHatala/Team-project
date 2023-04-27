@@ -29,6 +29,14 @@
   margin-bottom: 10px;
 }
 
+.topbar-left{
+  margin-left: 5px;
+}
+
+.topbar-right{
+  margin-right: 5px;
+}
+
 .topbar-left,
 .topbar-right {
   display: flex;
@@ -51,6 +59,7 @@
   text-align: center;
   align-items: center;
   padding: 30px 10px;
+  min-width: 100px;
   width: 100%;
   font-size: 16px;
   cursor: pointer;

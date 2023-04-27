@@ -8,7 +8,7 @@ function Login() {
     <>
       <AuthHeader />
       <div className={classes["authform-container"]}>
-        <Card>
+        <Card style={{marginTop: '55px'}}>
           <LoginForm />
         </Card>
       </div>

@@ -8,7 +8,7 @@ function Register() {
     <>
       <AuthHeader />
       <div className={classes["authform-container"]}>
-        <Card>
+        <Card style={{marginTop: '45px'}}>
           <RegisterForm />
         </Card>
       </div>

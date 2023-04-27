@@ -86,7 +86,7 @@ const create = asyncHandler(async (req, res) => {
     
     if (datetime < currentDate)
     {
-      return res.status(400).json({ message: 'You can not create ticket in the past time' });
+      return res.status(200).json({ message: 'You can not create ticket in the past time' });
     }
 
     let diffTime = newTicketDate.getTime() - currentDate.getTime(); // difference in milliseconds
@@ -98,6 +98,12 @@ const create = asyncHandler(async (req, res) => {
     if (!board) {
         return res.status(400).json({ message: 'Board not found' })
     }
+
+     if (weekIndex < 0) {
+       weekIndex = 0
+     }
+    //weekIndex = weekIndex + 1;
+    console.log(weekIndex)
     
     const week_tickets = [board.tickets[weekIndex].monday, board.tickets[weekIndex].tuesday,
       board.tickets[weekIndex].wednesday, board.tickets[weekIndex].thursday, 
@@ -118,7 +124,7 @@ const create = asyncHandler(async (req, res) => {
 
     if(findFreeSpace(arrTickets, newTicketDate, duration) != true)
     {
-      return res.status(400).json({ message: 'Ticket already exists at this time' });
+      return res.status(200).json({ message: 'Ticket already exists at this time' });
     }
 
     const existingTicket = await Ticket.findOne({
@@ -251,7 +257,7 @@ const update = async (req, res) => {
 
     if(findFreeSpace(arrTickets, newTicketDate, ticketData.duration) != true)
     {
-      return res.status(400).json({ message: 'Ticket already exists at this time' });
+      return res.status(200).json({ message: 'Ticket already exists at this time' });
     }
     else
     {

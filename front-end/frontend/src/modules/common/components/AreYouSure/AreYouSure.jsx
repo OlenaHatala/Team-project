@@ -10,17 +10,22 @@ const AreYouSure = ({ title, question, onClose, onContinue }) => {
       <div className={classes.container}>
         <div className={classes.info}>
           <h2>{title}</h2>
-          <p>{question}</p>
+          {question ? <p>{question}</p> : null}
         </div>
         <div className={classes.actions}>
-          <button onClick={onClose}>NO</button>
+          <button
+            onClick={
+              onClose}
+          >
+            CANCEL
+          </button>
           <button
             onClick={() => {
               onContinue();
               onClose();
             }}
           >
-            YES
+            CONTINUE
           </button>
         </div>
       </div>

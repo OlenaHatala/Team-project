@@ -9,6 +9,7 @@ import {
   ticketAdded,
   ticketUpdated,
 } from "../../store/weekSlice";
+import { setNotificationAction } from "../../../../modules/notifications/store/notificationsSlice";
 import { useConfigureTicketMutation } from "../../api";
 
 const EditTicketModalForm = () => {
@@ -44,6 +45,13 @@ const EditTicketModalForm = () => {
         duration: duration,
         availablePayload: availablePayload,
       }).unwrap();
+
+      dispatch(
+        setNotificationAction({
+          message: response?.message,
+          messageType: "error",
+        })
+      );
 
       const ticket = newTicketData.ticket;
       dispatch(ticketUpdated(ticket));

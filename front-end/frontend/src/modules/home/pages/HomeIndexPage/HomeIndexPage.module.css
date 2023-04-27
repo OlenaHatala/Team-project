@@ -30,6 +30,7 @@
   max-width: 550px;
   font-size: 20px;
   margin-top: 8%;
+  margin-left: 6%;
   padding: 0;
   color: #1C1333;
   z-index: 10;
@@ -71,7 +72,7 @@
 }
 
 .main-info{
-  padding-bottom: 390px;
+  padding-bottom: 300px;
 }
 
 .info{

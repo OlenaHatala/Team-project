@@ -12,7 +12,7 @@ function RootLayout() {
       <main>
         <Outlet />
       </main>
-      <Footer />
+      <Footer marginTop={location.pathname === "/" ? 0 : 200}/>
     </>
   );
 }

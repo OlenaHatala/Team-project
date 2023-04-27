@@ -5,7 +5,7 @@ import {
   Outlet,
 } from "react-router-dom";
 import { RequireAuth, usePersistAuth } from "./modules/auth";
-
+import { Notification } from "./modules/notifications/components/Notification";
 import ErrorPage from "./pages/Error";
 import SuccessPage from "./pages/Success";
 import { HomeIndexPage } from "./modules/home/index";
@@ -22,7 +22,7 @@ import { TakenTickets } from "./pages/TakenTickets";
 import BoardsPage from "./pages/Boards";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "./modules/auth/store/index";
-import './App.css';
+import "./App.css";
 
 function Home() {
   const user = useSelector(selectCurrentUser);
@@ -93,6 +93,7 @@ function App() {
   usePersistAuth();
   return (
     <div className="App">
+      <Notification />
       <RouterProvider router={router} />
     </div>
   );

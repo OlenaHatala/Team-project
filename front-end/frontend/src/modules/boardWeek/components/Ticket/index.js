@@ -8,6 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import classes from "./Ticket.module.css";
 import { TicketSkeleton } from "./Skeleton";
@@ -16,18 +17,18 @@ import {
   selectWeekMode,
   selectIsLoading,
   showEditTicketAction,
+  selectLoadingTicketId,
 } from "../../store/weekSlice";
-import { useTakeTicketMutation, useDeleteTicketMutation } from "../../api";
 
 export const Ticket = (props) => {
   const mode = useSelector(selectWeekMode);
   const isLoading = useSelector(selectIsLoading);
+  const loadingTicketId = useSelector(selectLoadingTicketId);
   const dispatch = useDispatch();
   const [hover, setHover] = useState(false);
 
-  const [takeTicket, { isLoading: takingInProgress }] = useTakeTicketMutation();
-  const [deleteTicket, { isLoading: deletingInProgress }] =
-    useDeleteTicketMutation();
+
+  const showLoader = props.ticket._id === loadingTicketId;
 
   let status = "nouser";
   let statusClass = classes["enabled-ticket"];
@@ -75,6 +76,21 @@ export const Ticket = (props) => {
     props?.onTicketApprove(ticket);
   };
 
+  const deleteHandler = async (ticket) => {
+    props?.onTicketDelete(ticket);
+  };
+
+  const takeHandler = async (ticket) => {
+    props?.onTicketTake(ticket);
+  };
+  
+  const ticketClickHandler = async (ticket) => {
+    // if (mode === 'member' && !ticket?.is_yours) {
+    //   await takeTicket({ ...ticket }).unwrap();
+    // } 
+    props?.onTicketTake(ticket);
+  }
+
   let actions = [];
   if (mode === "owner") {
     if (status === "nouser") {
@@ -89,8 +105,7 @@ export const Ticket = (props) => {
       actions.push({
         type: "delete",
         action: async (ticket) => {
-          console.log({ ...ticket });
-          await deleteTicket({ ...ticket }).unwrap();
+          deleteHandler(ticket);
         },
       });
     }
@@ -98,7 +113,7 @@ export const Ticket = (props) => {
     actions.push({
       type: "take",
       action: async (ticket) => {
-        await takeTicket({ ...ticket }).unwrap();
+        takeHandler(ticket);
       },
     });
   }
@@ -127,10 +142,18 @@ export const Ticket = (props) => {
       {isLoading ? (
         <TicketSkeleton ticket={props.ticket} height={props.height} />
       ) : (
+        <>
         <div
           className={`${classes.ticket} ${statusClass}`}
           style={{
             height: `${props.height}%`,
+          }}
+          onClick={() => {
+            if (mode === "owner") {
+              return;
+            } else {
+              ticketClickHandler(props.ticket);
+            }
           }}
           onMouseEnter={() => {
             setHover(true);
@@ -176,9 +199,9 @@ export const Ticket = (props) => {
               </div>
             ) : null}
           </div>
-          <div className={classes["flex-inner"]}>{inner}</div>
+          <div className={classes["flex-inner"]}> {showLoader && <CircularProgress sx={{position: 'absolute'}}/>}{inner}</div>
         </div>
-      )}
+        </>)}
     </>
   );
 };

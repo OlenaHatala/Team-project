@@ -1,9 +1,9 @@
 .footer {
-  margin-top: auto;
   width: 100%;
   padding: 50px 0 20px;
   background: #2c3640;
   color: #ffffff;
+  margin-bottom: auto;
 }
 
 .social-links {

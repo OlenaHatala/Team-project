@@ -34,6 +34,9 @@ export const boardsApiSlice = apiSlice.injectEndpoints({
                     if (boardData.join_requests_num !== 0) {
                         board.counters.requests = boardData.join_requests_num
                     }
+                    if (boardData.ticket_requests_num !== 0) {
+                        board.counters.tickets = boardData.ticket_requests_num
+                    }
                     return board;
                 });
             }

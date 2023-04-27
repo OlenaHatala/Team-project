@@ -18,6 +18,23 @@ export const weekApiSlice = apiSlice.injectEndpoints({
       },
     }),
 
+    addTicket: builder.mutation({
+      query: (ticket) => ({
+        url: "/ticket/create",
+        method: "POST",
+        body: {
+          user_id: "",
+          table_id: ticket?.table_id,
+          duration: ticket.duration,
+          datetime: ticket.datetime,
+          is_outdated: "false",
+          confirmed: "false",
+          enabled: ticket?.enabled,
+        },
+      }),
+      invalidatesTags: (arg) => [{ type: "week", id: arg.weekIndex }],
+    }),
+
     configureTicket: builder.mutation({
       query: (ticket) => ({
         url: "/ticket/update",
@@ -71,7 +88,6 @@ export const weekApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (arg) => [{ type: "week", id: arg.weekIndex }],
     }),
-
   }),
 });
 
@@ -82,4 +98,5 @@ export const {
   useApproveTicketMutation,
   useDenyTicketMutation,
   useDeleteTicketMutation,
+  useAddTicketMutation,
 } = weekApiSlice;

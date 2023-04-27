@@ -1,10 +1,11 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { useLogout, useSelectUser } from "../../../auth";
 
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import classes from "./MainNavigation.module.css";
+import { ReactComponent as HeaderLogo } from "../../../../assets/headerlogo.svg";
 import { useState } from "react";
 
 export function MainNavigation() {
@@ -17,6 +18,11 @@ export function MainNavigation() {
 
   return (
     <header className={classes.header}>
+            <div className={classes["logo-wrapper"]}>
+        <Link to="/">
+          <HeaderLogo height="53px" width="auto" margin="0" />
+        </Link>
+      </div>
       <nav className={classes.navbar}>
         <ul className={classes.list}>
           {!username && (

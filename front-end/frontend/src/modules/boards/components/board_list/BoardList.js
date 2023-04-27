@@ -29,18 +29,22 @@ export const BoardList = () => {
   let content;
   const noBoardsParagraph =
     showBoardType === "member" ? (
+      <div className={classes["text-wrapper"]}>
       <p className={classes["noboards-p"]}>
         You haven't joined any board yet. You can join board with the link given
         by the board owner.
       </p>
+      </div>
     ) : (
+      <div className={classes["text-wrapper"]}>
       <p className={classes["noboards-p"]}>
         You haven't created any board yet.
       </p>
+      </div>
     );
 
   if (isLoading) {
-    content = <p>Loading...</p>;
+    content = <div className={classes["text-wrapper"]}><p>Loading...</p></div>;
   } else if (isSuccess) {
     boards = allBoards.filter((board) => {
       return board.userStatus === showBoardType;

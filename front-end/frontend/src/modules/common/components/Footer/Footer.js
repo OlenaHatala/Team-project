@@ -1,11 +1,17 @@
 import classes from './Footer.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactComponent as FooterLogo } from '../../../../assets/footerlogo.svg';
 import { faFacebook, faInstagram, faTelegram, faTwitter} from '@fortawesome/free-brands-svg-icons';
 
-function Footer() {
+function Footer({marginTop = 0}) {
   return (
-    <footer className={classes.footer}>
+    <footer className={classes.footer} style={{marginTop: `${marginTop}px`}}>
         <div className={classes["social-links"]}>
+                 
+          <div style={{marginLeft:'7px'}}>
+
+          <FooterLogo height='70px' width='auto'/>
+          </div>
             <p className={classes["top-text"]}>Be a part of Loggions Community</p>
             <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon className={classes["facebook-icon"]} icon={faFacebook} />

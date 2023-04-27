@@ -1,18 +1,18 @@
 import React from "react";
 
 import classes from "./AuthHeader.module.css";
+import { ReactComponent as HeaderLogo } from "../../../../assets/headerlogo.svg";
 
 import { Link } from "react-router-dom";
 
 const AuthHeader = () => {
   return (
-    <header>
+    <header className={classes.header}>
       <div className={classes["auth-page__logo"]}>
-        <Link to="/">
-          <p>Loggions</p>
-          <span>Home</span>
-        </Link>
-      </div>
+          <Link to="/">
+            <HeaderLogo height="60px" width="auto" margin="0" />
+          </Link>
+        </div>
     </header>
   );
 };

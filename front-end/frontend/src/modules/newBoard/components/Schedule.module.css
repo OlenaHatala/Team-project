@@ -126,7 +126,7 @@ button:hover {
   background-color: #8d8b92;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 600px) {
   .week {
     display: block;
     text-align: center;

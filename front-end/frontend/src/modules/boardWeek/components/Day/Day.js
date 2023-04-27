@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { selectTimeBorders, selectDates } from "../../store/weekSlice";
 import { monthByIndex, weekDayToUpperCase } from "../../utils/weekDay";
 
-const Day = ({ day, onTicketApprove, onTicketDeny }) => {
+const Day = ({ day, onTicketApprove, onTicketDeny,  onTicketDelete, onTicketTake }) => {
   const { timePoints, minutePercentage } = useSelector(selectTimeBorders);
   const dates = useSelector(selectDates);
   const dayNumbers = dates[day];
@@ -51,7 +51,7 @@ const Day = ({ day, onTicketApprove, onTicketDeny }) => {
             : ""
         }`}</div>
         <div className={classes["time-markup"]}>{hourElements}</div>
-        <DayTickets day={day} onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny}/>
+        <DayTickets day={day} onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny} onTicketDelete={onTicketDelete} onTicketTake={onTicketTake}/>
       </div>
     </>
   );

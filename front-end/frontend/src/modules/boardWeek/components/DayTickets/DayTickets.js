@@ -42,7 +42,7 @@ const sortTickets = (tickets) => {
   return tickets;
 };
 
-const DayTickets = ({ day, onTicketApprove, onTicketDeny }) => {
+const DayTickets = ({ day, onTicketApprove, onTicketDeny,  onTicketDelete, onTicketTake}) => {
   const week = useSelector(selectWeek);
   const { tickets, timeBorders, weekIndex } = week;
   const { timePoints, minutePercentage } = timeBorders;
@@ -123,7 +123,7 @@ const DayTickets = ({ day, onTicketApprove, onTicketDeny }) => {
         } else {
           frameContent = (
             <React.Fragment key={index}>
-              <Ticket onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny}
+              <Ticket onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny} onTicketDelete={onTicketDelete} onTicketTake={onTicketTake}
                 height={(minutePercentage * frame.duration * 95) / 100}
                 ticket={frame}
               />

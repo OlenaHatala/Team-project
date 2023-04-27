@@ -5,6 +5,8 @@ import {
   useGetWeekQuery,
   useDenyTicketMutation,
   useApproveTicketMutation,
+  useTakeTicketMutation,
+  useDeleteTicketMutation,
 } from "../../api";
 
 import {
@@ -13,7 +15,10 @@ import {
   setLoadingAction,
   selectWeekIndex,
   selectModalsState,
+  setLoadingTicketIdAction,
 } from "../../store/weekSlice";
+
+import { setNotificationAction } from "../../../../modules/notifications/store/notificationsSlice";
 
 import WeekBody from "../WeekBody/WeekBody";
 import { NewTicketModalForm } from "../NewTicketModalForm";
@@ -36,7 +41,9 @@ export const BoardWeekIndex = ({ mode, id, weekIndex }) => {
   const [denyTicket, { isLoading: denyLoading }] = useDenyTicketMutation();
   const [approveTicket, { isLoading: approveLoading }] =
     useApproveTicketMutation();
-
+  const [takeTicket, { isLoading: takingInProgress }] = useTakeTicketMutation();
+  const [deleteTicket, { isLoading: deletingInProgress }] =
+    useDeleteTicketMutation();
   const [areYouSure, setAreYouSure] = useState(areYouSureInitialState);
 
   const {
@@ -47,23 +54,25 @@ export const BoardWeekIndex = ({ mode, id, weekIndex }) => {
   } = useGetWeekQuery({ boardId: id, weekIndex: weekIndex });
 
   useEffect(() => {
-    if (isLoading || isFetching) {
-      dispatch(setLoadingAction(true));
-      dispatch(weekFetched({ tickets: skeletonTickets, dates: {} }));
-    }
-  }, [weekIndex, isLoading, isFetching]);
+    //if (isLoading || isFetching) {
+    dispatch(setLoadingAction(true));
+    dispatch(weekFetched({ tickets: skeletonTickets, dates: {} }));
+    //}
+  }, [weekIndex]);
 
   useEffect(() => {
     if (!isLoading && !isFetching) {
       dispatch(
         weekFetched({ tickets: response.tickets, dates: response.dates })
       );
+      dispatch(setLoadingTicketIdAction(""));
       dispatch(setLoadingAction(false));
     }
   }, [isLoading, isFetching, response]);
 
   const denyHandler = (ticket) => {
     const action = async () => {
+      dispatch(setLoadingTicketIdAction(ticket._id));
       const response = await denyTicket(ticket).unwrap();
     };
 
@@ -77,6 +86,7 @@ export const BoardWeekIndex = ({ mode, id, weekIndex }) => {
 
   const approveHandler = (ticket) => {
     const action = async () => {
+      dispatch(setLoadingTicketIdAction(ticket._id));
       const response = await approveTicket(ticket).unwrap();
     };
 
@@ -88,14 +98,59 @@ export const BoardWeekIndex = ({ mode, id, weekIndex }) => {
     });
   };
 
+  const takeTicketHandler = (ticket) => {
+    if (!ticket.enabled) {
+      return;
+    }
+    const action = async () => {
+      dispatch(setLoadingTicketIdAction(ticket._id));
+      const response = await takeTicket({ ...ticket }).unwrap();
+      dispatch(
+        setNotificationAction({
+          message: response?.message,
+          messageType: "error",
+        })
+      );
+    };
+
+    setAreYouSure({
+      open: true,
+      title: "Take ticket",
+      question: "",
+      action,
+    });
+  };
+
+  const deleteTicketHandler = (ticket) => {
+    const action = async () => {
+      dispatch(setLoadingTicketIdAction(ticket._id));
+      const response = await deleteTicket({ ...ticket }).unwrap();
+    };
+
+    setAreYouSure({
+      open: true,
+      title: "Delete ticket",
+      question:
+        "You can delete only not taken tickets. You can easily re-create ticket for current time later.",
+      action,
+    });
+  };
+
   const closeAreYouSure = () => {
     setAreYouSure(areYouSureInitialState);
   };
 
   return (
     <>
-      <WeekBody onTicketApprove={approveHandler} onTicketDeny={denyHandler} />
-      {showNewTicket && <NewTicketModalForm />}
+      <WeekBody
+        onTicketApprove={approveHandler}
+        onTicketDeny={denyHandler}
+        onTicketTake={takeTicketHandler}
+        onTicketDelete={deleteTicketHandler}
+      />
+      {showNewTicket && (
+        <NewTicketModalForm boardId={id} weekIndex={weekIndex} />
+      )}
       {showEditTicket && <EditTicketModalForm />}
       {areYouSure.open ? (
         <AreYouSure

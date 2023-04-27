@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleShowNewTicketAction } from "../../../boardWeek";
 import { useGetOwnerBoardQuery } from "../../api";
-import { BoardWeekIndex, BoardWeekSlider} from "../../../boardWeek";
-import {selectWeekIndex} from '../../../boardWeek/store/weekSlice';
+import { BoardWeekIndex, BoardWeekSlider } from "../../../boardWeek";
+import { selectWeekIndex } from "../../../boardWeek/store/weekSlice";
 import {
   boardFetched,
   selectDashboardAll,
@@ -43,7 +43,7 @@ const DashboardIndex = ({ id }) => {
     dispatch(boardFetched(board));
     boardContent = (
       <>
-        <Card color="white" style={{ padding: "5px 30px", marginBottom: '0' }}>
+        <Card color="white" style={{ padding: "5px 30px", marginBottom: "0" }}>
           <BoardHeader
             label={board.label}
             servname={board.service_name}
@@ -58,7 +58,7 @@ const DashboardIndex = ({ id }) => {
               padding: "20px",
               width: "18%",
               height: "100%",
-              "margin-right":"0",
+              "margin-right": "0",
             }}
           >
             <div className={classes["list-toggle-container"]}>
@@ -112,7 +112,7 @@ const DashboardIndex = ({ id }) => {
               <div className={classes["slider-container"]}>
                 <BoardWeekSlider />
               </div>
-              <div className={classes["topbar-left"]}>
+              <div className={classes["topbar-right"]}>
                 <button
                   className={classes["topbar-button"]}
                   onClick={openConfigureHandler}
@@ -122,12 +122,12 @@ const DashboardIndex = ({ id }) => {
               </div>
             </div>
             <div className={classes["week-container"]}>
-              <BoardWeekIndex mode="owner" id={id} weekIndex={weekIndex}/>
+              <BoardWeekIndex mode="owner" id={id} weekIndex={weekIndex} />
             </div>
           </Card>
 
           {dashboard?.showConfigureBoard ? (
-              <ConfigureBoardModal boardInfo={{ ...board }} />
+            <ConfigureBoardModal boardInfo={{ ...board }} />
           ) : null}
         </div>
       </>

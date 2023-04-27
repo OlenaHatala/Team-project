@@ -8,6 +8,16 @@ export const WeekDayByIndex = {
   6: "saturday",
 };
 
+export const WeekDayByIndexInverse = {
+  "sunday": 7,
+  "saturday": 6,
+  "friday": 5,
+  "thursday": 4,
+  "wednesday": 3,
+  "tuesday": 2,
+  "monday": 1,
+};
+
 export const monthByIndex = {
     0: "Jan",
     1: "Feb",
