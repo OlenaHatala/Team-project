@@ -1,0 +1,25 @@
+.card {
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    border-radius: 14px;
+    margin: 1rem;
+    background-color: #2e5250;
+    animation: new-item-animation .4s linear forwards;
+  }
+
+  .card.white {
+    background: #f4f8f7;
+  }
+
+
+  @keyframes new-item-animation {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+}
+
+    to {
+        opacity: 1;
+        transform : translateY(0);
+    }
+}

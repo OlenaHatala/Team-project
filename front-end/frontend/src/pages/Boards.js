@@ -3,8 +3,7 @@ import Card from "../modules/common/UI/Card";
 
 function BoardsPage() {
   return (
-    <div className="account-details">
-      <h1>Boards List</h1>
+    <div className="board-list-page">
       <Card>
         <BoardList />
       </Card>

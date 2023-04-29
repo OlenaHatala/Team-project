@@ -1,0 +1,137 @@
+.page-content {
+  display: flex;
+  height: 110vh;
+}
+
+.general-block {
+  float: right;
+}
+
+.users-container {
+  width: 15%;
+  height: 100%;
+  min-width: 250px;
+}
+
+.week-container {
+  height: 85%;
+}
+
+.topbar-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgb(156, 156, 156);
+  border-radius: 10px;
+  background-color: #fff;
+  width: 100%;
+  margin-left: auto;
+  margin-bottom: 10px;
+}
+
+.topbar-left{
+  margin-left: 5px;
+}
+
+.topbar-right{
+  margin-right: 5px;
+}
+
+.topbar-left,
+.topbar-right {
+  display: flex;
+  align-items: center;
+  width: 13%;
+  min-width: 100px;
+  justify-content: center;
+  padding: 10px;
+}
+
+.slider-container {
+  width: 30%;
+  height: 85px;
+  min-width: 290px;
+}
+
+.topbar-button {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  padding: 30px 10px;
+  min-width: 100px;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 10px;
+  background-color: #2e5250;
+  box-shadow: rgba(255, 255, 255, 0.24) 0px 3px 8px;
+  color:#f3f3f3
+}
+
+.topbar-button:hover {
+  background-color: #2e5250;
+}
+
+.noboards-p {
+  font-size: 22px;
+}
+
+.list-toggle-container {
+  display: flex;
+  gap: 10px;
+}
+
+.button {
+  font-size: 18px;
+  background-color: #d1a504;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  border-radius: 4px;
+  border: none;
+  overflow: hidden;
+  color: #1c1333;
+  font-weight: bold;
+}
+
+
+.button:hover {
+  background-color: #bfa545;
+  cursor: pointer;
+}
+
+.noactive-button {
+  background-color: transparent;
+  color: #f3f3f3;
+  border: 1px solid #f3f3f3;
+}
+
+.noactive-button:hover {
+  background-color: rgba(0, 0, 0, 0.11);
+}
+
+@media only screen and (max-width: 768px) {
+  .topbar-buttons {
+    width: 100%;
+  }
+
+  .topbar-left,
+  .topbar-right {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .topbar-button {
+    width: 100%;
+    margin: 0;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 1000px) {
+  
+.list-toggle-container {
+  flex-direction: column;
+}
+}

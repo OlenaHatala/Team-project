@@ -1,10 +1,11 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { useLogout, useSelectUser } from "../../../auth";
 
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import classes from "./MainNavigation.module.css";
+import { ReactComponent as HeaderLogo } from "../../../../assets/headerlogo.svg";
 import { useState } from "react";
 
 export function MainNavigation() {
@@ -17,30 +18,38 @@ export function MainNavigation() {
 
   return (
     <header className={classes.header}>
+            <div className={classes["logo-wrapper"]}>
+        <Link to="/">
+          <HeaderLogo height="53px" width="auto" margin="0" />
+        </Link>
+      </div>
       <nav className={classes.navbar}>
         <ul className={classes.list}>
-          <li>
-            <NavLink
-              to="/"
-              className={({ isActive }) => {
-                if (isActive) {
-                  setActiveItem("/");
-                }
-                return isActive ? classes.active : undefined;
-              }}
-              end
-            >
-              <div
-                className={
-                  activeItem === "/"
-                    ? classes["active-item"]
-                    : classes["header-item"]
-                }
+          {!username && (
+            <li>
+              <NavLink
+                to="/"
+                className={({ isActive }) => {
+                  if (isActive) {
+                    setActiveItem("/");
+                  }
+                  return isActive ? classes.active : undefined;
+                }}
+                end
               >
-                Home
-              </div>
-            </NavLink>
-          </li>
+                <div
+                  className={
+                    activeItem === "/"
+                      ? classes["active-item"]
+                      : classes["header-item"]
+                  }
+                >
+                  Home
+                </div>
+              </NavLink>
+            </li>
+          )}
+          {username && (
           <li>
             <NavLink
               to="/newboard"
@@ -61,7 +70,7 @@ export function MainNavigation() {
                 New Board
               </div>
             </NavLink>
-          </li>
+          </li>)}
           {username && (
             <li>
               <NavLink

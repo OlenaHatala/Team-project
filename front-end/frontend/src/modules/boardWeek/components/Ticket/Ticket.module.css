@@ -5,46 +5,60 @@
     z-index: 12;
     position: relative;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.301);
+    color: rgb(216, 230, 221);
 }
 
 .confirmed-ticket {
-    background-color:rgb(143, 143, 207);
+    background-color:#27557d;
 }
 
 .requested-ticket {
-    background-color:rgb(207, 167, 143);
+    background-color:#4682B4;
 }
 
 .outdated-ticket {
-    background-color:rgb(172, 172, 172);
+    background-color:rgb(185, 185, 185);
+    color : rgb(135, 135, 135)
+}   
+
+.enabled-ticket {
+    background-color: #367A6E;
 }
 
-.ebabled-ticket {
-    background-color:rgb(151, 207, 143);
+.taken-ticket {
+    background-color: #27557d;
 }
 
-.disbabled-ticket {
-    background-color:rgb(176, 212, 211);
+.rejected-ticket {
+    background-color: #a74141;
 }
 
-.confirmed-ticket:hover {
+.waitlist-ticket {
+    background-color: #5e6e9d;
+}
+
+.disabled-ticket {
+    background-color:#687d8e;
+}
+
+/* .confirmed-ticket:hover {
     background-color:rgb(143, 143, 220);
-}
+} */
 
-.requested-ticket:hover {
-    background-color:rgb(207, 167, 143);
-}
+/* .requested-ticket:hover {
+    background-color:#4683b4e4;
+} */
 
-.outdated-ticket:hover {
+/* .outdated-ticket:hover {
     background-color:rgb(189, 189, 189);
+} */
+
+.enabled-ticket:hover {
+    background-color: #367a6dec;
 }
 
-.ebabled-ticket:hover {
-    background-color:rgb(159, 209, 152);
-}
-
-.disbabled-ticket:hover {
-    background-color:rgb(187, 221, 219);
+.disabled-ticket:hover {
+    background-color:#296091da;
 }
 
 .quick-actions {
@@ -63,4 +77,18 @@
     display: flex;
     justify-content: flex-end;
     height: 20px;
+
+}
+
+.action-section-hidden {
+    display: none;
+    justify-content: flex-end;
+    height: 20px;
+}
+
+.flex-inner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }

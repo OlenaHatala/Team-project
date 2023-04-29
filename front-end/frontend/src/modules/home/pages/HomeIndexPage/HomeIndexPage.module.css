@@ -1,0 +1,155 @@
+.wave {
+  height: 850px;
+  display: flex;
+  justify-content:space-around;
+  animation: new-item-animation .4s linear forwards;
+}
+
+.design {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  position: relative;
+  background: linear-gradient(90deg, #65A09D 30%, #F3D461 100%);
+}
+
+.design:before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 320px;
+  background: url(../../pictures/wave.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.content {
+  max-width: 550px;
+  font-size: 20px;
+  margin-top: 8%;
+  margin-left: 6%;
+  padding: 0;
+  color: #1C1333;
+  z-index: 10;
+}
+
+.content p{
+  padding: 0;
+  margin: 0;
+}
+
+.start-button{
+  margin-top: 70px;
+  padding: 15px 15px 30px;
+  max-width: 220px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: #1C1333;
+  border-radius: 10px;
+  border: 0px;
+  font-weight: 700;
+  box-shadow: 0px 0px 14px -7px #D1A504;;
+  background-image: linear-gradient(45deg, #D1A504 0%, #F09819  51%, #FF512F  100%);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.imagedesktop {
+  height: auto;
+}
+
+.imagedesktop-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.start-button:hover {
+  background-position: right center;
+  color: #1C1333;
+  text-decoration: none;
+}
+
+.start-button:active {
+  transform: scale(0.95);
+}
+
+.main-info{
+  padding-bottom: 300px;
+}
+
+.info{
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-around;
+  animation: new-item-animation .4s linear forwards;
+}
+
+.text-block{
+  display: flex;
+  max-width: 500px;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.text-block p{
+  font-size: 21px;
+  padding: 0;
+  margin: 0;
+}
+
+.text-block ul{
+  margin: 0;
+  padding: 8px;
+  list-style: none; 
+}
+
+.text-block li::before {
+  content: "•";
+  color: #65A09D;
+  margin-right: 5px;
+}
+
+.main-info{
+  color: #1C1333;
+  background-color: white;
+  z-index: 10;
+}
+
+@media (max-width: 1250px) {
+  .imagedesktop {
+    height: 500px;
+  }
+
+  .imagedesktop-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 1450px) {
+  .content {
+    max-width: 550px;
+    min-width: 200px;
+    font-size: 20px;
+    padding-left: 30px;
+  }
+}
+
+@keyframes new-item-animation {
+  from {
+      opacity: 0;
+      transform: translateY(-20px);
+}
+
+  to {
+      opacity: 1;
+      transform : translateY(0);
+  }
+}

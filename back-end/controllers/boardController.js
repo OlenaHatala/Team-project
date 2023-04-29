@@ -126,7 +126,19 @@ const getBoardTicketOwner = async (ticket) => {
     };
 } 
 
-const getBoardTicketMember = (ticket) => {
+const getBoardTicketMember = (ticket, obj_user_id) => {
+    if(ticket.user_id){
+        is_yours = obj_user_id.equals(ticket.user_id) && ticket.confirmed && !ticket.is_outdated,
+        in_waitlist = !ticket.confirmed && obj_user_id.equals(ticket.user_id) && !ticket.is_outdated
+        // is_rejected = !is_yours && !in_waitlist
+        is_rejected = !ticket.user_id.equals(obj_user_id)
+    }
+    else{
+        is_yours = false
+        in_waitlist = false
+        is_rejected = true
+    }
+
     return {
         _id: ticket._id,
         table_id: ticket.table_id,
@@ -134,6 +146,10 @@ const getBoardTicketMember = (ticket) => {
         is_outdated: ticket.is_outdated,
         confirmed: ticket.confirmed,
         duration: ticket.duration,
+        enabled: !is_rejected && !is_yours && !in_waitlist && !ticket.is_outdated,
+        is_rejected,
+        is_yours,
+        in_waitlist,
     };
 } 
 
@@ -260,24 +276,30 @@ const create  = asyncHandler(async (req, res) =>{
 
                     const duration = markup.duration
 
-                    const current_day = new Date().getDay()
-                    num_of_days = 8 - current_day + 7 * i + week_index[day]
+                    let currentDate = new Date(); // today
+                    const timezoneOffset_ = 0;
+                    // const timezoneOffset_ = currentDate.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
+                    var new_current_time = new Date(currentDate.getTime() - (timezoneOffset_ * 60 * 1000)); // Adjust the time by the offset
+                    
+                    prev_day_time = new Date(new_current_time.getTime() - 24*60*60*1000 )
+                    const current_day_1 = prev_day_time.getDay()
 
-                    const open_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
+                    monday = new Date(new_current_time.getTime() - current_day_1*24*60*60*1000 )
+                    num_of_days = 7 * i + week_index[day]
+
+
+                    const open_time = new Date(monday.getTime() + num_of_days*24*60*60*1000);
                     open_time.setMinutes(open_min)
                     open_time.setHours(open_hour )
+                    
+                    var new_open_time = new Date(open_time.getTime() - (timezoneOffset_ * 60 * 1000)); // Adjust the time by the offset
+                    var ticket_time = new Date(new_open_time.getTime()); // Adjust the time by the offset
 
-                    const timezoneOffset = open_time.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
-                    var new_open_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
-                    var ticket_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
-
-
-                    const close_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
+                    const close_time = new Date(monday.getTime() + num_of_days*24*60*60*1000);
                     close_time.setHours(close_hour)
                     close_time.setMinutes(close_min)
 
-                    const new_close_time = new Date(close_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
-
+                    const new_close_time = new Date(close_time.getTime() - (timezoneOffset_ * 60 * 1000) + 1000*50); // Adjust the time by the offset
                     while(addMinutes(ticket_time, duration) <= new_close_time)
                     {
                         ticket = await Ticket.create({table_id:board._id, user_id: null , datetime: ticket_time, duration: markup.duration,is_outdated: false, enabled: false, confirmed: false})
@@ -396,7 +418,7 @@ async function delete_outdated_week(id){
     }
 }
 
-cron.schedule('32 00 * * 4', async () => {
+cron.schedule('59 23 * * 0', async () => {
     try {
         const boards = await Board.find().exec();
         
@@ -425,7 +447,12 @@ const createWeek  = asyncHandler(async (req, res) =>{
     try {
         const board = await Board.findById(board_id);
         const weekObjectId = mongoose.Types.ObjectId(week_id);
-        if(board.owner_id != user_id)
+        if(!board){
+            return res.status(404).json({
+                message: "Board with that id doesn`t exist",
+            })
+        }
+        if(board.owner_id.toString() != user_id.toString())
         {
             return res.status(400).json({ 
                 message: "User does not own that board",
@@ -459,34 +486,40 @@ const createWeek  = asyncHandler(async (req, res) =>{
                     {
                         break;
                     }
-
-                    if (week_tickets[day].workday)
+                    if (board.markup.days[day].workday)
                     {
-                        const open_hour = board.markup.days[day].open.split(':')[0];
-                        const open_min = board.markup.days[day].open.split(':')[1];
-    
-                        const close_hour = board.markup.days[day].close.split(':')[0];
-                        const close_min = board.markup.days[day].close.split(':')[1];
-    
-                        const duration = board.markup.duration
-    
-                        const current_day = new Date().getDay()
-                        num_of_days = 8 - current_day + 7 * i + week_index[day]
-    
-                        const open_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
+                        const open_hour = markup.days[day].open.split(':')[0];
+                        const open_min = markup.days[day].open.split(':')[1];
+                        const close_hour = markup.days[day].close.split(':')[0];
+                        const close_min = markup.days[day].close.split(':')[1];
+                        const duration = markup.duration
+
+                        let currentDate = new Date(); // today
+
+                        const timezoneOffset_ = 0
+
+                        var new_current_time = new Date(currentDate.getTime() - (timezoneOffset_ * 60 * 1000)); // Adjust the time by the offset
+                            
+                        prev_day_time = new Date(new_current_time.getTime() - 24*60*60*1000 )
+                        const current_day_1 = prev_day_time.getDay()
+
+                        monday = new Date(new_current_time.getTime() - current_day_1*24*60*60*1000 )
+                        num_of_days = 7 * i + week_index[day]
+                        
+
+                        const open_time = new Date(monday.getTime() + num_of_days*24*60*60*1000);
                         open_time.setMinutes(open_min)
                         open_time.setHours(open_hour )
-    
-                        const timezoneOffset = open_time.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
-                        var new_open_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
-                        var ticket_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
-    
-    
-                        const close_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
+                        
+                        var new_open_time = new Date(open_time.getTime() - (timezoneOffset_ * 60 * 1000)); // Adjust the time by the offset
+                        var ticket_time = new Date(new_open_time.getTime()); // Adjust the time by the offset
+
+                        const close_time = new Date(monday.getTime() + num_of_days*24*60*60*1000);
                         close_time.setHours(close_hour)
                         close_time.setMinutes(close_min)
-    
-                        const new_close_time = new Date(close_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+
+                        const new_close_time = new Date(close_time.getTime() - (timezoneOffset_ * 60 * 1000) + 1000*50); // Adjust the time by the offset
+
     
                         while(addMinutes(ticket_time, duration) <= new_close_time)
                         {
@@ -556,6 +589,7 @@ const update = asyncHandler(async (req, res) => {
                 auto_open
             }
         )
+
         if ((!(compareMarkup(markup, board.markup))) && (apply_new_markup === true)) {
             for (i = 0; i < 6; i++) {
 
@@ -592,11 +626,9 @@ const update = asyncHandler(async (req, res) => {
                     }
                     
                 } 
-
                 if (found_enabled_ticket) {
                     continue
                 }
-                
                 else {
                     for (const day in week_tickets) 
                     {
@@ -613,31 +645,39 @@ const update = asyncHandler(async (req, res) => {
                     {
                         if (markup.days[day].workday)
                         {
+
                             const open_hour = markup.days[day].open.split(':')[0];
                             const open_min = markup.days[day].open.split(':')[1];
-    
                             const close_hour = markup.days[day].close.split(':')[0];
                             const close_min = markup.days[day].close.split(':')[1];
-    
                             const duration = markup.duration
-    
-                            const current_day = new Date().getDay()
-                            num_of_days = 8 - current_day + 7 * i + week_index[day]
-    
-                            const open_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
+
+                            let currentDate = new Date(); // today
+
+                            const timezoneOffset_ = 0
+
+                            var new_current_time = new Date(currentDate.getTime() - (timezoneOffset_ * 60 * 1000)); // Adjust the time by the offset
+                                
+                            prev_day_time = new Date(new_current_time.getTime() - 24*60*60*1000 )
+                            const current_day_1 = prev_day_time.getDay()
+
+                            monday = new Date(new_current_time.getTime() - current_day_1*24*60*60*1000 )
+                            num_of_days = 7 * i + week_index[day]
+                            
+
+                            const open_time = new Date(monday.getTime() + num_of_days*24*60*60*1000);
                             open_time.setMinutes(open_min)
                             open_time.setHours(open_hour )
-    
-                            const timezoneOffset = open_time.getTimezoneOffset(); // Get the difference in minutes between the local time zone and UTC time
-                            var new_open_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
-                            var ticket_time = new Date(open_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
-    
-    
-                            const close_time = new Date(new Date().getTime() + num_of_days*24*60*60*1000);
+                            
+                            var new_open_time = new Date(open_time.getTime() - (timezoneOffset_ * 60 * 1000)); // Adjust the time by the offset
+                            var ticket_time = new Date(new_open_time.getTime()); // Adjust the time by the offset
+
+                            const close_time = new Date(monday.getTime() + num_of_days*24*60*60*1000);
                             close_time.setHours(close_hour)
                             close_time.setMinutes(close_min)
-    
-                            const new_close_time = new Date(close_time.getTime() - (timezoneOffset * 60 * 1000)); // Adjust the time by the offset
+
+                            const new_close_time = new Date(close_time.getTime() - (timezoneOffset_ * 60 * 1000) + 1000*50); // Adjust the time by the offset
+
     
                             while(addMinutes(ticket_time, duration) <= new_close_time)
                             {
@@ -662,6 +702,7 @@ const update = asyncHandler(async (req, res) => {
         
                                 ticket.save()
                                 board.tickets[i][day].push(ticket._id)
+
         
                                 ticket_time = addMinutes(ticket_time, duration)
                             } 
@@ -670,7 +711,6 @@ const update = asyncHandler(async (req, res) => {
                 }
                 board.tickets[i] = week_tickets                
             }
-
             await Board.findByIdAndUpdate(
                 id,
                 {
@@ -730,12 +770,13 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
     const { user_id } = req;
 
     try {
+    const user_obj_id = new ObjectId(user_id)
+
     const board = await Board.findById(id).exec()
     const isOwner = board.owner_id == user_id
     const showEnabledOnly = !isOwner;
 
-    if (!board.members.find(memberId => memberId === user_id ) && !isOwner) 
-    {
+    if (!board.members.find(memberId => memberId.toString() === user_id ) && !isOwner) {
         return res.status(403).json({ message: 'Forbidden' })
     }
         
@@ -748,19 +789,53 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
         wednesday: board.tickets[numberOfWeek].wednesday, thursday : board.tickets[numberOfWeek].thursday, 
         friday: board.tickets[numberOfWeek].friday, saturday: board.tickets[numberOfWeek].saturday, sunday: board.tickets[numberOfWeek].sunday}
 
+
     const tickets = {}
+    const dates = {}
 
-    for(const day in week_tickets) 
-    {
+    let show_button = true;
+
+    for (const day in week_tickets) {
+        if( week_tickets[day].length != 0){
+            show_button = false;
+            break;
+        }
+    } 
+
+    let todayWeekDay = new Date().getDay();
+    if (todayWeekDay === 0) {
+        todayWeekDay = 7;
+    }
+    //fallback for no tickets in day case
+    //sunday of prev week
+    let fallbackDate = new Date(
+        Date.now()
+        + (numberOfWeek * 7 * 24 * 3600 * 1000) 
+        - ((todayWeekDay) * 24 * 3600 * 1000)
+        )
+    
+    for(const day in week_tickets) {
         let day_tickets = week_tickets[day]
-
+        //increment fallbackDate from prev iteration (or monday of current week if first iteration)
+        fallbackDate = new Date(fallbackDate.getTime() + (24 * 3600 * 1000));
+        dates[day] = {day: fallbackDate.getDate(), month: fallbackDate.getMonth()};
         for(const ticket_id in day_tickets)
         {
             const findTicket = await check_if_outdated(day_tickets[ticket_id])
             let ticketData = null;
+            dates[day] = {day: findTicket.datetime.getDate(), month: findTicket.datetime.getMonth()};
+            fallbackDate = findTicket.datetime;
             if (showEnabledOnly) {
-                if (findTicket.enabled==true && !findTicket.user_id && findTicket.is_outdated === false) {
-                    ticketData = getBoardTicketMember(findTicket)
+                const user = await User.findById(user_id).exec()
+                if (findTicket.enabled==true && !findTicket.user_id && findTicket.is_outdated === false && !user.taken_tickets.includes(findTicket._id.toString())) {
+                    ticketData = getBoardTicketMember(findTicket, user_obj_id)
+                    ticketData.is_rejected = false
+                    ticketData.is_yours = false
+                    ticketData.in_waitlist = false
+                    ticketData.enabled = true
+                }
+                else if (user.taken_tickets.includes(findTicket._id.toString())){
+                    ticketData = getBoardTicketMember(findTicket, user_obj_id)
                 }
             } else {
                 ticketData = await getBoardTicketOwner(findTicket)
@@ -774,16 +849,19 @@ const readOneWeek  = asyncHandler(async (req, res) =>{
             }
         }
     }
-  res.status(200).json({
-    message:"Get week tickets",
-    tickets
-  })
-  } catch(error) {
-    res.status(500).json({
-      message: "An error occurred",
-      error: error.message,
+    
+    res.status(200).json({
+        message:"Get week tickets",
+        dates,
+        tickets,
+        show_button
     })
-  }
+    } catch(error) {
+        res.status(500).json({
+        message: "An error occurred",
+        error: error.message,
+        })
+    }
 })
 
 const getBoard = asyncHandler(async (req, res) => {
@@ -856,9 +934,10 @@ const addMember = asyncHandler(async (req, res) => {
     const {board_id, user_id, is_approved } = req.body;
     const {created_tables} = req;
 
-    const required_fields_present = (board_id && user_id && is_approved)
+    const required_fields_present = (board_id && user_id)
     const user_obj_id = new ObjectId(user_id)
     const board_obj_id = new ObjectId(board_id)
+
 
 
     if (created_tables.length === 0 || !created_tables.find(boardId => boardId === board_id)) {
@@ -887,10 +966,10 @@ const addMember = asyncHandler(async (req, res) => {
 
         if(is_approved === "false"){
             board.requests = board.requests.filter((requested_id)=>{ 
-                return requested_id != user_obj_id;
+                return requested_id != user_id;
             })
             board.save();
-            return res.status(404).json({
+            return res.status(200).json({
                 message:"Owner denied request. User deleted from requests.",
                 members: board.members
               }) 

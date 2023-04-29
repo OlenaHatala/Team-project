@@ -2,6 +2,11 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -9,15 +14,16 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: black;
-  background-color: #ffff;
+  color: rgb(255, 255, 255);
+  
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-
+  
+  --swiper-theme-color: #a58203;
   --color-gray-100: #f4f3f1;
   --color-gray-200: #dddbd8;
   --color-gray-300: #ccc9c6;
@@ -31,16 +37,26 @@
   --color-primary-100: #f7e1fc;
   --color-primary-200: #edcdfc;
   --color-primary-300: #d8affa;
-  --color-primary-400: rgb(214, 151, 251);
-  --color-primary-500: #d57cff;
-  --color-primary-600: #f962ec;
-  --color-primary-700: #ad4dfb;
-  --color-primary-800: #b133fa;
-  --color-primary-900: #b11bf6;
+  --color-primary-400: rgb(151, 169, 251);
+  --color-primary-500: #7c7eff;
+  --color-primary-600: #6297f9;
+  --color-primary-700: #4d5efb;
+  --color-primary-800: #3368fa;
+  --color-primary-900: #1b2af6;
 }
 
 body {
   margin: 0;
+  position: relative;
+
+  background-color: #e4edea;
+  background-image: url("background.png");
+
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
 }
 
 ul {
@@ -49,27 +65,19 @@ ul {
   padding: 0;
 }
 
-.auth-page {
-  max-width: 30rem;
-  margin-inline: auto;
+.account-details {
+  max-width: 60rem;
+  margin: auto;
 }
 
-.account-details {
-  max-width: 70rem;
+.board-list-page {
+  max-width: 60rem;
   margin: auto;
 }
 
 .new-board-page {
-  max-width: 70rem;
+  max-width: 60rem;
   margin: auto;
-}
-
-.form-header {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #c2c2c2;
 }
 
 .testweek {
@@ -78,5 +86,3 @@ ul {
   width: 65vw;
   height: 80vh;
 }
-
-

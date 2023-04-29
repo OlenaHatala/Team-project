@@ -1,8 +1,11 @@
 .ticket-list {
     display: flex;
     flex-wrap: wrap;
-    padding: 0;
+    justify-content: center;
+    padding: 0 200px !important;
+    min-height: 480px;
     margin: 0;
+    animation: new-item-animation .4s linear forwards;
   }
 
   .ticket-list-item{
@@ -14,14 +17,30 @@
     margin: auto;
     margin-bottom: 50px;
     padding: 0;
+  }
+
+  .without-tickets{
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    color: #1C1333;
+    margin-bottom: 400px;
+  }
+
+  @media only screen and (max-width: 1200px) {
+    .ticket-list {
+      padding: 0 !important;
+    }
 
   }
 
-
-  @media only screen and (min-width: 768px) {
+  @media only screen and (min-width: 0) {
     .ticket-list {
-      width: 70%;
+      width: 100%;
       margin: auto;
+      padding: 0;
     }
 
     .ticket-list-item {
@@ -31,3 +50,16 @@
     }
 
   }
+
+
+@keyframes new-item-animation {
+  from {
+      opacity: 0;
+      transform: translateY(-20px);
+}
+
+  to {
+      opacity: 1;
+      transform : translateY(0);
+  }
+}

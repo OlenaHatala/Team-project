@@ -9,6 +9,7 @@ import {
   ticketAdded,
   ticketUpdated,
 } from "../../store/weekSlice";
+import { setNotificationAction } from "../../../../modules/notifications/store/notificationsSlice";
 import { useConfigureTicketMutation } from "../../api";
 
 const EditTicketModalForm = () => {
@@ -31,11 +32,26 @@ const EditTicketModalForm = () => {
 
   const sumbitHandler = async (e) => {
     e.preventDefault();
+    let hours = time.slice(0, 2);
+    let mins = time.slice(3, 5);
+    let newDateTime = new Date(editedTicket.datetime);
+    newDateTime.setHours(hours);
+    newDateTime.setMinutes(mins);
+    let availablePayload = available ? 'true' : 'false';
     try {
       const newTicketData = await configureTicket({
         ...editedTicket,
-        available,
+        datetime: newDateTime,
+        duration: duration,
+        availablePayload: availablePayload,
       }).unwrap();
+
+      dispatch(
+        setNotificationAction({
+          message: response?.message,
+          messageType: "error",
+        })
+      );
 
       const ticket = newTicketData.ticket;
       dispatch(ticketUpdated(ticket));

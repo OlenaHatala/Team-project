@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useMemo } from "react";
 import { v4 as uuid } from "uuid";
 import classes from "./DayTickets.module.css";
 
@@ -42,15 +42,15 @@ const sortTickets = (tickets) => {
   return tickets;
 };
 
-const DayTickets = ({ day }) => {
+const DayTickets = ({ day, onTicketApprove, onTicketDeny,  onTicketDelete, onTicketTake}) => {
   const week = useSelector(selectWeek);
-  const { tickets, timeBorders } = week;
+  const { tickets, timeBorders, weekIndex } = week;
   const { timePoints, minutePercentage } = timeBorders;
   const borderDates = {
     upper: new Date(timePoints.upper),
     bottom: new Date(timePoints.bottom),
   };
-  const dayTickets = tickets[day];
+  const dayTickets = tickets[day] || [];
 
   const dayArray = useMemo(() => {
     let sortedTickets;
@@ -68,6 +68,8 @@ const DayTickets = ({ day }) => {
       const currentTicket = {
         ...sortedTickets[i],
         datetime: new Date(sortedTickets[i].datetime),
+        weekIndex: weekIndex,
+        weekDay: day,
       };
       const currentStart =
         currentTicket.datetime.getHours() * 60 +
@@ -83,7 +85,7 @@ const DayTickets = ({ day }) => {
           duration: currentStart - prevEnd,
         });
       }
-      calculatedArray.push({ ...currentTicket, id: currentTicket.id });
+      calculatedArray.push({ ...currentTicket, id: currentTicket.id,  });
       prevEndDate = new Date(
         currentTicket.datetime.getTime() + currentTicket.duration * 1000 * 60
       );
@@ -121,7 +123,7 @@ const DayTickets = ({ day }) => {
         } else {
           frameContent = (
             <React.Fragment key={index}>
-              <Ticket
+              <Ticket onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny} onTicketDelete={onTicketDelete} onTicketTake={onTicketTake}
                 height={(minutePercentage * frame.duration * 95) / 100}
                 ticket={frame}
               />

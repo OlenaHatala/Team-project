@@ -24,9 +24,9 @@
   border: 0;
   outline: 0;
   background: transparent;
-  border-bottom: 2px solid #8c5bff;
+  border-bottom: 2px solid #776937;
   padding: 15px;
-  color: #a0a0a0;
+  color: white;
   font-size: 18px;
   text-decoration: none solid rgb(243, 243, 243);
   caret-color: transparent;
@@ -41,8 +41,8 @@
 .form label {
   white-space: nowrap;
   font-size: 14px;
-  color: #ad7ada;
-  text-decoration: none solid rgb(173, 122, 218);
+  color: #f5c416;
+  text-decoration: none solid #d1a504;
   letter-spacing: 2px;
 }
 
@@ -93,13 +93,13 @@
   cursor: pointer;
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
-  background-color: rgb(150, 120, 209);
+  background-color: #d1a504;
   color: rgb(28, 0, 51);
   border: none;
 }
 
 .actions button:hover {
-  background-color: rgb(219, 201, 255);
+  background-color: #bfa545;
 }
 
 .header {

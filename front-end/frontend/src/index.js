@@ -8,6 +8,9 @@ import App from "./App";
 
 import "./index.css";
 
+var rootElement = document.getElementById("root");
+rootElement.style.height = "100%";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>

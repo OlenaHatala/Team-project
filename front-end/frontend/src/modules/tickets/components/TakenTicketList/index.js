@@ -1,6 +1,8 @@
 import { useGetTicketsQuery } from "../../api";
-import TakenTicket from '../TakenTicket/index.js';
+import TakenTicket from "../TakenTicket/index.js";
 import classes from "./TakenTicketList.module.css";
+
+import { LargeSizedLoader } from "../../../common/components";
 
 export const TakenTicketList = () => {
   const {
@@ -12,16 +14,29 @@ export const TakenTicketList = () => {
   } = useGetTicketsQuery();
 
   let content;
-  const noTicketsParagraph = <p>You haven't taken any tickets yet.</p>;
+  const noTicketsParagraph = (
+    <div className={classes["without-tickets"]}>
+      You haven't taken any tickets yet.
+    </div>
+  );
 
   if (isLoading) {
-    content = <p>"Loading..."</p>;
+    content = <LargeSizedLoader />;
   } else if (isSuccess) {
     content = (
       <>
         <div className={classes["ticket-list"]}>
           {tickets.map((ticket) => (
-            <div key={ticket._id} className={classes["ticket-list-item"]}><TakenTicket status={ticket.status} boardName={ticket.boardName} date={ticket.date} time={ticket.time}/></div>
+            <div key={ticket._id} className={classes["ticket-list-item"]}>
+              <TakenTicket
+                status={ticket.status}
+                boardName={ticket.boardName}
+                date={ticket.date}
+                time={ticket.time}
+                duration={ticket.duration}
+                boardId={ticket.boardId}
+              />
+            </div>
           ))}
         </div>
         {tickets?.length === 0 ? noTicketsParagraph : null}

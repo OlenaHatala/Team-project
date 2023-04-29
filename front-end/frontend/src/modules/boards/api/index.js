@@ -21,7 +21,7 @@ export const boardsApiSlice = apiSlice.injectEndpoints({
                 });
             }
             let createdBoards = [];
-            if (responseData?.membered_boards_arr?.length > 0) {
+            if (responseData?.created_boards_arr?.length > 0) {
                 createdBoards = responseData.created_boards_arr.map(boardData => {
                     let board = {
                         userStatus: "owner",
@@ -33,6 +33,9 @@ export const boardsApiSlice = apiSlice.injectEndpoints({
                     }
                     if (boardData.join_requests_num !== 0) {
                         board.counters.requests = boardData.join_requests_num
+                    }
+                    if (boardData.ticket_requests_num !== 0) {
+                        board.counters.tickets = boardData.ticket_requests_num
                     }
                     return board;
                 });

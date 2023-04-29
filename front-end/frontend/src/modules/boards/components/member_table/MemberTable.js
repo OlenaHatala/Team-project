@@ -13,7 +13,6 @@ const MemberTable = (props) => {
         <div className={classes["table-title"]}>
           {props.boardName.slice(0, 40)}
           <div className={classes["table-info-block"]}>
-          <IconCounter icon={priceTags} counter={41}/>
         </div>
         </div>
         <span className={classes["circleRight-icon"]}><Icon icon={circleRight} size={36} style={{ color: '#717171' }}/></span>

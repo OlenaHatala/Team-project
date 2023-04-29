@@ -97,6 +97,7 @@ export const DashboardSlice = createSlice({
   },
 });
 
+export const selectBoardId = (state) => state.dashboard.boardId;
 export const selectMembers = (state) => state.dashboard.members;
 export const selectRequests = (state) => state.dashboard.requests;
 export const selectDashboardAll = (state) => state.dashboard;

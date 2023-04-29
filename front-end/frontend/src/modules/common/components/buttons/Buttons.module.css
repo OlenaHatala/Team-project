@@ -1,0 +1,43 @@
+.user-list-buttons {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 1rem;
+    margin-top:3px;
+}
+
+.user-list-buttons-slim 
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    gap: 1rem;
+    margin-top:3px;
+}
+
+.button-choice-accept{
+    color: #2e5250;
+    width: 20%;
+    height: 100%;
+    padding: 0;
+    background-color: #d1e0db;
+}
+
+.button-choice-reject{
+    color: rgb(184, 29, 29);
+    width: 20%;
+    height: 100%;
+    padding: 0;
+    background-color: #d1e0db;
+}
+
+
+.button-choice-accept:hover{
+    background-color: #d1e0dba2;
+}
+
+.button-choice-reject:hover{
+    background-color: #d1e0dba2;
+}
+

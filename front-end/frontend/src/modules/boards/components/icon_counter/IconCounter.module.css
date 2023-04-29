@@ -1,23 +1,25 @@
 .table-info {
-  background-color: #feaec9;
   border-radius: 10px;
   display: flex;
   align-items: center;
   width: 50px;
-  height: 17px;
+  height: 22px;
   padding-left: 5px;
   font-size: 14px;
+  border: 2px solid #2e5250;
+  margin-top: 0px;
 }
 
 .count-window {
-  height: 80%;
+  height: 60%;
   width: 50%;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-left: auto;
-  background-color: #ffffff;
+  color: white;
+  background-color: #800c04c2;
   margin-right: 3px;
 }
 

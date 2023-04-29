@@ -5,7 +5,7 @@ export const TicketHead = ({ datetime, duration, status, actions }) => {
     const endTime = getTimeFromString(datetime, duration);
   return (
     <div>
-      <h3 style={{"margin": "0", "padding": "0"}}>{`${startTime}-${endTime}`}</h3>
+      <h3 style={{"margin": "0", "padding": "0", fontSize: '15px'}}>{`${startTime}-${endTime}`}</h3>
       <p style={{"margin": "0", "padding": "0"}}>{status}</p>
     </div>
   );

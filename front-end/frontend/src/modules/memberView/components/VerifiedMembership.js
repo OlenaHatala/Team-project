@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useGetBoardQuery, useJoinMutation } from "../api";
-import { MemberView } from "./MemberView";
+import { MemberView } from "./MemberView/MemberView";
 import { RequestSentCard } from "./RequestSentCard";
+
+import { LargeSizedLoader } from "../../common/components/LargeSizedLoader";
 
 export const VerifiedMembership = ({ boardId }) => {
   const [isAdded, setIsAdded] = useState(false);
@@ -29,11 +31,11 @@ export const VerifiedMembership = ({ boardId }) => {
     }
   }, [isSuccess]);
 
-  let content = <p>"Loading..."</p>;
+  let content = <LargeSizedLoader />;
   if (boardIsLoading) {
-    content = <p>"Loading..."</p>;
+    content = <LargeSizedLoader />;
   } else if (isSuccess && board?.label) {
-    content = <MemberView board={board} boardId={boardId}/>;
+    content = <MemberView board={board} id={boardId} />;
   } else if (isAdded) {
     content = <RequestSentCard />;
   }

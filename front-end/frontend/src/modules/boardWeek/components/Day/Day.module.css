@@ -1,14 +1,14 @@
 .day {
     width: 100%;
     height: 1500px;
-    color: #b2a4e5;
+    color: black;
     justify-content: center;
     align-items: center;
     position: relative;
 }
 
 .week-header {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color:#e4edea;
     height: 40px;
     min-height: 40px;
 }
@@ -16,14 +16,13 @@
 .time-markup {
     width: 100%;
     height: 100%;
-    color: #b2a4e5;
+    color: black;
     display: inline;
     position: absolute;
     z-index: 11;
 }
 
 .fourth {
-    background-color:transparent;
     width: 100%;
     text-align: center;
     position: relative; 

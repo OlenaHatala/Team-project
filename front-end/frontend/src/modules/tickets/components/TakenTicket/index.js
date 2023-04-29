@@ -2,16 +2,26 @@ import classes from "./TakenTicket.module.css";
 import { Icon } from "react-icons-kit";
 import { calendar } from "react-icons-kit/icomoon/calendar";
 import { clock } from "react-icons-kit/icomoon/clock";
+import { useNavigate } from "react-router-dom";
 
 const TakenTicket = (props) => {
-  console.log(props);
-  console.log(props.status);
+  const statusText = props.status === "in-waitlist"? "in waitlist": props.status;
+  const [hours, minutes] = props.time.split(':').map(Number);
+  const totalMinutes = hours * 60 + minutes + props.duration;
+  const newHours = Math.floor(totalMinutes / 60);
+  const newMinutes = totalMinutes % 60;
+  const end_time = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
+
+  const navigate = useNavigate();
+  const clickHandler = () => {
+    navigate(`/board/${props?.boardId}`)
+  }
   return (
-    <div className={classes.ticket}>
+    <div className={classes.ticket} onClick={clickHandler}>
       <div
         className={`${classes["ticket-header"]} ${classes[`${props.status}`]}`}
       >
-        {props.status}
+        {statusText}
       </div>
       <div className={classes["ticket-title"]}>
         {props.boardName.slice(0, 40)}
@@ -29,7 +39,7 @@ const TakenTicket = (props) => {
           <span>
             <Icon icon={clock} size={14} />
           </span>
-          {props.time}
+          {props.time}-{end_time}
         </div>
       </div>
     </div>

@@ -31,7 +31,7 @@
   align-items: center;
   padding-bottom: 14px;
   text-transform: uppercase;
-  color: #432670;
+  color: #2e5250;
   word-wrap: break-word;
   height: 25%;
 
@@ -49,20 +49,25 @@
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  color: #564f6f;
+  color: #e7e5f0;
 }
 
-.ticket-header.wait {
-  background-color: #718df5;
+.ticket-header.in-waitlist {
+  background-color: #27557d;
+}
+
+.ticket-header.rejected {
+  background-color: #a74141;
 }
 
 .ticket-header.confirmed {
-  background-color: #7ac48f;
+  background-color: #367A6E;
 }
 
 .ticket-header.outdated {
-  background-color: #9b9595;
+  background-color: #687d8e;
 }
+
 
 .ticket hr {
   border-top: 1px dashed #0000008c;

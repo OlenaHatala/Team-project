@@ -27,15 +27,20 @@ export const ticketsApiSlice = apiSlice.injectEndpoints({
                     }
                     else
                     {
-                        status = "wait";
+                        status = "in-waitlist";
                     }
                     if(ticketData.is_outdated)
                     {
                         status = "outdated";
                     }
+                    if (ticketData.is_rejected)
+                    {
+                        status = "rejected";
+                    }
                     return {
                         id: ticketData._id,
                         boardName: ticketData.boardlabel,
+                        boardId: ticketData.boardId,
                         date: date,
                         time: getStartTime(date),
                         status,

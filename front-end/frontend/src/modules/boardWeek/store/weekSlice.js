@@ -1,18 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { findTimeBorders } from "../utils/time";
 import { WeekDayByIndex } from "../utils/weekDay";
+import { skeletonTickets } from "../utils/skeletonTickets";
 
 const initialState = {
-  mode: '',
-  tickets: {
-    monday: [],
-    tuesday: [],
-    wednesday: [],
-    tuesday: [],
-    friday: [],
-    saturday: [],
-    sunday: [],
-  },
+  isLoading: true,
+  loadingTicketId: '',
+  mode: "",
+  weekIndex: 0,
+  tickets: skeletonTickets,
+  dates: {},
   timeBorders: {
     timePoints: {
       upper: "August 19, 1975 10:00:00",
@@ -23,7 +20,7 @@ const initialState = {
   modals: {
     showNewTicket: false,
     showEditTicket: false,
-    editedTicket: null
+    editedTicket: null,
   },
 };
 
@@ -90,25 +87,19 @@ export const weekSlice = createSlice({
         );
       }
 
-     
-    
-      let dayarray = state.tickets[
-        WeekDayByIndex[ticket.datetime.getDay()]
-      ];
+      let dayarray = state.tickets[WeekDayByIndex[ticket.datetime.getDay()]];
       const index = state.tickets[
         WeekDayByIndex[ticket.datetime.getDay()]
-      ].findIndex((oldTicket) => { return (oldTicket._id === ticket._id) });
-      //console.log(dayarray);
-      //console.log(index)
-      //console.log(state.tickets[WeekDayByIndex[ticket.datetime.getDay()]][index])
-      //console.log(ticket)
+      ].findIndex((oldTicket) => {
+        return oldTicket._id === ticket._id;
+      });
       state.tickets[WeekDayByIndex[ticket.datetime.getDay()]][index] = ticket;
-      //console.log(state.tickets[WeekDayByIndex[ticket.datetime.getDay()]][index])
     },
 
     weekFetched(state, action) {
-      state.tickets = action.payload;
-      state.timeBorders.timePoints = findTimeBorders(action.payload);
+      state.dates = action.payload.dates;
+      state.tickets = action.payload.tickets;
+      state.timeBorders.timePoints = findTimeBorders(action.payload.tickets);
       let upperDate = new Date(state.timeBorders.timePoints.upper);
       let bottomDate = new Date(state.timeBorders.timePoints.bottom);
       state.timeBorders.minutePercentage =
@@ -138,10 +129,26 @@ export const weekSlice = createSlice({
     setModeAction(state, action) {
       state.mode = action.payload;
     },
+
+    setLoadingAction(state, action) {
+      state.isLoading = action.payload;
+    },
+
+    setWeekIndexAction(state, action) {
+      state.weekIndex = action.payload;
+    },
+
+    setLoadingTicketIdAction(state, action) {
+      state.loadingTicketId = action.payload;
+    },
   },
 });
 
 export const selectWeek = (state) => state.week;
+export const selectDates = (state) => state.week.dates;
+export const selectWeekIndex = (state) => state.week.weekIndex;
+export const selectIsLoading = (state) => state.week.isLoading;
+export const selectLoadingTicketId = (state) => state.week.loadingTicketId;
 export const selectWeekMode = (state) => state.week.mode;
 export const selectModalsState = (state) => state.week.modals;
 export const selectTimeBorders = (state) => state.week.timeBorders;
@@ -154,6 +161,9 @@ export const {
   showEditTicketAction,
   hideEditTicketAction,
   setModeAction,
+  setLoadingAction,
+  setWeekIndexAction,
+  setLoadingTicketIdAction,
 } = weekSlice.actions;
 
 export default weekSlice.reducer;

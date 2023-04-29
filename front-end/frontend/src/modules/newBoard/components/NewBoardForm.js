@@ -7,7 +7,6 @@ export const NewBoardForm = ({
   onSubmit,
   disableSubmit,
   isUpdateForm,
-  defaultValues,
 }) => {
   const {
     page,
@@ -34,9 +33,6 @@ export const NewBoardForm = ({
       saturday: { open: sat.open, close: sat.close, workday: !sat.disabled  },
       sunday: { open: sun.open, close: sun.close, workday: !sun.disabled  },
     };
-
-    console.log(!mon.disabled)
-    console.log(typeof mon.disabled)
 
     days.monday.hours = [];
     days.tuesday.hours = [];

@@ -3,10 +3,13 @@ import DayTickets from "../DayTickets/DayTickets";
 import classes from "./Day.module.css";
 
 import { useSelector } from "react-redux";
-import { selectTimeBorders } from "../../store/weekSlice";
+import { selectTimeBorders, selectDates } from "../../store/weekSlice";
+import { monthByIndex, weekDayToUpperCase } from "../../utils/weekDay";
 
-const Day = ({ day }) => {
+const Day = ({ day, onTicketApprove, onTicketDeny,  onTicketDelete, onTicketTake }) => {
   const { timePoints, minutePercentage } = useSelector(selectTimeBorders);
+  const dates = useSelector(selectDates);
+  const dayNumbers = dates[day];
   const borderDates = {
     upper: new Date(timePoints.upper),
     bottom: new Date(timePoints.bottom),
@@ -39,11 +42,16 @@ const Day = ({ day }) => {
   return (
     <>
       <div className={classes.day}>
-        <div className={classes["week-header"]}>{`${day
-          .slice(0, 1)
-          .toUpperCase()}${day.slice(1, 9)}`}</div>
+        <div className={classes["week-header"]}>{`${weekDayToUpperCase[day]}${
+          dayNumbers?.day
+            ? ", " +
+              dayNumbers?.day +
+              " " +
+              monthByIndex[dayNumbers?.month].slice(0, 3)
+            : ""
+        }`}</div>
         <div className={classes["time-markup"]}>{hourElements}</div>
-        <DayTickets day={day} />
+        <DayTickets day={day} onTicketApprove={onTicketApprove} onTicketDeny={onTicketDeny} onTicketDelete={onTicketDelete} onTicketTake={onTicketTake}/>
       </div>
     </>
   );

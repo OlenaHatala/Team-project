@@ -1,0 +1,30 @@
+.container {
+    padding: 20px;
+    color:black;
+    background-color: #e4edea;
+    border-radius: 10px;
+}
+
+.info {
+    margin-bottom: 50px;
+}
+
+.info h2{
+    font-size: 24px;
+}
+
+.info p{
+    font-size: 18px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: row;
+    gap: 200px;
+    font: bold;
+    cursor: pointer;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    color: rgb(28, 0, 51);
+    border: none;
+}

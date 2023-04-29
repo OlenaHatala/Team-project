@@ -1,8 +1,7 @@
 .time-column {
-    width: 50%;
+    width: 30%;
     height: 1500px;
     color: #b2a4e5;
-    background-color: rgba(0, 0, 0, 0.05);
     justify-content: center;
     align-items: center;
     position: relative;
@@ -30,6 +29,7 @@
     width: 97%;
     border-bottom: 1px solid rgb(150, 144, 144);
     z-index: 11;
+        background-color: #e4edea;
 }
 
 .time p {

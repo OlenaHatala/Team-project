@@ -1,0 +1,74 @@
+.board-header {
+  color: black;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.titles {
+  text-align: center;
+}
+
+.titles-padding {
+    text-align: center;
+    padding: 15px 0;
+}
+
+.board-header h1 {
+  margin: 0;
+  color: black;
+  line-height: 26px;
+  font-size: 24px;
+}
+
+.board-header h3 {
+  margin: 0;
+  font-weight: normal;
+
+  color: rgb(119, 119, 119);
+  line-height: 17px;
+  font-size: 15px;
+}
+
+.board-header p {
+  margin: 5px;
+  line-height: 16px;
+  font-size: 14px;
+}
+
+.header-right-block {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 100px;
+}
+
+.address-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.link-btn-container {
+  width: 200px;
+  display: flex;
+  align-items: center;
+}
+
+.link-btn {
+  width: 100%;
+  padding: 0 18px;
+  line-height: 23px;
+  font-size: 18px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  color: black;
+}
+
+.copylink-text {
+  line-height: 18px;
+  font-size: 13px;
+  text-transform: none;
+  margin-left: 5px;
+}
