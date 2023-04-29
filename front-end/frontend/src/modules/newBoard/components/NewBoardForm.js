@@ -34,9 +34,6 @@ export const NewBoardForm = ({
       sunday: { open: sun.open, close: sun.close, workday: !sun.disabled  },
     };
 
-    console.log(!mon.disabled)
-    console.log(typeof mon.disabled)
-
     days.monday.hours = [];
     days.tuesday.hours = [];
     days.wednesday.hours = [];

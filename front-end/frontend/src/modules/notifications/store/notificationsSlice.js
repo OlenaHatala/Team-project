@@ -19,7 +19,6 @@ export const sliceNotification = createSlice({
       state.message = action.payload.message;
       state.messageType = action.payload.messageType;
       state.open = true;
-      console.log(action.payload);
     },
   },
 });

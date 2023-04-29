@@ -93,12 +93,7 @@ export const weekSlice = createSlice({
       ].findIndex((oldTicket) => {
         return oldTicket._id === ticket._id;
       });
-      //console.log(dayarray);
-      //console.log(index)
-      //console.log(state.tickets[WeekDayByIndex[ticket.datetime.getDay()]][index])
-      //console.log(ticket)
       state.tickets[WeekDayByIndex[ticket.datetime.getDay()]][index] = ticket;
-      //console.log(state.tickets[WeekDayByIndex[ticket.datetime.getDay()]][index])
     },
 
     weekFetched(state, action) {

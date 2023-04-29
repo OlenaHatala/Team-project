@@ -7,10 +7,6 @@ export const weekApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
       providesTags: (arg) => [{ type: "week", id: arg.weekIndex }],
       transformResponse: (responseData) => {
-        console.log({
-          tickets: responseData.tickets,
-          dates: responseData?.dates || {},
-        });
         return {
           tickets: responseData.tickets,
           dates: responseData?.dates || {},

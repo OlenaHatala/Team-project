@@ -37,10 +37,6 @@ const NewTicketModalForm = ({ boardId, weekIndex }) => {
     datetime.setHours(hours);
     datetime.setMinutes(mins);
 
-    console.log(WeekDayByIndexInverse[weekday] - todayWeekDay);
-    console.log(weekIndex * 7 * 24 * 3600 * 1000);
-    console.log(datetime)
-
     const response = await addTicket({
       user_id: "",
       table_id: boardId,

@@ -13,11 +13,9 @@ import ConfigureBoardModal from "../../../newBoard/ConfigureBoardModal/Configure
 import classes from "./DashboardIndex.module.css";
 
 import { Card } from "../../../common/UI";
-import { BoardHeader } from "../../../common/components";
+import { BoardHeader, LargeSizedLoader } from "../../../common/components";
 import AddIcon from "@mui/icons-material/Add";
 import SettingsIcon from "@mui/icons-material/Settings";
-
-import CircularProgress from "@mui/material/CircularProgress";
 
 import UserList from "../userList/index";
 import { boardLinkCreator } from "../../../common/constants";
@@ -38,39 +36,9 @@ const DashboardIndex = ({ id }) => {
     dispatch(toggleShowConfigureBoardAction(true));
   };
 
-  let boardContent = (
-    <div
-      styles={{
-        minHeight: "700px",
-        height: "700px",
-        width: "100%",
-        display: "flex",
-        "justify-content": "center",
-        "align-items": "center",
-        "background-color": "black",
-      }}
-    >
-      <CircularProgress sx={{ marginBottom: "450px", marginInline: "auto" }} />
-    </div>
-  );
+  let boardContent = <LargeSizedLoader />;
   if (boardIsLoading) {
-    boardContent = (
-      <div
-        styles={{
-          minHeight: "700px",
-          height: "700px",
-          width: "100%",
-          display: "flex",
-          "justify-content": "center",
-          "align-items": "center",
-          "background-color": "black",
-        }}
-      >
-        <CircularProgress
-          sx={{ marginBottom: "440px", marginInline: "auto" }}
-        />
-      </div>
-    );
+    boardContent = <LargeSizedLoader />;
   } else if (isSuccess && board?.label) {
     dispatch(boardFetched(board));
     boardContent = (

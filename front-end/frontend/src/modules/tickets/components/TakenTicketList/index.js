@@ -2,7 +2,7 @@ import { useGetTicketsQuery } from "../../api";
 import TakenTicket from "../TakenTicket/index.js";
 import classes from "./TakenTicketList.module.css";
 
-import CircularProgress from "@mui/material/CircularProgress";
+import { LargeSizedLoader } from "../../../common/components";
 
 export const TakenTicketList = () => {
   const {
@@ -21,23 +21,7 @@ export const TakenTicketList = () => {
   );
 
   if (isLoading) {
-    content = (
-      <div
-        styles={{
-          minHeight: "700px",
-          height: "700px",
-          width: "100%",
-          display: "flex",
-          "justify-content": "center",
-          "align-items": "center",
-          "background-color": "black",
-        }}
-      >
-        <CircularProgress
-          sx={{ marginBottom: "440px", marginInline: "auto" }}
-        />
-      </div>
-    );
+    content = <LargeSizedLoader />;
   } else if (isSuccess) {
     content = (
       <>

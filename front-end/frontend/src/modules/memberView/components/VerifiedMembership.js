@@ -3,7 +3,7 @@ import { useGetBoardQuery, useJoinMutation } from "../api";
 import { MemberView } from "./MemberView/MemberView";
 import { RequestSentCard } from "./RequestSentCard";
 
-import CircularProgress from "@mui/material/CircularProgress";
+import { LargeSizedLoader } from "../../common/components/LargeSizedLoader";
 
 export const VerifiedMembership = ({ boardId }) => {
   const [isAdded, setIsAdded] = useState(false);
@@ -31,39 +31,9 @@ export const VerifiedMembership = ({ boardId }) => {
     }
   }, [isSuccess]);
 
-  let content = (
-    <div
-      styles={{
-        minHeight: "700px",
-        height: "700px",
-        width: "100%",
-        display: "flex",
-        "justify-content": "center",
-        "align-items": "center",
-        "background-color": "black",
-      }}
-    >
-      <CircularProgress sx={{ marginBottom: "440px", marginInline: "auto" }} />
-    </div>
-  );
+  let content = <LargeSizedLoader />;
   if (boardIsLoading) {
-    content = (
-      <div
-        styles={{
-          minHeight: "700px",
-          height: "700px",
-          width: "100%",
-          display: "flex",
-          "justify-content": "center",
-          "align-items": "center",
-          "background-color": "black",
-        }}
-      >
-        <CircularProgress
-          sx={{ marginBottom: "440px", marginInline: "auto" }}
-        />
-      </div>
-    );
+    content = <LargeSizedLoader />;
   } else if (isSuccess && board?.label) {
     content = <MemberView board={board} id={boardId} />;
   } else if (isAdded) {

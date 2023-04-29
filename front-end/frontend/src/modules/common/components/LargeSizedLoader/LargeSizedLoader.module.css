@@ -1,0 +1,9 @@
+.large-loder-wrapper {
+  min-height: "700px";
+  height: "700px";
+  width: "100%";
+  display: "flex";
+  justify-content: "center";
+  align-items: "center";
+  background-color: "black";
+}
