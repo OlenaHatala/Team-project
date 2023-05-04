@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useMediaQuery } from "@mui/material";
 
 import {
   useGetWeekQuery,
@@ -16,6 +17,7 @@ import {
   selectWeekIndex,
   selectModalsState,
   setLoadingTicketIdAction,
+  setWeekViewAction,
 } from "../../store/weekSlice";
 
 import { setNotificationAction } from "../../../../modules/notifications/store/notificationsSlice";
@@ -25,7 +27,9 @@ import { NewTicketModalForm } from "../NewTicketModalForm";
 import { EditTicketModalForm } from "../EditTicketModalForm";
 
 import { skeletonTickets } from "../../utils/skeletonTickets";
+import { weekViewsConstants } from "../../utils/weekView";
 import { AreYouSure, Loader } from "../../../common/components";
+import { device } from "../../../common/constants";
 
 const areYouSureInitialState = {
   open: false,
@@ -37,14 +41,17 @@ const areYouSureInitialState = {
 export const BoardWeekIndex = ({ mode, id, weekIndex }) => {
   const dispatch = useDispatch();
   dispatch(setModeAction(mode));
+  const isTabletView = useMediaQuery(device.tablet, { noSsr: true });
+
   const { showNewTicket, showEditTicket } = useSelector(selectModalsState);
+  const [areYouSure, setAreYouSure] = useState(areYouSureInitialState);
+
   const [denyTicket, { isLoading: denyLoading }] = useDenyTicketMutation();
   const [approveTicket, { isLoading: approveLoading }] =
     useApproveTicketMutation();
   const [takeTicket, { isLoading: takingInProgress }] = useTakeTicketMutation();
   const [deleteTicket, { isLoading: deletingInProgress }] =
     useDeleteTicketMutation();
-  const [areYouSure, setAreYouSure] = useState(areYouSureInitialState);
 
   const {
     data: response,
@@ -52,6 +59,12 @@ export const BoardWeekIndex = ({ mode, id, weekIndex }) => {
     isSuccess,
     isFetching,
   } = useGetWeekQuery({ boardId: id, weekIndex: weekIndex });
+
+  useEffect(() => {
+    if (isTabletView) {
+      dispatch(setWeekViewAction(weekViewsConstants.halfWeek));
+    }
+  }, [isTabletView]);
 
   useEffect(() => {
     //if (isLoading || isFetching) {

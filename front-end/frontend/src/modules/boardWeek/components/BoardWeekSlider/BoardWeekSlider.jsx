@@ -4,40 +4,64 @@ import { useDispatch, useSelector } from "react-redux";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 
-import { setWeekIndexAction, selectDates } from "../../store/weekSlice";
-import { monthByIndex } from "../../utils/weekDay";
-
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
+import {
+  setWeekIndexAction,
+  selectDates,
+  selectWeekView,
+} from "../../store/weekSlice";
+import { monthByIndex } from "../../utils/weekDay";
+import { weekHalfsConstants, weekViewsConstants } from "../../utils/weekView";
+import { fullWeekSlides, halfWeekSlides } from "./Slides";
+
 import classes from "./BoardWeekSlider.module.css";
 import { Loader } from "../../../common/components";
 
-const SliderItemWrapper = () => {
+const SlideItemInner = ({ weekHalf }) => {
   const swiper = useSwiper();
   const dispatch = useDispatch();
   const dates = useSelector(selectDates);
+  const weekView = useSelector(selectWeekView);
+
+  const weekSlides =
+    weekView === weekViewsConstants.fullWeek ? fullWeekSlides : halfWeekSlides;
 
   swiper.on("activeIndexChange", () => {
-    dispatch(setWeekIndexAction(swiper.activeIndex));
+    dispatch(
+      setWeekIndexAction({
+        index:
+          weekSlides.find((slide) => slide.sliderIndex === swiper.activeIndex)
+            ?.weekIndex || 0,
+        weekHalf:
+          weekSlides.find((slide) => slide.sliderIndex === swiper.activeIndex)
+            ?.weekHalf || weekHalfsConstants.mondayWednesday,
+      })
+    );
   });
 
-  let label = <Loader />
-  if (dates?.monday?.day) {
+  let datesBorders = <Loader />;
 
-    
-    label = `${dates?.monday?.day || " "} ${
-      monthByIndex[dates?.monday?.month] || " "
-    } - ${dates?.sunday?.day || " "} ${
-      monthByIndex[dates?.sunday?.month] || " "
-    }`;
+  const fromDay =
+    weekHalf === weekHalfsConstants.thursdaySunday ? "thursday" : "monday";
+  const toDay =
+    weekHalf === weekHalfsConstants.mondayWednesday ? "wednesday" : "sunday";
+
+  if (dates?.monday?.day) {
+    datesBorders = `${dates[fromDay].day || " "} ${
+      monthByIndex[dates[fromDay].month] || " "
+    } - ${dates[toDay].day || " "} ${monthByIndex[dates[toDay].month] || " "}`;
   }
-    
-  return <div>{label}</div>;
+
+  return <div>{datesBorders}</div>;
 };
 
 const BoardWeekSlider = () => {
+  const weekView = useSelector(selectWeekView);
+  const weekSlides =
+    weekView === weekViewsConstants.fullWeek ? fullWeekSlides : halfWeekSlides;
   return (
     <>
       <Swiper
@@ -46,24 +70,17 @@ const BoardWeekSlider = () => {
         modules={[Navigation, Pagination]}
         className={classes.swiper}
       >
-        <SwiperSlide className={classes["swiper-slide"]}>
-          <SliderItemWrapper index={0} />
-        </SwiperSlide>
-        <SwiperSlide className={classes["swiper-slide"]}>
-          <SliderItemWrapper index={1} />
-        </SwiperSlide>
-        <SwiperSlide className={classes["swiper-slide"]}>
-          <SliderItemWrapper index={2} />
-        </SwiperSlide>
-        <SwiperSlide className={classes["swiper-slide"]}>
-          <SliderItemWrapper index={3} />
-        </SwiperSlide>
-        <SwiperSlide className={classes["swiper-slide"]}>
-          <SliderItemWrapper index={4} />
-        </SwiperSlide>
-        <SwiperSlide className={classes["swiper-slide"]}>
-          <SliderItemWrapper index={5} />
-        </SwiperSlide>
+        {weekSlides.map((slide) => (
+          <SwiperSlide
+            key={slide.sliderIndex}
+            className={classes["swiper-slide"]}
+          >
+            <SlideItemInner
+              index={slide.sliderIndex}
+              weekHalf={slide.weekHalf}
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </>
   );

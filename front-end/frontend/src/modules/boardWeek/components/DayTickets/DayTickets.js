@@ -45,6 +45,7 @@ const sortTickets = (tickets) => {
 const DayTickets = ({ day, onTicketApprove, onTicketDeny,  onTicketDelete, onTicketTake}) => {
   const week = useSelector(selectWeek);
   const { tickets, timeBorders, weekIndex } = week;
+  const { index: indexOfWeek } = weekIndex;
   const { timePoints, minutePercentage } = timeBorders;
   const borderDates = {
     upper: new Date(timePoints.upper),
@@ -68,7 +69,7 @@ const DayTickets = ({ day, onTicketApprove, onTicketDeny,  onTicketDelete, onTic
       const currentTicket = {
         ...sortedTickets[i],
         datetime: new Date(sortedTickets[i].datetime),
-        weekIndex: weekIndex,
+        weekIndex: indexOfWeek,
         weekDay: day,
       };
       const currentStart =

@@ -9,7 +9,7 @@ import { selectWeekIndex } from "../../../boardWeek/store/weekSlice";
 import classes from "./MemberView.module.css";
 
 export const MemberView = ({ board, id }) => {
-  const weekIndex = useSelector(selectWeekIndex);
+  const { index: weekIndex } = useSelector(selectWeekIndex);
   return (
     <div className={classes["member-view-container"]}>
       <Card color="white" style={{ padding: "5px 30px", marginBottom: "0" }}>

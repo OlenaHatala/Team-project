@@ -23,7 +23,7 @@ import { boardLinkCreator } from "../../../common/constants";
 const DashboardIndex = ({ id }) => {
   const dispatch = useDispatch();
   const dashboard = useSelector(selectDashboardAll);
-  const weekIndex = useSelector(selectWeekIndex);
+  const { index: weekIndex } = useSelector(selectWeekIndex);
   const [userlistType, setUserlistType] = useState("users");
 
   const {
