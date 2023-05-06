@@ -12,7 +12,6 @@ export const Notification = memo(() => {
   const [message, setMessage] = useState("");
 
   const notificationData = useSelector(selectNotification);
-  console.log(notificationData)
   
   let content = (
     <Grid             sx={{

@@ -17,14 +17,13 @@ import { BoardHeader, LargeSizedLoader } from "../../../common/components";
 import AddIcon from "@mui/icons-material/Add";
 import SettingsIcon from "@mui/icons-material/Settings";
 
-import UserList from "../userList/index";
+import { Members } from "../Members/index";
 import { boardLinkCreator } from "../../../common/constants";
 
 const DashboardIndex = ({ id }) => {
   const dispatch = useDispatch();
   const dashboard = useSelector(selectDashboardAll);
   const { index: weekIndex } = useSelector(selectWeekIndex);
-  const [userlistType, setUserlistType] = useState("users");
 
   const {
     data: board,
@@ -53,47 +52,7 @@ const DashboardIndex = ({ id }) => {
           />
         </Card>
         <div className={classes["page-content"]}>
-          <Card
-            style={{
-              padding: "20px",
-              width: "18%",
-              height: "100%",
-              "margin-right": "0",
-            }}
-          >
-            <div className={classes["list-toggle-container"]}>
-              <button
-                className={
-                  userlistType === "requests"
-                    ? `${classes["noactive-button"]} ${classes.button}`
-                    : classes.button
-                }
-                onClick={() => {
-                  setUserlistType("users");
-                }}
-                disabled={userlistType === "users"}
-              >
-                Clients
-              </button>
-              <button
-                className={
-                  userlistType === "users"
-                    ? `${classes["noactive-button"]} ${classes.button}`
-                    : classes.button
-                }
-                onClick={() => {
-                  setUserlistType("requests");
-                }}
-                disabled={userlistType === "requests"}
-              >
-                Requests
-              </button>
-            </div>
-            <UserList
-              users={userlistType === "users" ? board.members : board.requests}
-              userlistType={userlistType}
-            />
-          </Card>
+          <Members members={board.members} requests={board.requests} />
           <Card
             color="white"
             style={{ padding: "20px", width: "80%", height: "100%" }}

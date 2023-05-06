@@ -2,11 +2,11 @@ import React from "react";
 import UserListItem from "../userListItem/index";
 import classes from "./UserList.module.css";
 
-const UserList = ({ users, userlistType }) => {
+export const UserList = ({ users, userlistType }) => {
   const noUserText =
     userlistType === "users"
-      ? "No one has joined your board yet!"
-      : "You have no requests!";
+      ? "No one has joined your board yet."
+      : "You don't have new requests.";
   return (
     <>
       {users?.length === 0 ? (
@@ -43,5 +43,3 @@ const UserList = ({ users, userlistType }) => {
     </>
   );
 };
-
-export default UserList;

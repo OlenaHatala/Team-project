@@ -4,4 +4,6 @@ export const boardLinkCreator = (id) => {
 
 export const device = {
   tablet: '(max-width: 1100px)',
+  tabletM: '(max-width: 800px)',
+  mobile: '(max-width: 425px)',
 }

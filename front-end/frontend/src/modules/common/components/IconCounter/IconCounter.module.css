@@ -1,0 +1,13 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.icon-wrapper {
+  color: rgb(255, 255, 255);
+}
+
+.icon-wrapper svg {
+  font-size: 30px;
+}
