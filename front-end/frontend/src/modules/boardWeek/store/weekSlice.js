@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { findTimeBorders } from "../utils/time";
-import { WeekDayByIndex } from "../utils/weekDay";
+import { WeekDayByIndex, WeekDay } from "../utils/weekDay";
 import { weekViewsConstants, weekHalfsConstants } from "../utils/weekView";
 import { skeletonTickets } from "../utils/skeletonTickets";
 
@@ -9,7 +9,7 @@ const initialState = {
   weekView: weekViewsConstants.fullWeek,
   loadingTicketId: "",
   mode: "",
-  weekIndex: { index: 0, weekHalf: weekHalfsConstants.mondayWednesday },
+  weekIndex: { index: 0, weekHalf: weekHalfsConstants.mondayWednesday, weekDay: WeekDay.monday},
   tickets: skeletonTickets,
   dates: {},
   timeBorders: {
@@ -139,7 +139,7 @@ export const weekSlice = createSlice({
     setWeekIndexAction(state, action) {
       state.weekIndex = {
         index: action.payload.index,
-        weekHalf: action.payload.weekHalf,
+        weekHalf: action.payload?.weekHalf || weekHalfsConstants.mondayWednesday,
       };
     },
 

@@ -12,8 +12,9 @@ import {
   weekHalfsConstants,
   weekViewsConstants,
 } from "../../utils/weekView.js";
+import { OneDaySwiper } from "./OneDaySwiper.jsx";
 
-const WeekBody = ({
+export const WeekBody = ({
   onTicketApprove,
   onTicketDeny,
   onTicketDelete,
@@ -32,78 +33,87 @@ const WeekBody = ({
     weekHalf === weekHalfsConstants.thursdaySunday;
 
   return (
-    <div className={classes.scroll}>
-      <div className={classes.days}>
-        <TimeColumn
-          timeBorders={timePoints}
-          minutePercentage={minutePercentage}
+    <>
+      {weekView === weekViewsConstants.oneDay ? (
+        <OneDaySwiper
+          onTicketApprove={onTicketApprove}
+          onTicketDeny={onTicketDeny}
+          onTicketDelete={onTicketDelete}
+          onTicketTake={onTicketTake}
         />
-        {showMondayWednesday && (
-          <Day
-            day="monday"
-            onTicketApprove={onTicketApprove}
-            onTicketDeny={onTicketDeny}
-            onTicketDelete={onTicketDelete}
-            onTicketTake={onTicketTake}
-          />
-        )}
-        {showMondayWednesday && (
-          <Day
-            day="tuesday"
-            onTicketApprove={onTicketApprove}
-            onTicketDeny={onTicketDeny}
-            onTicketDelete={onTicketDelete}
-            onTicketTake={onTicketTake}
-          />
-        )}
-        {showMondayWednesday && (
-          <Day
-            day="wednesday"
-            onTicketApprove={onTicketApprove}
-            onTicketDeny={onTicketDeny}
-            onTicketDelete={onTicketDelete}
-            onTicketTake={onTicketTake}
-          />
-        )}
-        {showThursdaySunday && (
-          <Day
-            day="thursday"
-            onTicketApprove={onTicketApprove}
-            onTicketDeny={onTicketDeny}
-            onTicketDelete={onTicketDelete}
-            onTicketTake={onTicketTake}
-          />
-        )}
-        {showThursdaySunday && (
-          <Day
-            day="friday"
-            onTicketApprove={onTicketApprove}
-            onTicketDeny={onTicketDeny}
-            onTicketDelete={onTicketDelete}
-            onTicketTake={onTicketTake}
-          />
-        )}
-        {showThursdaySunday && (
-          <Day
-            day="saturday"
-            onTicketApprove={onTicketApprove}
-            onTicketDeny={onTicketDeny}
-            onTicketDelete={onTicketDelete}
-            onTicketTake={onTicketTake}
-          />
-        )}
-        {showThursdaySunday && (
-          <Day
-            day="sunday"
-            onTicketApprove={onTicketApprove}
-            onTicketDeny={onTicketDeny}
-            onTicketDelete={onTicketDelete}
-            onTicketTake={onTicketTake}
-          />
-        )}
-      </div>
-    </div>
+      ) : (
+        <div className={classes.scroll}>
+          <div className={classes.days}>
+            <TimeColumn
+              timeBorders={timePoints}
+              minutePercentage={minutePercentage}
+            />
+            {showMondayWednesday && (
+              <Day
+                day="monday"
+                onTicketApprove={onTicketApprove}
+                onTicketDeny={onTicketDeny}
+                onTicketDelete={onTicketDelete}
+                onTicketTake={onTicketTake}
+              />
+            )}
+            {showMondayWednesday && (
+              <Day
+                day="tuesday"
+                onTicketApprove={onTicketApprove}
+                onTicketDeny={onTicketDeny}
+                onTicketDelete={onTicketDelete}
+                onTicketTake={onTicketTake}
+              />
+            )}
+            {showMondayWednesday && (
+              <Day
+                day="wednesday"
+                onTicketApprove={onTicketApprove}
+                onTicketDeny={onTicketDeny}
+                onTicketDelete={onTicketDelete}
+                onTicketTake={onTicketTake}
+              />
+            )}
+            {showThursdaySunday && (
+              <Day
+                day="thursday"
+                onTicketApprove={onTicketApprove}
+                onTicketDeny={onTicketDeny}
+                onTicketDelete={onTicketDelete}
+                onTicketTake={onTicketTake}
+              />
+            )}
+            {showThursdaySunday && (
+              <Day
+                day="friday"
+                onTicketApprove={onTicketApprove}
+                onTicketDeny={onTicketDeny}
+                onTicketDelete={onTicketDelete}
+                onTicketTake={onTicketTake}
+              />
+            )}
+            {showThursdaySunday && (
+              <Day
+                day="saturday"
+                onTicketApprove={onTicketApprove}
+                onTicketDeny={onTicketDeny}
+                onTicketDelete={onTicketDelete}
+                onTicketTake={onTicketTake}
+              />
+            )}
+            {showThursdaySunday && (
+              <Day
+                day="sunday"
+                onTicketApprove={onTicketApprove}
+                onTicketDeny={onTicketDeny}
+                onTicketDelete={onTicketDelete}
+                onTicketTake={onTicketTake}
+              />
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
-
-export default WeekBody;

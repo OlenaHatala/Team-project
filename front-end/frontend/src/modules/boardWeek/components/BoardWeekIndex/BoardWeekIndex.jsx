@@ -22,7 +22,7 @@ import {
 
 import { setNotificationAction } from "../../../../modules/notifications/store/notificationsSlice";
 
-import WeekBody from "../WeekBody/WeekBody";
+import { WeekBody } from "../WeekBody";
 import { NewTicketModalForm } from "../NewTicketModalForm";
 import { EditTicketModalForm } from "../EditTicketModalForm";
 
@@ -42,6 +42,7 @@ export const BoardWeekIndex = ({ mode, id, weekIndex }) => {
   const dispatch = useDispatch();
   dispatch(setModeAction(mode));
   const isTabletView = useMediaQuery(device.tablet, { noSsr: true });
+  const isMobileView = useMediaQuery(device.mobile, { noSsr: true });
 
   const { showNewTicket, showEditTicket } = useSelector(selectModalsState);
   const [areYouSure, setAreYouSure] = useState(areYouSureInitialState);
@@ -61,10 +62,14 @@ export const BoardWeekIndex = ({ mode, id, weekIndex }) => {
   } = useGetWeekQuery({ boardId: id, weekIndex: weekIndex });
 
   useEffect(() => {
-    if (isTabletView) {
+    if (isMobileView) {
+      dispatch(setWeekViewAction(weekViewsConstants.oneDay));
+    } else if (isTabletView) {
       dispatch(setWeekViewAction(weekViewsConstants.halfWeek));
+    } else {
+      dispatch(setWeekViewAction(weekViewsConstants.fullWeek));
     }
-  }, [isTabletView]);
+  }, [isTabletView, isMobileView]);
 
   useEffect(() => {
     //if (isLoading || isFetching) {

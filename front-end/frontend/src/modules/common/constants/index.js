@@ -7,3 +7,14 @@ export const device = {
   tabletM: '(max-width: 800px)',
   mobile: '(max-width: 425px)',
 }
+
+export const weekIndexContants = {
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+  firstIndex: 0,
+  lastIndex: 5
+}

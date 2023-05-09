@@ -41,8 +41,9 @@
 .topbar-right {
   display: flex;
   align-items: center;
-  width: 13%;
-  min-width: 100px;
+  width: 35%;
+  min-width: 210px;
+  gap: 10px;
   justify-content: center;
   padding: 10px;
 }
@@ -58,9 +59,9 @@
   justify-content: center;
   text-align: center;
   align-items: center;
-  padding: 30px 10px;
+  padding: 30px 20px;
+  width: auto;
   min-width: 100px;
-  width: 100%;
   font-size: 16px;
   cursor: pointer;
   border-radius: 10px;

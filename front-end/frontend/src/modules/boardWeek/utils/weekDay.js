@@ -1,3 +1,13 @@
+export const WeekDay = {
+  monday: "monday",
+  tuesday: "tuesday",
+  wednesday: "wednesday",
+  thursday: "thursday",
+  friday: "friday",
+  saturday: "saturday",
+  sunday: "sunday",
+};
+
 export const WeekDayByIndex = {
   0: "sunday",
   1: "monday",

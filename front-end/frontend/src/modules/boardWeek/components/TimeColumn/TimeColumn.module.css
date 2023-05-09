@@ -1,7 +1,8 @@
 .time-column {
     width: 30%;
     height: 1500px;
-    color: #b2a4e5;
+    width: 50px;
+    min-width: 50px;
     justify-content: center;
     align-items: center;
     position: relative;
